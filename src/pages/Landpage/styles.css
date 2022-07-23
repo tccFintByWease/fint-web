@@ -1,0 +1,6 @@
+@import url(./../../styles/global.css);
+
+h1 {
+    margin: 0px 64px;
+    color: var(--primaryGreen);
+}

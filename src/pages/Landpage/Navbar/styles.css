@@ -1,0 +1,75 @@
+@import url(./../../../styles/global.css);
+
+header {
+    height: 120px;
+    margin-bottom: 60px;
+    background: var(--white);
+
+    display: flex;
+    align-items: center;
+}
+
+nav {
+    width: 100%;
+    margin-right: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav > span > a {
+    margin-right: 60px;
+
+    font-size: 24px;
+    letter-spacing: 0.1em;
+}
+
+nav > span > a:last-child {
+    margin-right: 0px;
+}
+
+/*TODO: resize logo images in photoshop*/
+header > a > .logo {
+    width: 100px;
+    height: 63px;
+    margin: 10px 128px 10px 64px;
+}
+
+nav > .navLinks > a { 
+    transition: all ease 0.3s;
+}
+
+nav > .navLinks > a:hover { 
+    color: var(--primaryGreen);
+    /*TODO: border-bottom hover animation left to right*/
+}
+
+nav > .navActions > a { 
+    color: var(--primaryGreen);
+    transition: ease all 0.3s;
+}
+
+nav > .navActions > a:hover {
+    /*TODO: border-bottom hover animation left to right*/
+}
+
+nav > .navActions > .linkButton {
+    height: 60px;
+    padding: 14px 32px;
+    background: var(--primaryGreen);
+    border: solid 2px var(--primaryGreen);
+    border-radius: 50px;
+
+    font-size: 24px;
+    color: var(--white);
+
+    transition: ease all 0.3s;
+}
+
+nav > .navActions > .linkButton:hover {
+    background: transparent;
+    border: solid 2px var(--primaryGreen);
+
+    color: var(--primaryGreen);
+}

@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/*TODO: change the variables names to be flexible to switch between light and dark theme*/
+:root {
+    --primaryGreen: #2CE6A3;
+    --secundaryGreen: #23B380;
+    --detailsGreen: #579C99;
+    --red: #F84949;
+    --white: #FFF;
+    --primaryGray: #F3F3F3;
+    --secundaryGray: #E1E1E1;
+    --detailsGray: #818181;
+    --black: #000;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body, a {
+    font-family: 'Roboto', sans-serif;
+    color: var(--black);
+    text-decoration: none;
+}
