@@ -10,15 +10,15 @@ function Navbar() {
                     <img src={logo} alt="Fint" class="logo" />
                 </a>
                 <nav>
-                    <span class="navLinks">
+                    <span className="navLinks">
                         <a href="#">Início</a>
                         <a href="#">Explorar</a>
                         <a href="#">Planos</a>
                         <a href="#">Sobre</a>
                     </span>
-                    <span class="navActions">
+                    <span className="navActions">
                         <a href="#">Conectar-se</a>
-                        <a href="#" class="linkButton">Cadastrar-se</a>
+                        <a href="#" className="linkButton">Cadastrar-se</a>
                     </span>
                 </nav>
             </header>

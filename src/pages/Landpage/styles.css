@@ -1,6 +1,122 @@
 @import url(./../../styles/global.css);
 
-h1 {
-    margin: 0px 64px;
+/*HERO & EXPLORE*/
+/**************************************************/
+.hero, .explore-control, .explore-simulation {
+    height: 720px;
+    margin: 0px 64px 120px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero > .hero-text {
+    width: 960px;
+}
+
+.hero-text > h1 {
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+
+    margin-bottom: 40px;
+}
+
+.hero-text > p {
+    font-size: 32px;
+}
+
+.hero-text > h1, .hero-text > p {
+    margin-bottom: 40px;
+}
+
+.hero-text > .buttons-cta > button {
+    width: 433px;
+    height: 80px;
+    margin-right: 40px;
+    padding: 20px 32px;
+    background: var(--primaryGreen);
+    border: solid 2px var(--primaryGreen);
+    border-radius: 50px;
+
+    font-size: 24px;
+    color: var(--white);
+
+    transition: ease all 0.3s;
+}
+
+.hero-text > .buttons-cta > button:last-child {
     color: var(--primaryGreen);
+    background: transparent;
+}
+
+.hero-text > .buttons-cta > button:last-child:hover {
+    color: var(--white);
+    background: var(--primaryGreen);
+}
+
+.hero-text > .buttons-cta > button:hover {
+    background: transparent;
+    border: solid 2px var(--primaryGreen);
+
+    color: var(--primaryGreen);
+}
+
+.hero > .hero-image, .explore-image {
+    height: 100%;
+}
+
+.hero > .hero-image > .placeholder-image {
+    width: 640px;
+}
+
+.placeholder-image {
+    height: 100%;
+    background: var(--primaryGreen);
+}
+
+.explore .explore-text > h2 {
+    font-size: 64px;
+    font-weight: 200;
+    letter-spacing: 0.024em;
+
+    margin-bottom: 20px;
+}
+
+.explore-text > p {
+    margin-bottom: 20px;
+}
+
+.explore-text > p, .explore-text > ul > li {
+    font-size: 24px;
+}
+
+.explore-control {
+    flex-direction: row-reverse;
+}
+
+.explore-control > .explore-image {
+    margin-right: 60px;
+}
+
+.explore-image > .placeholder-image {
+    width: 1148px;
+}
+
+.explore-text > ul > li {
+    margin-bottom: 10px;
+}
+
+.fa-li {
+    color: var(--primaryGreen);
+}
+
+/*SUBSCRIPTIONS*/
+/**************************************************/
+
+.subscriptions {
+    width: 100vw;
+    height: 720px;
+    background: var(--primaryGray);
 }
