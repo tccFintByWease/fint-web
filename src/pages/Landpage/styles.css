@@ -1,8 +1,8 @@
 @import url(./../../styles/global.css);
 
-/*HERO & EXPLORE*/
+/*HERO, EXPLORE & ABOUT US*/
 /**************************************************/
-.hero, .explore-control, .explore-simulation {
+.hero, .explore-control, .explore-simulation, .about-us {
     height: 720px;
     margin: 0px 64px 120px;
     
@@ -27,11 +27,15 @@
     font-size: 32px;
 }
 
-.hero-text > h1, .hero-text > p {
+.hero-text > h1, .hero-text > p, .about-us-text > h2, .about-us-text > p {
     margin-bottom: 40px;
 }
 
-.hero-text > .buttons-cta > button {
+.fa-ul {
+    list-style-position: inside;
+}
+
+.hero-text > .buttons-cta > button, .about-us-text > .buttons-cta > button {
     width: 433px;
     height: 80px;
     margin-right: 40px;
@@ -46,24 +50,24 @@
     transition: ease all 0.3s;
 }
 
-.hero-text > .buttons-cta > button:last-child {
+.hero-text > .buttons-cta > button:last-child, .about-us-text > .buttons-cta > button:last-child {
     color: var(--primaryGreen);
     background: transparent;
 }
 
-.hero-text > .buttons-cta > button:last-child:hover {
+.hero-text > .buttons-cta > button:last-child:hover, .about-us-text > .buttons-cta > button:last-child:hover {
     color: var(--white);
     background: var(--primaryGreen);
 }
 
-.hero-text > .buttons-cta > button:hover {
+.hero-text > .buttons-cta > button:hover, .about-us-text > .buttons-cta > button:hover {
     background: transparent;
     border: solid 2px var(--primaryGreen);
 
     color: var(--primaryGreen);
 }
 
-.hero > .hero-image, .explore-image {
+.hero > .hero-image, .explore-image, .about-us > .about-us-image {
     height: 100%;
 }
 
@@ -108,7 +112,7 @@
     margin-bottom: 10px;
 }
 
-.fa-li {
+.fa-li svg {
     color: var(--primaryGreen);
 }
 
@@ -116,7 +120,261 @@
 /**************************************************/
 
 .subscriptions {
-    width: 100vw;
-    height: 720px;
+    width: 100%;
+    margin-bottom: 120px;
+    padding: 60px 64px;
     background: var(--primaryGray);
+}
+
+.subscriptions > h2 {
+    font-size: 80px;
+    font-weight: 200;
+    letter-spacing: 0.024em;
+}
+
+.subscriptions > p {
+    width: 800px;
+    margin: 60px auto;
+    font-size: 24px;
+}
+
+.subscriptions > h2, .subscriptions > p {
+    text-align: center;
+}
+
+.subscriptions > .plans {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plans > div {
+    border-radius: 10px;
+}
+
+.plans > .monthly, .plans > .quarterly {
+    padding: 20px;
+    padding-bottom: -50px;
+    background: var(--white);
+    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.2);
+
+    text-align: center;
+}
+
+.plans > .monthly {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.plans > .quarterly {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.plans p {
+    margin-bottom: 20px;
+    font-size: 24px;
+    letter-spacing: 0.024em;
+}
+
+.plans .price {
+    font-size: 48px;
+    margin-bottom: 40px;
+}
+
+.price > span {
+    font-size: 64px;
+}
+
+.monthly > .button-box, .quarterly > .button-box {
+    position: absolute;
+    margin: -10px -150.5px;;
+}
+
+.plans button {
+    width: 300px;
+    height: 60px;
+    padding: 10px 32px;
+    background: var(--primaryGreen);
+    border: solid 2px var(--primaryGreen);
+    border-radius: 50px;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.2);
+
+    font-size: 24px;
+    color: var(--white);
+
+    transition: ease all 0.3s;
+}
+
+.plans button:hover {
+    background: var(--white);
+    border: solid 2px var(--white);
+    color: var(--primaryGreen);
+}
+
+.yearly > button {
+    background: var(--white);
+    border: solid 2px var(--white);
+    color: var(--primaryGreen);
+    transform: ease all 0.3s;
+}
+
+.yearly > button:hover {
+    background: transparent;
+    border: solid 2px var(--white);
+    color: var(--white);
+}
+
+.promo {
+    margin: 0px auto 40px !important;
+    padding: 5px;
+    background: var(--detailsGray);
+    border-radius: 3px;
+
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    color: var(--white);
+}
+
+.monthly > .promo, .quarterly > .promo {
+    width: 200px;
+    font-size: 18px;
+}
+
+.plans > .yearly {
+    padding: 20px;
+    padding-bottom: -50px;
+    background: var(--primaryGreen);
+    box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.2);
+
+    text-align: center;
+    color: var(--white);
+
+    z-index: 1;
+}
+
+.yearly > .promo {
+    font-size: 18px;
+    background-color: var(--white);
+    color: var(--primaryGreen);
+}
+
+.yearly .fa-li svg{
+    color: var(--white);
+}
+
+.yearly > .price {
+    margin-bottom: 0px;
+}
+
+.yearly > .list {
+    width: 100%;
+    margin: 60px 0px 120px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.list > p {
+    font-size: 48px;
+    line-height: 10px;
+}
+
+.yearly > .list > ul {
+    list-style-position: none;
+}
+
+.yearly > .list > ul > li {
+    margin-bottom: 10px;
+    font-size: 24px;
+    text-align: justify;
+}
+
+/*ABOUT US*/
+/**************************************************/
+
+.about-us-text {
+    width: 735px;
+}
+
+.about-us-text > h2 {
+    font-size: 80px;
+    font-weight: 200;
+    letter-spacing: 0.024em;
+}
+
+.about-us-text > p {
+    font-size: 24px;
+    
+}
+
+.about-us > .about-us-image > .placeholder-image {
+    width: 997px;
+}
+
+.about-us-text > .buttons-cta > button {
+    width: 307.5px;
+    height: 80px;
+    margin-right: 40px;
+    padding: 20px 32px;
+}
+
+/*FOOTER*/
+/**************************************************/
+
+.footer-text {
+    padding: 64px 60px;
+    border-top: solid 2px var(--primaryGray);
+
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-direction: center;
+}
+
+.footer-text .logo, .footer-links {
+    margin-bottom: 60px;
+}
+
+.footer-links:last-child {
+    margin-bottom: 0px;
+}
+
+.footer-text > a > .logo {
+    width: 126px;
+}
+
+.footer-text > .footer-links > a {
+    margin-right: 60px;
+    
+    font-size: 24px;
+    letter-spacing: 0.024em;
+    color: var(--detailsGray);
+}
+
+.footer-links > a svg {
+    font-size: 48px;
+    color: var(--black);
+}
+
+.footer-links > a:last-child {
+    margin-right: 0px;
+}
+
+footer > .footer-copyright {
+    padding: 20px 0px;
+    box-shadow: 0px -5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.footer-copyright p {
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-align: center;
 }

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@testing-library/jest-dom": "^5.16.4",
@@ -12,6 +13,7 @@
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
     "date-fns": "^2.0.0-beta.5",
+    "formik": "^2.2.9",
     "hookrouter": "^1.2.5",
     "node-polyfill-webpack-plugin": "^2.0.0",
     "prop-types": "^15.8.1",
@@ -21,7 +23,8 @@
     "react-dom": "^18.2.0",
     "react-google-charts": "^4.0.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.6"
   }
 }
