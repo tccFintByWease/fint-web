@@ -11,6 +11,11 @@
     --secundaryGray: #E1E1E1;
     --detailsGray: #818181;
     --black: #000;
+
+    --maxSpacing: 0.1em;
+    --minSpacing: 0.024em;
+
+    --transition-hover: ease all 0.3s;
 }
 
 * {
@@ -25,6 +30,6 @@ body, a {
     text-decoration: none;
 }
 
-button {
-    cursor: pointer;
+.flex {
+    display: flex;
 }

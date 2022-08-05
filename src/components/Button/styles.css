@@ -1,0 +1,31 @@
+@import url(./../../styles/global.css);
+
+.btn-action {
+    height: 64px;
+    background-color: var(--primaryGreen);
+    border: solid 2px var(--primaryGreen);
+    border-radius: 50px;
+
+    font-size: 24px;
+    color: var(--white);
+
+    transition: var(--transition-hover);
+    cursor: pointer;
+}
+
+.transparent {
+    background-color: transparent;
+
+    color: var(--primaryGreen);
+}
+
+.normal:hover {
+    background-color: var(--detailsGreen);
+    border-color: var(--detailsGreen);
+}
+
+.transparent:hover {
+    border-color: var(--detailsGreen);
+
+    color: var(--detailsGreen);
+}

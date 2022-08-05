@@ -3,11 +3,11 @@
 /*NAVBAR*/
 /**************************************************/
 header {
+    width: 100%;
     height: 120px;
     margin-bottom: 60px;
     background: var(--white);
 
-    display: flex;
     align-items: center;
 }
 
@@ -15,7 +15,6 @@ nav {
     width: 100%;
     margin-right: 64px;
 
-    display: flex;
     align-items: center;
     justify-content: space-between;
 }
@@ -24,14 +23,13 @@ nav > span > a {
     margin-right: 60px;
 
     font-size: 24px;
-    letter-spacing: 0.1em;
+    letter-spacing: var(--maxSpacing);
 }
 
 nav > span > a:last-child {
     margin-right: 0px;
 }
 
-/*TODO: resize logo images in photoshop*/
 header > a > .logo {
     width: 100px;
     height: 63px;
@@ -39,39 +37,46 @@ header > a > .logo {
 }
 
 nav > .navLinks > a { 
-    transition: all ease 0.3s;
+    transition: var(--transition-hover);
 }
 
 nav > .navLinks > a:hover { 
     color: var(--primaryGreen);
-    /*TODO: border-bottom hover animation left to right*/
 }
 
 nav > .navActions > a { 
     color: var(--primaryGreen);
-    transition: ease all 0.3s;
+    transition: var(--transition-hover);
 }
 
 nav > .navActions > a:hover {
-    /*TODO: border-bottom hover animation left to right*/
+    color:var(--detailsGreen);
 }
 
 nav > .navActions > .linkButton {
     height: 60px;
     padding: 14px 32px;
-    background: var(--primaryGreen);
+    background-color: var(--primaryGreen);
     border: solid 2px var(--primaryGreen);
     border-radius: 50px;
 
     font-size: 24px;
     color: var(--white);
 
-    transition: ease all 0.3s;
+    transition: var(--transition-hover);
 }
 
 nav > .navActions > .linkButton:hover {
-    background: transparent;
-    border: solid 2px var(--primaryGreen);
+    background-color: var(--detailsGreen);
+    border: solid 2px var(--detailsGreen);
+    color: var(--white);
+}
 
-    color: var(--primaryGreen);
+.fixed {
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.2);
+
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    overflow: hidden;
 }
