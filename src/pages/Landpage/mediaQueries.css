@@ -1,0 +1,56 @@
+/* Tablet */
+@media only screen and (max-width: 1299px) {
+    .explore-text > p,
+    .list > ul > li,
+    .subscriptions > .plans p,
+    .subscriptions > p {
+        font-size: 20px !important;
+    }
+
+    .explore-text > ul > li {
+        font-size: 20px !important;
+    }
+    
+
+    .yearly > .list > p {
+        font-size: 32px !important;
+    }
+
+    .subscriptions > .plans .promo {
+        width: 100%;
+        padding: 5px 10px;
+
+        font-size: 16px !important;
+    }
+
+    .subscriptions > .plans p {
+        font-size: 18px;
+    }
+
+    .plans > .yearly > .price {
+        font-size: 32px !important;
+    }
+
+    .plans > .yearly > .price > span {
+        font-size: 48px !important;
+    }
+
+    .about-us-text > p {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 20px !important;
+    }
+
+    
+
+    /* trocar o menu */
+}
+
+/* Mobile */
+/*
+@media only screen and (min-width: 1024px) {*/
+    /* arrumar a parte de inscrições */
+    /* arrumar a estruturação do conteúdo */
+/*}*/

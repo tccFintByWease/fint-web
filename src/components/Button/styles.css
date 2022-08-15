@@ -1,12 +1,12 @@
 @import url(./../../styles/global.css);
 
 .btn-action {
-    height: 64px;
+    height: 3.33vw;
     background-color: var(--primaryGreen);
     border: solid 2px var(--primaryGreen);
     border-radius: 50px;
 
-    font-size: 24px;
+    font-size: 1.25vw;
     color: var(--white);
 
     transition: var(--transition-hover);

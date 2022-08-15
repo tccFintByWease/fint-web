@@ -1,6 +1,6 @@
 @import url(./../../../styles/global.css);
-
-.login {
+/*
+.authentication {
     width: 100vw;
     height: 100vh;
 
@@ -12,7 +12,7 @@
     align-items: center;
 }
 
-.login > .login-box, .login > .download-box {
+.authentication > .authentication-box, .authentication > .download-box {
     padding: 60px;
     background-color: var(--white);
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
@@ -20,12 +20,12 @@
     text-align: center;
 }
 
-.login-box > .logo {
+.authentication-box > .logo {
     width: 126px;
     margin: 0px auto 60px;
 }
 
-.login-box > form input {
+.authentication-box > form input {
     width: 360px;
     height: 40px;
     margin: 10px 0px;
@@ -35,7 +35,7 @@
     font-size: 20px;
 }
 
-.login-box button {
+.authentication-box button {
     width: 360px;
     height: 40px;
     margin: 20px 0px;
@@ -54,7 +54,7 @@
     transition: ease all 0.3s;
 }
 
-.login-box button:hover {
+.authentication-box button:hover {
     background: transparent;
     color: var(--primaryGreen);
 }
@@ -117,3 +117,4 @@ form .password svg:hover {
 .download-box > .download-buttons a:first-child {
     margin-right: 10px;
 }
+*/

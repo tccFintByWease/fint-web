@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import './styles.css';
+import './mediaQueries.css';
 import Navbar from './Navbar/index';
 import Button from './../../components/Button/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

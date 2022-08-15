@@ -1,0 +1,119 @@
+@import url(./../../../styles/global.css);
+/*
+.authentication {
+    width: 100vw;
+    height: 100vh;
+
+    background-image: linear-gradient(to bottom right, var(--primaryGreen), var(--secundaryGreen), var(--detailsGreen));
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.authentication > .authentication-box, .authentication > .download-box {
+    padding: 60px;
+    background-color: var(--white);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+
+    text-align: center;
+}
+
+.authentication-box > .logo {
+    width: 126px;
+    margin: 0px auto 60px;
+}
+
+.authentication-box > form input {
+    width: 360px;
+    height: 40px;
+    margin: 10px 0px;
+    padding: 20px;
+    border-radius: 50px;
+
+    font-size: 20px;
+}
+
+.authentication-box button {
+    width: 360px;
+    height: 40px;
+    margin: 20px 0px;
+    padding: 0px 32px;
+    background: var(--primaryGreen);
+    border: solid 2px var(--primaryGreen);
+    border-radius: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 20px;
+    color: var(--white);
+
+    transition: ease all 0.3s;
+}
+
+.authentication-box button:hover {
+    background: transparent;
+    color: var(--primaryGreen);
+}
+
+form p {
+    width: 360px;
+    
+    font-size: 18px;
+}
+
+form a {
+    font-size: 18px;
+    color: var(--detailsGreen);
+}
+
+form a:hover {
+    color: var(--secundaryGreen);
+}
+
+form .row, form .col-sm-12 {
+    height: 100% !important;
+}
+
+form hr {
+    height: 1px;
+    margin: 20px 0px;
+    background: var(--detailsGray);
+    border: none;
+}
+
+form .password svg {
+    margin: -40px 140px;
+    position: absolute;
+
+    font-size: 20px;
+    color: var(--detailsGray);
+    
+    cursor: pointer;
+}
+
+form .password svg:hover {
+    color: rgba(129, 129, 129, 0.6);
+}
+
+.download-box {
+    width: 480px;
+    padding: 20px 60px !important;
+    margin-top: 20px;
+}
+
+.download-box > p {
+    font-size: 20px;
+}
+
+.download-box > .download-buttons img {
+    width: 175px;
+}
+
+.download-box > .download-buttons a:first-child {
+    margin-right: 10px;
+}
+*/

@@ -1,11 +1,11 @@
 @import url(./../../../styles/global.css);
 
-/*NAVBAR*/
-/**************************************************/
+/* Navbar */
+/* ------------------------------------------------------------- */
 header {
     width: 100%;
-    height: 120px;
-    margin-bottom: 60px;
+    height: 6.25vw;
+    margin-bottom: 3.125vw;
     background: var(--white);
 
     align-items: center;
@@ -13,14 +13,14 @@ header {
 
 nav {
     width: 100%;
-    margin-right: 64px;
+    margin-right: 3.33vw;
 
     align-items: center;
     justify-content: space-between;
 }
 
 nav > span > a {
-    margin-right: 60px;
+    margin-right: 3.125vw;
 
     font-size: 24px;
     letter-spacing: var(--maxSpacing);
@@ -31,9 +31,9 @@ nav > span > a:last-child {
 }
 
 header > a > .logo {
-    width: 100px;
-    height: 63px;
-    margin: 10px 128px 10px 64px;
+    width: 5.2vw;
+    height: 3.28125vw;
+    margin: 0.52vw 6.67vw 0.52vw 3.33vw;
 }
 
 nav > .navLinks > a { 
@@ -54,13 +54,13 @@ nav > .navActions > a:hover {
 }
 
 nav > .navActions > .linkButton {
-    height: 60px;
-    padding: 14px 32px;
+    height: 3.125vw;
+    padding: 0.729vw 1.67vw;
     background-color: var(--primaryGreen);
     border: solid 2px var(--primaryGreen);
     border-radius: 50px;
 
-    font-size: 24px;
+    font-size: 1.25vw;
     color: var(--white);
 
     transition: var(--transition-hover);
@@ -73,10 +73,31 @@ nav > .navActions > .linkButton:hover {
 }
 
 .fixed {
-    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 1.0416vw 2.083vw rgba(0, 0, 0, 0.2);
 
     position: fixed;
     top: 0;
     z-index: 2;
     overflow: hidden;
+}
+
+/* Mobile Navbar */
+header .hamburger, .nav-background {
+    visibility: hidden;
+}
+
+header .hamburger {
+    position: absolute;
+    right: 64px;
+    font-size: 36px;
+
+    cursor: pointer;
+}
+
+.nav-background {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2));
+    position: fixed;
+    z-index: 2;
 }
