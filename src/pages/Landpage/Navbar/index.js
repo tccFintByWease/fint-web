@@ -12,9 +12,17 @@ function Navbar() {
     // fix the menu on the top of the page
     const scrollFunction = () => {
         if (document.body.scrollTop > 119 || document.documentElement.scrollTop > 119) {
-            document.querySelector('.header-nav').classList.add('fixed');
+            document.querySelector('.header').classList.add('fixed');
+            if (window.innerWidth <= 1299) {
+                console.log('teste');
+                document.querySelector('.header-nav').classList.add('mobile-navar');
+            }
         } else {
-            document.querySelector('.header-nav').classList.remove('fixed');
+            document.querySelector('.header').classList.remove('fixed');
+            if (window.innerWidth > 1299) {
+                console.log('teste');
+                document.querySelector('.header-nav').classList.remove('mobile-navar');
+            }
         }
     }
 
@@ -48,7 +56,7 @@ function Navbar() {
 
     return (
         <Fragment>
-            <header className="header-nav flex">
+            <header className="header flex">
                 <a href="#hero">
                     <img src={logo} alt="Fint" className="logo" />
                 </a>

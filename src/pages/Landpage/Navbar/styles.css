@@ -77,8 +77,15 @@ nav > .navActions > .linkButton:hover {
 
     position: fixed;
     top: 0;
-    z-index: 2;
+    z-index: 3;
     overflow: hidden;
+}
+
+.mobile-navbar {
+    position: fixed;
+    top: 6vw;
+    overflow: hidden;
+    z-index: 3;
 }
 
 /* Mobile Navbar */
