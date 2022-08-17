@@ -5,7 +5,6 @@
 header {
     width: 100%;
     height: 6.25vw;
-    margin-bottom: 3.125vw;
     background: var(--white);
 
     align-items: center;
@@ -36,24 +35,24 @@ header > a > .logo {
     margin: 0.52vw 6.67vw 0.52vw 3.33vw;
 }
 
-nav > .navLinks > a { 
+nav > .nav-links > a { 
     transition: var(--transition-hover);
 }
 
-nav > .navLinks > a:hover { 
+nav > .nav-links > a:hover { 
     color: var(--primaryGreen);
 }
 
-nav > .navActions > a { 
+nav > .nav-actions > a { 
     color: var(--primaryGreen);
     transition: var(--transition-hover);
 }
 
-nav > .navActions > a:hover {
+nav > .nav-actions > a:hover {
     color:var(--detailsGreen);
 }
 
-nav > .navActions > .linkButton {
+nav > .nav-actions > .linkButton {
     height: 3.125vw;
     padding: 0.729vw 1.67vw;
     background-color: var(--primaryGreen);
@@ -66,7 +65,7 @@ nav > .navActions > .linkButton {
     transition: var(--transition-hover);
 }
 
-nav > .navActions > .linkButton:hover {
+nav > .nav-actions > .linkButton:hover {
     background-color: var(--detailsGreen);
     border: solid 2px var(--detailsGreen);
     color: var(--white);

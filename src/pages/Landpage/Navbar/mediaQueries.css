@@ -19,7 +19,6 @@
     }
 
     header nav {
-        margin: 20px 0px;
         background-color: var(--white);
         box-shadow: 0px 1.0416vw 1.0416vw rgba(0, 0, 0, 0.2);
         
@@ -39,16 +38,16 @@
         text-align: center;
     }
 
-    nav .navLinks a:first-child {
+    nav .nav-links a:first-child {
         border-top: solid 2px var(--primaryGray);
     }
 
-    nav, .navLinks, .navActions {
+    nav, .nav-links, .nav-actions {
         width: 100%;
         flex-direction: column;
     }
 
-    .navActions > .linkButton {
+    .nav-actions > .linkButton {
         width: 240px;
         margin: 20px auto;
         padding: 20px 32px;

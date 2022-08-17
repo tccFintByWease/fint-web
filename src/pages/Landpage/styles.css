@@ -35,6 +35,10 @@ html {
 }
 
 /* Hero */
+.hero {
+    margin-top: 3.125vw;
+}
+
 .hero > .hero-text {
     width: 50vw;
 }
