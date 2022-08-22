@@ -8,13 +8,6 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 function Navbar() {
 
     const [navbarIsOpen, setNavbarIsOpen] = useState(false);
-
-    // quando tá aberto o menu e volta a tela:
-    //              - não reseta a visibilidade do menu
-    //              - o fundo não sai
-    //              - tirar o mobile navbar do menu
-    //              - ativar o menu fixado quando abrir ele direto (chamar o método de scroll)
-    //              - OK mobile navbar não sai quando redimensiona a tela
     
     // fix the menu on the top of the page
     const scrollFunction = () => {
@@ -25,15 +18,29 @@ function Navbar() {
         }
     }
 
+    // reset the menu settings when the window is resized
+    const resizeFunction = () => {
+        const nav = document.querySelector('.header-nav');
+        const navLinks = document.querySelector('.nav-links');
+        const navActions = document.querySelector('.nav-actions');
+        const navBackground = document.querySelector('.nav-background');
+        
+        if (window.innerWidth > 1299) {
+            nav.classList.remove('mobile-navbar');
+            nav.style.visibility = 'visible';
+            navBackground.style.visibility = 'hidden';
+
+            navLinks.classList.remove('flex');
+            navActions.classList.remove('flex');
+        } else if (window.innerWidth <= 1299) {
+            nav.style.visibility = 'hidden';
+        }
+    }
+
     window.onscroll = function() { scrollFunction() }
+    window.onresize = function() { resizeFunction() }
 
     const handleNavbarisOpen = () => {
-        if (window.innerWidth > 1299) {
-            openNavbar(); /* TODO: ABRIR E FECHAR O MENU QUANDO REDIMENSIONA A TELA E PASSA DE 1299 */
-        } else if (window.innerWidth <= 1299) {
-            closeNavbar();
-        }
-
         if (!navbarIsOpen) {
             openNavbar();
         } else {
@@ -92,8 +99,8 @@ function Navbar() {
                         <a href="#about-us">Sobre</a>
                     </span>
                     <span className="nav-actions">
-                        <a href="/login">Conectar-se</a>
-                        <a href="/cadastro" className="linkButton">Cadastrar-se</a>
+                        <a href="/authentication">Conectar-se</a>
+                        <a href="/authentication" className="linkButton">Cadastrar-se</a>
                     </span>
                 </nav>
             </header>

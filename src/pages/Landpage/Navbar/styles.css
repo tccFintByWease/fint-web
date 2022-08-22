@@ -54,7 +54,7 @@ nav > .nav-actions > a:hover {
 
 nav > .nav-actions > .linkButton {
     height: 3.125vw;
-    padding: 0.729vw 1.67vw;
+    padding: 0.834vw 1.67vw;
     background-color: var(--primaryGreen);
     border: solid 2px var(--primaryGreen);
     border-radius: 50px;

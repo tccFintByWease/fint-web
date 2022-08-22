@@ -4,8 +4,9 @@
 
 ### LANDPAGE
 
-- Deixar a landpage responsiva
-- Alterar o nome das variáveis para torná-las flexíveis para troca entre os temas claro e escuro
+- Carregar o conteúdo dinamicamente com o scroll
+- Adicionar e configurar as ilustrações
+- Deixar o menu responsivo e fechar o menu ao clicar no background
 
 ### PÁGINAS DE LOGIN
 

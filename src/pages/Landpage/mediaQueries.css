@@ -10,8 +10,11 @@
     .explore-text > ul > li {
         font-size: 20px !important;
     }
-    
-
+    /*
+    .fa-li {
+        width: 20px;
+    }
+    */
     .yearly > .list > p {
         font-size: 32px !important;
     }
@@ -35,22 +38,266 @@
         font-size: 48px !important;
     }
 
+    .monthly > .button-box, .quarterly > .button-box {
+        margin: -1.04167vw -7.838vw;
+    }
+
     .about-us-text > p {
         font-size: 20px;
     }
 
     button {
+        height: 48px !important;
         font-size: 20px !important;
+        padding: 8px 12px !important;
     }
 
-    
-
-    /* trocar o menu */
+    .footer-text > .footer-links a, .footer-copyright p {
+        font-size: 18px !important;
+    }
 }
 
-/* Mobile */
 /*
-@media only screen and (min-width: 1024px) {*/
-    /* arrumar a parte de inscrições */
-    /* arrumar a estruturação do conteúdo */
-/*}*/
+ARRUMAR AS LISTAS DO EXPLORE (O ESPAÇO DOS LIS)
+*/
+
+/* Mobile */
+@media only screen and (max-width: 960px) {
+    .hero, .explore-simulation, .explore-control, .subscriptions, .about-us {
+        height: 100%;
+        margin-top: 4.17vw;
+
+        flex-direction: column;
+    }
+
+    .hero-text h1 {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 36px !important;
+    }
+
+    h2 {
+        font-size: 32px !important;
+    }
+
+    .hero-text, .explore-text, .about-us-text {
+        width: 100% !important;
+    }
+
+    .hero-image, .explore-image, .about-us-image {
+        width: 100%;
+        margin: 4.17vw 0px 0px !important;
+    }
+
+    .placeholder-image {
+        width: 100% !important;
+        height: 37.539vw;
+    }
+
+    .hero-text p {
+        font-size: 20px;
+    }
+
+    .hero-text > .buttons-cta > button {
+        width: 120px;
+        font-size: 18px;
+    }
+
+    .explore-text p {
+        font-size: 18px !important;
+    }
+
+    .explore-text ul > li {
+        font-size: 18px !important;
+    }
+
+    .fa-li {
+        width: 2.085vw;
+    }
+
+    .subscriptions {
+        padding: 6.2565vw;
+    }
+
+    .subscriptions > .plans {
+        flex-direction: column;
+    }
+
+    .subscriptions > p {
+        width: 100%;
+    }
+
+    .subscriptions > p, .about-us-text > p {
+        font-size: 18px !important;
+    }
+
+    .plans > .monthly, .plans > .quarterly {
+        width: 40%;
+        border-radius: 0.52vw;
+    }
+
+    .plans > .monthly, .plans > .yearly {
+        margin-bottom: 8.342vw;
+    }
+
+    .plans > .quarterly {
+        margin-bottom: 6.2565vw;
+    }
+
+    .plans > .yearly {
+        width: 48%;
+    }
+
+    .subscriptions > .plans .promo {
+        width: 64%;
+        font-size: 14px !important;
+    }
+
+    .subscriptions > .plans > .yearly > .promo {
+        width: 96%;
+    }
+
+    .hero-text > .buttons-cta > button, .about-us-text > .buttons-cta > button {
+        width: 33.368vw;
+    }
+
+    .subscriptions .button-box {
+        width: 100%;
+        left: 0;
+        margin: -0.52vw 0px;
+    }
+
+    .subscriptions button, .subscriptions button {
+        width: 25.02vw;
+        padding: 1.4598 3.368vw;
+    }
+
+    footer .footer-text .logo {
+        width: 10.427vw;
+        height: 6.67vw;
+    }
+
+    footer .footer-text .footer-links a {
+        font-size: 18px !important;
+    }
+
+    footer .footer-links > a svg {
+        font-size: 32px;
+    }
+
+    footer .footer-copyright {
+        padding: 1.8769vw 0px;
+    }
+}
+
+@media only screen and (max-width: 720px) {
+    .hero, .explore-control, .explore-simulation, .about-us {
+        margin-top: 60px !important;
+    }
+
+    h1 {
+        font-size: 36px !important;
+    }
+
+    h2 {
+        font-size: 36px !important;
+    }
+
+    h1, h2 {
+        margin: 0px 0px 20px !important;
+    }
+
+    .hero-text > p {
+        font-size: 18px;
+    }
+
+    .hero-text > .buttons-cta > button, .about-us-text > .buttons-cta > button {
+        width: 100%;
+        margin: 0px;
+        font-size: 16px !important;
+    }
+
+    .hero-text > .buttons-cta > button:first-child, .about-us-text > .buttons-cta > button:first-child {
+        margin: 20px 0px 10px;
+    }
+
+    .hero-text > .buttons-cta > button:last-child, .about-us-text > .buttons-cta > button:last-child {
+        margin-bottom: 20px
+    }
+
+    .explore-text p {
+        margin-bottom: 20px;
+    }
+
+    .plans > .monthly, .plans > .quarterly {
+        width: 100%;
+    }
+
+    .plans > .monthly {
+        margin-bottom: 80px !important;
+    }
+
+    .plans > .yearly {
+        margin-bottom: 40px !important;
+    }
+
+    .plans > .quarterly {
+        margin-bottom: 60px !important;
+    }
+
+    .plans > .yearly {
+        width: 100%;
+    }
+
+    .subscriptions > p {
+        font-size: 16px !important;
+    }
+
+    .subscriptions > .plans .price {
+        margin-bottom: 20px;
+    }
+
+    .subscriptions > .plans > .yearly .list {
+        margin-bottom: 32px !important;
+    }
+
+    .subscriptions > .plans .price span {
+        font-size: 36px !important;
+    }
+    .subscriptions > .plans > .yearly .price {
+        font-size: 24px !important;
+    }
+
+    .monthly > .button-box, .quarterly > .button-box {
+        margin: -3.125vw 0px;
+    }
+
+    .subscriptions > .plans button {
+        width: 60%;
+        font-size: 16px !important;
+    }
+
+    .subscriptions > .plans .promo {
+        width: 80%;
+        font-size: 12px !important;
+    }
+
+    .plans > .monthly {
+        margin-top: 20px;
+    }
+
+    .plans > .monthly, .plans > .quarterly, .plans > .yearly {
+        padding: 20px !important;
+    }
+
+    .subscriptions > .plans > .yearly > .promo {
+        width: 96%;
+    }
+
+    footer .footer-text .logo {
+        width: 50px;
+        height: 32px;
+    }
+}

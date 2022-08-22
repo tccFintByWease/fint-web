@@ -33,7 +33,7 @@
     nav a {
         width: 100%;
         border-bottom: solid 2px var(--primaryGray);
-        padding: 10px 0px;
+        padding: 0.7698vw 0px;
 
         text-align: center;
     }
@@ -48,10 +48,12 @@
     }
 
     .nav-actions > .linkButton {
-        width: 240px;
-        margin: 20px auto;
-        padding: 20px 32px;
+        width: 18.475vw;
+        margin: 1.539vw auto;
+        padding: 1.539vw 2.46vw;
         
-        font-size: 20px !important;
+        font-size: 1.539vw !important;
     }
 }
+
+/* Mobile */
