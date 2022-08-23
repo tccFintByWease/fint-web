@@ -94,7 +94,7 @@ header .hamburger, .nav-background {
 
 header .hamburger {
     position: absolute;
-    right: 64px;
+    right: 3.34vw;
     font-size: 36px;
 
     cursor: pointer;

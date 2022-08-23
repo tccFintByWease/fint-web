@@ -59,17 +59,22 @@
 /* Mobile */
 @media only screen and (max-width: 960px) {
     header {
-        padding-top: 40px;
-        padding-bottom: 40px;
+        height: 10.4167vw !important;
+        padding-top: 2.0834vw;
+        padding-bottom: 2.0834vw;
+    }
+    
+    header .hamburger {
+        font-size: 32px;
     }
 
     header > nav {
-        margin-top: 37px;
+        margin-top: 4.375vw;
     }
 
     nav a {
         font-size: 20px !important;
-        padding: 10px 0px;
+        padding: 1.04167vw 0px;
     }
 
     nav > .nav-actions > .linkButton {
@@ -85,3 +90,10 @@
         height: 32px;
     }
 }
+
+@media only screen and (max-width: 720px) {
+    header .hamburger {
+        font-size: 28px;
+    }
+}
+/*TODOS: Fechar o menu clicando no filtro de background, dar um blur no filtro de background, arrumar a responsividade do menu no 720px, resolver o bug de redimensionar a tela sempre fechar o menu*/
