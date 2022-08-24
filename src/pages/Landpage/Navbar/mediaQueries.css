@@ -92,8 +92,26 @@
 }
 
 @media only screen and (max-width: 720px) {
+    header {
+        height: 60px !important;
+        padding: 10px 0px !important;
+    }
     header .hamburger {
         font-size: 28px;
     }
+
+    header > nav {
+        margin-top: 0px !important;
+    }
+
+    .mobile-navbar {
+        top: 60px;
+    }
+
+    nav > .nav-actions > .linkButton {
+        width: 180px;
+        height: 36px;
+        padding: 12px 20px !important;
+        font-size: 18px !important;
+    }
 }
-/*TODOS: Fechar o menu clicando no filtro de background, dar um blur no filtro de background, arrumar a responsividade do menu no 720px, resolver o bug de redimensionar a tela sempre fechar o menu*/

@@ -6,7 +6,6 @@
 
 - Carregar o conteúdo dinamicamente com o scroll
 - Adicionar e configurar as ilustrações
-- Deixar o menu responsivo e fechar o menu ao clicar no background
 
 ### PÁGINAS DE LOGIN
 
