@@ -22,3 +22,4 @@
 ### TERMOS DE USO E POLÍTICA DE PRIVACIDADE
 
 - Adicionar o menu lateral com os tópicos da página
+- Adicionar um botão para download do arquivos em PDF dos Termos de Uso e da Política de Privacidade
