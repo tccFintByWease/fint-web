@@ -1,21 +1,20 @@
 import React, { Fragment } from 'react';
 import { Form, Row, Col, Modal } from 'react-bootstrap';
 import logo from './../../../assets/images/black-logo.png';
-import googlePlayBadge from './../../../assets/images/google-play-badge.png';
-import appStoreBadge from './../../../assets/images/app-store-badge.png';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import './styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { A, Navigate } from 'hookrouter';
+import { A } from 'hookrouter';
+import PropTypes from 'prop-types';
+import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Cadastro() {
+function Login(props) {
     return (
         <Fragment>
-            <div className="authentication-box">
+            <div className={props.visibility ? 'authentication-box' : 'authentication-box none'}>
                 <img src={logo} alt="Fint" className="logo" />
                 <Form>
                     <Form.Group as={Row} controlId="usuario">
@@ -36,7 +35,7 @@ function Cadastro() {
                             </button>
                         </Col>
                     </Form.Group>
-                    <a href="/recuperar-senha">Esqueceu sua senha?</a>
+                    <A href="#" onClick={() => props.handleFormVisibility('recoverPassword')}>Esqueceu sua senha?</A>
                     <hr />
                     <Form.Group as={Row} controlId="loginFacebook">
                         <Col sm={12}>
@@ -54,22 +53,16 @@ function Cadastro() {
                             </button>
                         </Col>
                     </Form.Group>
-                    <A href="/cadastro">Crie uma nova conta</A>
+                    <A href="#" onClick={() => props.handleFormVisibility('signUp')}>Crie uma nova conta</A>
                 </Form>
-            </div>
-            <div className="download-box">
-                <p>Baixe o aplicativo</p>
-                <div className="download-buttons">
-                    <a href="#">
-                        <img src={googlePlayBadge} alt="Fint" />
-                    </a>
-                    <a href="#">
-                        <img src={appStoreBadge} alt="Fint" />
-                    </a>
-                </div>
             </div>
         </Fragment>
     );
 }
 
-export default Cadastro;
+Login.propTypes = {
+    visibility: PropTypes.bool.isRequired,
+    handleFormVisibility: PropTypes.func.isRequired
+}
+
+export default Login;

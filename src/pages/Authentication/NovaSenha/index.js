@@ -10,12 +10,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { A, Navigate } from 'hookrouter';
+import PropTypes from 'prop-types';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function NovaSenha() {
+function NovaSenha(props) {
     return (
         <Fragment>
-            <div className="authentication-box">
+            <div className={props.visibility ? 'authentication-box' : 'authentication-box none'}>
                 <img src={logo} alt="Fint" className="logo" />
                 <Form>
                     <Form.Group as={Row} controlId="senha">
@@ -39,19 +40,13 @@ function NovaSenha() {
                     </Form.Group>
                 </Form>
             </div>
-            <div className="download-box">
-                <p>Baixe o aplicativo</p>
-                <div className="download-buttons">
-                    <a href="#">
-                        <img src={googlePlayBadge} alt="Fint" />
-                    </a>
-                    <a href="#">
-                        <img src={appStoreBadge} alt="Fint" />
-                    </a>
-                </div>
-            </div>
         </Fragment>
     );
+}
+
+NovaSenha.propTypes = {
+    visibility: PropTypes.bool.isRequired,
+    handleFormVisibility: PropTypes.func.isRequired
 }
 
 export default NovaSenha;

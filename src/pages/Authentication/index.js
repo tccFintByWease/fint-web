@@ -1,10 +1,14 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
+import Login from './Login/index';
 import Cadastro from './Cadastro/index';
 import NovaSenha from './NovaSenha/index';
 import RecuperarSenha from './RecuperarSenha/index';
+import googlePlayBadge from './../../assets/images/google-play-badge.png';
+import appStoreBadge from './../../assets/images/app-store-badge.png';
+import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Login() {
+function Authentication() {
 
     const [loginVisibility, setLoginVisilibity] = useState(true);
     const [signUpVisibility, setSignUpVisilibity] = useState(false);
@@ -28,22 +32,27 @@ function Login() {
         }
     }
 
-    useEffect(() => {
-        
-    }, [loginVisibility, signUpVisibility, newPasswordVisibility, recoverPasswordVisibility] );
-
     return (
         <Fragment>
             <section className="authentication">
-                {/*ver como usar essas classes para alterar visibilidade (props ou className? - ja criei o props no cadastro)*/}
-                <Login loginVisibility />
-                <Cadastro signUpVisibility />
-                <NovaSenha newPasswordVisibility />
-                <RecuperarSenha recoverPasswordVisibility />
-                {/*a caixa de download do app é igual em todas as telas portanto pode ficar aqui ao inves de nos componentes*/}
+                <Login visibility={loginVisibility} handleFormVisibility={handleFormVisibility} />
+                <Cadastro visibility={signUpVisibility} handleFormVisibility={handleFormVisibility} />
+                <NovaSenha visibility={newPasswordVisibility} handleFormVisibility={handleFormVisibility} />
+                <RecuperarSenha visibility={recoverPasswordVisibility} handleFormVisibility={handleFormVisibility} />
+                <div className="download-box">
+                    <p>Baixe o aplicativo</p>
+                    <div className="download-buttons">
+                        <a href="#">
+                            <img src={googlePlayBadge} alt="Fint" />
+                        </a>
+                        <a href="#">
+                            <img src={appStoreBadge} alt="Fint" />
+                        </a>
+                    </div>
+                </div>
             </section>
         </Fragment>
     );
 }
 
-export default Login;
+export default Authentication;

@@ -1,0 +1,33 @@
+/* Tablet */
+@media only screen and (max-width: 1299px) {
+    .footer-text > .footer-links a, .footer-copyright p {
+        font-size: 18px !important;
+    }
+}
+
+/* Mobile */
+@media only screen and (max-width: 960px) {
+    footer .footer-text .logo {
+        width: 10.427vw;
+        height: 6.67vw;
+    }
+
+    footer .footer-text .footer-links a {
+        font-size: 18px !important;
+    }
+
+    footer .footer-links > a svg {
+        font-size: 32px;
+    }
+
+    footer .footer-copyright {
+        padding: 1.8769vw 0px;
+    }
+}
+
+@media only screen and (max-width: 720px) {
+    footer .footer-text .logo {
+        width: 50px;
+        height: 32px;
+    }
+}

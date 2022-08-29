@@ -2,6 +2,10 @@
 
 ## TODO
 
+### CRÍTICO
+
+- Resolver o erro do CSS se aplicar a todas as páginas
+
 ### LANDPAGE
 
 - Carregar o conteúdo dinamicamente com o scroll
@@ -14,3 +18,7 @@
 - Criar a validação adequada dos formulários
 - Refatorar todos os CSS
 - Criar a funcionalidade de exibir ou ocultar a senha
+
+### TERMOS DE USO E POLÍTICA DE PRIVACIDADE
+
+- Adicionar o menu lateral com os tópicos da página

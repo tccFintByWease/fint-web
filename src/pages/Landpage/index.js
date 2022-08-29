@@ -2,14 +2,12 @@ import React, { Fragment } from 'react';
 import './styles.css';
 import './mediaQueries.css';
 import Navbar from './Navbar/index';
+import Footer from './../../components/Footer/index';
 import Button from './../../components/Button/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { faSquareInstagram, faSquareTwitter } from '@fortawesome/free-brands-svg-icons';
-import logo from './../../assets/images/black-logo.png';
 
 function Landpage() {
-
     return (
         <Fragment>
             <Navbar className="nav" />
@@ -107,29 +105,7 @@ function Landpage() {
                     <div className="placeholder-image"></div>
                 </div>
             </section>
-            <footer>
-                <div className="footer-text flex">
-                    <a href="#">
-                        <img src={logo} alt="Fint" className="logo" />
-                    </a>
-                    <div className="footer-links">
-                        <a href="#">Contato</a>
-                        <a href="#">Termos de Uso</a>
-                        <a href="#">FAQ</a>
-                    </div>
-                    <div className="footer-links">
-                        <a href="#">
-                            <FontAwesomeIcon icon={faSquareInstagram} />
-                        </a>
-                        <a href="#">
-                            <FontAwesomeIcon icon={faSquareTwitter} />
-                        </a>
-                    </div>
-                </div>
-                <div className="footer-copyright">
-                    <p>Copyright © 2021 Wease Co.</p>
-                </div>
-            </footer>
+            <Footer />
         </Fragment>
     );
 }

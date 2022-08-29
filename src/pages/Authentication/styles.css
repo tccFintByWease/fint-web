@@ -20,6 +20,19 @@
     text-align: center;
 }
 
+.authentication-box {
+    width: 480px;
+}
+
+.authentication-box p {
+    font-size: 18px;
+    text-align: center;
+}
+
+.authentication-box p:last-child {
+    margin-bottom: 0px;
+}
+
 .authentication-box > .logo {
     width: 126px;
     margin: 0px auto 60px;
@@ -140,6 +153,7 @@ form .password svg:hover {
 }
 
 .download-box > p {
+    text-align: center;
     font-size: 20px;
 }
 
@@ -151,6 +165,6 @@ form .password svg:hover {
     margin-right: 10px;
 }
 
-.hidden {
-    visibility: hidden;
+.none {
+    display: none;
 }

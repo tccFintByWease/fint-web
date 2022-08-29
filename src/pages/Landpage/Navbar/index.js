@@ -24,26 +24,17 @@ function Navbar() {
         const navLinks = document.querySelector('.nav-links');
         const navActions = document.querySelector('.nav-actions');
         const navBackground = document.querySelector('.nav-background');
-        
-        // if (window.innerWidth > 1299) {
-        //     nav.classList.remove('mobile-navbar');
-        //     nav.style.visibility = 'visible';
-        //     navBackground.style.visibility = 'hidden';
 
-        //     navLinks.classList.remove('flex');
-        //     navActions.classList.remove('flex');
-        // } else if (window.innerWidth <= 1299) {
-        //     nav.style.visibility = 'hidden';
-        // }
-
-        if (window.innerWidth > 1299) {
+        if (window.innerWidth >= 1300) {
             nav.classList.remove('mobile-navbar');
             nav.style.visibility = 'visible';
             navBackground.style.visibility = 'hidden';
 
             navLinks.classList.remove('flex');
             navActions.classList.remove('flex');
-        } else if (window.innerWidth > 1298 && window.innerWidth <= 1299) {
+            
+            setNavbarIsOpen(false);
+        } else if (window.innerWidth < 1300 && !navbarIsOpen) {
             nav.classList.add('mobile-navbar');
             nav.style.visibility = 'hidden';
 

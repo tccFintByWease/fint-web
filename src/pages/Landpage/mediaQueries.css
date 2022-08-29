@@ -10,11 +10,7 @@
     .explore-text > ul > li {
         font-size: 20px !important;
     }
-    /*
-    .fa-li {
-        width: 20px;
-    }
-    */
+
     .yearly > .list > p {
         font-size: 32px !important;
     }
@@ -51,15 +47,7 @@
         font-size: 20px !important;
         padding: 8px 12px !important;
     }
-
-    .footer-text > .footer-links a, .footer-copyright p {
-        font-size: 18px !important;
-    }
 }
-
-/*
-ARRUMAR AS LISTAS DO EXPLORE (O ESPAÇO DOS LIS)
-*/
 
 /* Mobile */
 @media only screen and (max-width: 960px) {
@@ -173,23 +161,6 @@ ARRUMAR AS LISTAS DO EXPLORE (O ESPAÇO DOS LIS)
         width: 25.02vw;
         padding: 1.4598 3.368vw;
     }
-
-    footer .footer-text .logo {
-        width: 10.427vw;
-        height: 6.67vw;
-    }
-
-    footer .footer-text .footer-links a {
-        font-size: 18px !important;
-    }
-
-    footer .footer-links > a svg {
-        font-size: 32px;
-    }
-
-    footer .footer-copyright {
-        padding: 1.8769vw 0px;
-    }
 }
 
 @media only screen and (max-width: 720px) {
@@ -298,10 +269,5 @@ ARRUMAR AS LISTAS DO EXPLORE (O ESPAÇO DOS LIS)
 
     .subscriptions > .plans > .yearly > .promo {
         width: 96%;
-    }
-
-    footer .footer-text .logo {
-        width: 50px;
-        height: 32px;
     }
 }
