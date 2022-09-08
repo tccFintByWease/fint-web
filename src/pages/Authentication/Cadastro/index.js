@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Row, Col, Modal } from 'react-bootstrap';
 import logo from './../../../assets/images/black-logo.png';
 import { Formik } from 'formik';
@@ -14,6 +14,8 @@ import Button from './../../../components/Button/index';
 import axios from 'axios';
 
 function Cadastro(props) {
+
+    const [step, setStep] = useState(1);
 
     const SIGN_UP_URL = '';
 
@@ -34,15 +36,28 @@ function Cadastro(props) {
 
     const schemaStepTwo = yup.object({
         // fazer
-    })
+    });
 
-    const passStep = () => {
+    const schemaStepThree = yup.object({
+        // fazer
+    });
+
+    const passStep = (step) => {
         // criar a verificação do forms
         const stepOne = document.querySelector('.sign-up-step-one');
         const stepTwo = document.querySelector('.sign-up-step-two');
+        const stepThree = document.querySelector('.sign-up-step-three');
 
-        stepOne.classList.add('none');
-        stepTwo.classList.remove('none');
+        if (step === 1) {
+            stepOne.classList.add('none');
+            stepTwo.classList.remove('none');
+            setStep(step + 1);
+        } else if (step === 2) {
+            stepTwo.classList.add('none');
+            stepThree.classList.remove('none');
+            setStep(step + 1);
+        }
+
     }
 
     return (
@@ -50,12 +65,13 @@ function Cadastro(props) {
             <img src={logo} alt="Fint" className="logo" />
             <Form className="authentication-form sign-up-step-one">
                 <div className="sign-up-step">
-                    <p>Email e senha</p>
+                    <p>1. Email e senha</p>
                     <div className="steps-bar flex">
                         <span className="flex">1</span>
                         <div className="step-progress"></div>
-                        <div className="step-progress"></div>
                         <span className="flex">2</span>
+                        <div className="step-progress"></div>
+                        <span className="flex">3</span>
                     </div>
                 </div>
                 <Form.Group as={Row} controlId="email">
@@ -75,20 +91,21 @@ function Cadastro(props) {
                         <FontAwesomeIcon icon={faEye} />
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row} controlId="next-step">
+                <Form.Group as={Row} controlId="pass-step-one">
                     <Col>
-                        <Button text="Avançar" transparent={false} onClick={passStep} />
+                        <Button text="Avançar" transparent={false} onClick={() => passStep(step)} />
                     </Col>
                 </Form.Group>
             </Form>
             <Form className="authentication-form sign-up-step-two none">
-            <div className="sign-up-step">
+                <div className="sign-up-step">
                     <p>2. Dados pessoais</p>
                     <div className="steps-bar flex">
                         <span className="flex">1</span>
                         <div className="step-progress"></div>
-                        <div className="step-progress"></div>
                         <span className="flex">2</span>
+                        <div className="step-progress"></div>
+                        <span className="flex">3</span>
                     </div>
                 </div>
                 <Form.Group as={Row} controlId="name">
@@ -109,6 +126,29 @@ function Cadastro(props) {
                 <Form.Group as={Row} controlId="birth-date">
                     <Col>
                         <Form.Control type="date" placeholder="Data de nascimento" name="date" />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="pass-step-two">
+                    <Col>
+                        <Button text="Avançar" transparent={false} onClick={() => passStep(step)} />
+                    </Col>
+                </Form.Group>
+            </Form>
+            <Form className="authentication-form sign-up-step-three none">
+                <div className="sign-up-step">
+                    <p>3. Moeda padrão</p>
+                    <div className="steps-bar flex">
+                        <span className="flex">1</span>
+                        <div className="step-progress"></div>
+                        <span className="flex">2</span>
+                        <div className="step-progress"></div>
+                        <span className="flex">3</span>
+                    </div>
+                </div>
+                <Form.Group as={Row} controlId="initialValue">
+                    <Col className="flex">
+                        <Form.Control type="number" placeholder="0" value="0" name="initialValue" />
+                        <Form.Control type="text" placeholder="BRL" value="BRL" name="initialValue" />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="sign-up">
