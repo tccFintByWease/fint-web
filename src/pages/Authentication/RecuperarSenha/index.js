@@ -13,7 +13,7 @@ function RecuperarSenha(props) {
         <Fragment>
             <div className={props.visibility ? 'authentication-box' : 'authentication-box none'}>
                 <img src={logo} alt="Fint" className="logo" />
-                <Form>
+                <Form className="authentication-form">
                     <Form.Group as={Row} controlId="email">
                         <Col>
                             <Form.Control type="email" placeholder="Email" name="email" />

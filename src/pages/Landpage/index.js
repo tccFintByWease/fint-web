@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import './styles.css';
 import './mediaQueries.css';
 import Navbar from './Navbar/index';
@@ -9,7 +9,7 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
 function Landpage() {
     return (
-        <Fragment>
+        <div id="landpage">
             <Navbar className="nav" />
             <section className="hero flex" id="hero">
                 <div className="hero-text">
@@ -106,7 +106,7 @@ function Landpage() {
                 </div>
             </section>
             <Footer />
-        </Fragment>
+        </div>
     );
 }
 

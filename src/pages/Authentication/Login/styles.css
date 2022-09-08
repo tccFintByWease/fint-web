@@ -1,1 +1,94 @@
 @import url(./../../../styles/global.css);
+
+/* Form*/
+/* ------------------------------------------------------------- */
+
+/* Date input */
+::-webkit-datetime-edit-text,
+::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-year-field {
+    color: var(--detailsGray);
+}
+
+::-webkit-datetime-edit-month-field:focus, ::-webkit-datetime-edit-day-field:focus, ::-webkit-datetime-edit-year-field:focus {
+    background-color: transparent;
+}
+
+::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+}
+
+/* Sign-up Steps */
+.sign-up-step {
+    font-size: 24px !important;
+}
+
+.sign-up-step > p {
+    margin-bottom: 20px;
+    
+    font-size: 24px !important;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.sign-up-step > .steps-bar {
+    margin-bottom: 40px;
+    
+    justify-content: space-between;
+    align-items: center;
+}
+
+.steps-bar > .step-progress {
+    height: 4px;
+    border-radius: 50px;
+    
+}
+
+.sign-up-step-one .steps-bar > .step-progress {
+    width: 10%;
+    background-color: var(--primaryGreen);
+}
+
+.sign-up-step-one .steps-bar > .step-progress:last-of-type {
+    width: 90%;
+    background-color: var(--detailsGray) !important;
+}
+
+.sign-up-step-two .steps-bar > .step-progress {
+    width: 90%;
+    background-color: var(--primaryGreen);
+}
+
+.sign-up-step-two .steps-bar > .step-progress:last-of-type {
+    width: 10%;
+    background-color: var(--detailsGray) !important;
+}
+
+.sign-up-step span {
+    width: 32px;
+    height: 32px;
+    background-color: var(--primaryGreen);
+    border-radius: 50px;
+
+    position: absolute;
+    right: 57%;
+
+    font-size: 18px;
+    color: var(--white);
+}
+
+.sign-up-step span:last-child {
+    left: 57%;
+}
+
+.sign-up-step-two span:first-child {
+    background-color: var(--primaryGreen);
+}
+
+.sign-up-step-one span:last-child {
+    background-color: var(--detailsGray);
+}
+
+.sign-up-step, .sign-up-step span {
+    justify-content: center;
+    align-items: center;
+}

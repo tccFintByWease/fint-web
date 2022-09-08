@@ -18,7 +18,7 @@ function NovaSenha(props) {
         <Fragment>
             <div className={props.visibility ? 'authentication-box' : 'authentication-box none'}>
                 <img src={logo} alt="Fint" className="logo" />
-                <Form>
+                <Form className="authentication-form">
                     <Form.Group as={Row} controlId="senha">
                         <Col className="password">
                             <Form.Control type="password" placeholder="Senha" name="senha" />

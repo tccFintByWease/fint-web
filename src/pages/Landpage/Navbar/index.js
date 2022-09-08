@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import './styles.css';
 import './mediaQueries.css';
 import logo from './../../../assets/images/black-logo.png';
@@ -89,7 +89,7 @@ function Navbar() {
     }
 
     return (
-        <Fragment>
+        <div id="landpage__nav">
             <header className="header flex">
                 <a href="#hero">
                     <img src={logo} alt="Fint" className="logo" />
@@ -111,7 +111,7 @@ function Navbar() {
                 </nav>
             </header>
             <div className="nav-background" onClick={handleNavbarisOpen}></div>
-        </Fragment>
+        </div>
     );
 }
 

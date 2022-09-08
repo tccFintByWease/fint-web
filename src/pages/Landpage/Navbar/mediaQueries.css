@@ -2,15 +2,15 @@
 
 /* Tablet */
 @media only screen and (max-width: 1299px) {
-    header {
+    #landpage__nav header {
         flex-wrap: wrap;
     }
 
-    header .hamburger {
+    #landpage__nav header .hamburger {
         visibility: visible;
     }
 
-    header a, header svg {
+    #landpage__nav header a, header svg {
         height: 100%;
 
         display: flex;
@@ -18,7 +18,7 @@
         align-items: center;
     }
 
-    header nav {
+    #landpage__nav header nav {
         background-color: var(--white);
         box-shadow: 0px 1.0416vw 1.0416vw rgba(0, 0, 0, 0.2);
         
@@ -30,7 +30,7 @@
         visibility: hidden;
     }
 
-    nav a {
+    #landpage__nav nav a {
         width: 100%;
         border-bottom: solid 2px var(--primaryGray);
         padding: 0.7698vw 0px;
@@ -38,11 +38,11 @@
         text-align: center;
     }
 
-    nav .nav-links a:first-child {
+    #landpage__nav nav .nav-links a:first-child {
         border-top: solid 2px var(--primaryGray);
     }
 
-    nav, .nav-links, .nav-actions {
+    #landpage__nav nav, .nav-links, .nav-actions {
         width: 100%;
         flex-direction: column;
     }
@@ -58,26 +58,26 @@
 
 /* Mobile */
 @media only screen and (max-width: 960px) {
-    header {
+    #landpage__nav header {
         height: 10.4167vw !important;
         padding-top: 2.0834vw;
         padding-bottom: 2.0834vw;
     }
     
-    header .hamburger {
+    #landpage__nav header .hamburger {
         font-size: 32px;
     }
 
-    header > nav {
+    #landpage__nav header > nav {
         margin-top: 4.375vw;
     }
 
-    nav a {
+    #landpage__nav nav a {
         font-size: 20px !important;
         padding: 1.04167vw 0px;
     }
 
-    nav > .nav-actions > .linkButton {
+    #landpage__nav nav > .nav-actions > .linkButton {
         width: 200px;
         height: 40px;
         padding: 18px 32px;
@@ -85,22 +85,22 @@
         font-size: 18px !important;
     }
 
-    header > a > .logo {
+    #landpage__nav header > a > .logo {
         width: 50px;
         height: 32px;
     }
 }
 
 @media only screen and (max-width: 720px) {
-    header {
+    #landpage__nav header {
         height: 60px !important;
         padding: 10px 0px !important;
     }
-    header .hamburger {
+    #landpage__nav header .hamburger {
         font-size: 28px;
     }
 
-    header > nav {
+    #landpage__nav header > nav {
         margin-top: 0px !important;
     }
 
@@ -108,7 +108,7 @@
         top: 60px;
     }
 
-    nav > .nav-actions > .linkButton {
+    #landpage__nav nav > .nav-actions > .linkButton {
         width: 180px;
         height: 36px;
         padding: 12px 20px !important;

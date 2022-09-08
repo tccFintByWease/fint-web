@@ -42,7 +42,7 @@
         font-size: 20px;
     }
 
-    button {
+    #landpage button {
         height: 48px !important;
         font-size: 20px !important;
         padding: 8px 12px !important;
@@ -58,15 +58,12 @@
         flex-direction: column;
     }
 
-    .hero-text h1 {
+    .hero-text > h1 {
         width: 90%;
-    }
-
-    h1 {
         font-size: 36px !important;
     }
 
-    h2 {
+    .explore-text > h2, .subscriptions > h2, .about-us-text > h2 {
         font-size: 32px !important;
     }
 
@@ -172,15 +169,15 @@
         margin-top: 60px !important;
     }
 
-    h1 {
+    .hero-text > h1 {
         font-size: 36px !important;
     }
 
-    h2 {
+    .explore-text > h2, .subscriptions > h2, .about-us-text > h2 {
         font-size: 36px !important;
     }
 
-    h1, h2 {
+    .hero-text > h1, .explore-text > h2, .subscriptions > h2, .about-us-text > h2 {
         margin: 0px 0px 20px !important;
     }
 
@@ -246,7 +243,7 @@
     }
 
     .monthly > .button-box, .quarterly > .button-box {
-        margin: -3.125vw 0px;
+        margin: -0.834vw 0px;
     }
 
     .subscriptions > .plans button {

@@ -38,11 +38,12 @@
     margin: 0px auto 60px;
 }
 
-.authentication-box > form input {
+.authentication-box > .authentication-form input {
     width: 360px;
     height: 40px;
     margin: 10px 0px;
     padding: 20px;
+    border: solid 1px var(--secundaryGray);
     border-radius: 50px;
 
     font-size: 20px;
@@ -67,32 +68,27 @@
     transition: ease all 0.3s;
 }
 
-.authentication-box button:hover {
-    background: transparent;
-    color: var(--primaryGreen);
-}
-
-form a {
+.authentication-form a {
     font-size: 18px;
     color: var(--detailsGreen);
 }
 
-form a:hover {
+.authentication-form a:hover {
     color: var(--secundaryGreen);
 }
 
-form .row, form .col-sm-12 {
+.authentication-form .row, .authentication-form .col-sm-12 {
     height: 100% !important;
 }
 
-form hr {
+.authentication-form hr {
     height: 1px;
     margin: 20px 0px;
     background: var(--detailsGray);
     border: none;
 }
 
-form .password svg {
+.authentication-form .password svg {
     margin: -40px 140px;
     position: absolute;
 
@@ -102,7 +98,7 @@ form .password svg {
     cursor: pointer;
 }
 
-form .password svg:hover {
+.authentication-form .password svg:hover {
     color: rgba(129, 129, 129, 0.6);
 }
 

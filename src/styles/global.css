@@ -37,3 +37,8 @@ p {
 .flex {
     display: flex;
 }
+
+input:focus {
+    border-color: var(--secundaryGray) !important;
+    box-shadow: none !important;
+}

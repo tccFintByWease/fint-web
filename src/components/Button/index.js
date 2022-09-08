@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 
 function Button(props) {
     return (
-        <button className={props.transparent ? 'btn-action transparent' : 'btn-action normal'}>
+        <button type={props.type ? props.type : 'button'} className={props.transparent ? 'btn-action transparent' : 'btn-action normal'} onClick={props.onClick}>
             {props.text}
         </button>
     );
 }
 
 Button.propTypes = {
-    text: PropTypes.number.isRequired,
+    type: PropTypes.string,
+    text: PropTypes.string.isRequired,
+    onClick: PropTypes.func,
     transparent: PropTypes.bool.isRequired
 }  
 
