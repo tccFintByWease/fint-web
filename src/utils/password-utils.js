@@ -1,4 +1,9 @@
-function handlePasswordVisibility(event) {
+import faEye from './../assets/images//eye-solid.png';
+import faEyeSlash from './../assets/images/eye-slash-solid.png';
+
+const handlePasswordVisibility = (event) => {
+    let passwordVisibility = false;
+
     const password = document.querySelector('#password');
     const passwordConfirmation = document.querySelector('#passwordConfirmation');
 
@@ -14,7 +19,7 @@ function handlePasswordVisibility(event) {
         }
 
         button.src = faEyeSlash;
-        setPasswordVisibility(true);
+        passwordVisibility = true;
     } else {
         if (button === passwordButton) {
             password.type = 'password';
@@ -23,7 +28,7 @@ function handlePasswordVisibility(event) {
         }
 
         button.src = faEye;
-        setPasswordVisibility(false);
+        passwordVisibility = false;
     }
 }
 

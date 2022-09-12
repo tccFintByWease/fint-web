@@ -1,22 +1,20 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Form, Row, Col, Modal } from 'react-bootstrap';
 import logo from './../../../assets/images/black-logo.png';
-import googlePlayBadge from './../../../assets/images/google-play-badge.png';
-import appStoreBadge from './../../../assets/images/app-store-badge.png';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import './styles.css';
+import './../styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { A, Navigate } from 'hookrouter';
-import PropTypes from 'prop-types';
+import DownloadBox from './../components/DownloadBox/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function NovaSenha(props) {
+function NovaSenha() {
     return (
-        <Fragment>
-            <div className={props.visibility ? 'authentication-box' : 'authentication-box none'}>
+        <section className="authentication">
+            <div className="authentication-box">
                 <img src={logo} alt="Fint" className="logo" />
                 <Form className="authentication-form">
                     <Form.Group as={Row} controlId="senha">
@@ -40,13 +38,9 @@ function NovaSenha(props) {
                     </Form.Group>
                 </Form>
             </div>
-        </Fragment>
+            <DownloadBox />
+        </section>
     );
-}
-
-NovaSenha.propTypes = {
-    visibility: PropTypes.bool.isRequired,
-    handleFormVisibility: PropTypes.func.isRequired
 }
 
 export default NovaSenha;

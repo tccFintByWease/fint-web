@@ -3,15 +3,16 @@ import { Form, Row, Col, Modal } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { A } from 'hookrouter';
-import PropTypes from 'prop-types';
+import DownloadBox from './../components/DownloadBox/index';
 import logo from './../../../assets/images/black-logo.png';
 import './styles.css';
+import './../styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function RecuperarSenha(props) {
+function RecuperarSenha() {
     return (
-        <Fragment>
-            <div className={props.visibility ? 'authentication-box' : 'authentication-box none'}>
+        <section className="authentication">
+            <div className="authentication-box">
                 <img src={logo} alt="Fint" className="logo" />
                 <Form className="authentication-form">
                     <Form.Group as={Row} controlId="email">
@@ -28,16 +29,12 @@ function RecuperarSenha(props) {
                     </Form.Group>
                     <p>Verifique seu email ou telefone e acesse o link enviado para recuperar sua conta</p>
                     <hr />
-                    <p><A href="#" onClick={() => props.handleFormVisibility('signUp')}>Criar uma nova conta</A> ou <A href="#" onClick={() => props.handleFormVisibility('login')}>Conectar-se</A></p>
+                    <p><A href="/sign-up">Criar uma nova conta</A> ou <A href="/login">Conectar-se</A></p>
                 </Form>
             </div>
-        </Fragment>
+            <DownloadBox />
+        </section>
     );
-}
-
-RecuperarSenha.propTypes = {
-    visibility: PropTypes.bool.isRequired,
-    handleFormVisibility: PropTypes.func.isRequired
 }
 
 export default RecuperarSenha;

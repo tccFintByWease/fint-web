@@ -156,25 +156,6 @@
     margin-right: 20px;
 }
 
-.download-box {
-    width: 480px;
-    padding: 20px 60px !important;
-    margin-top: 20px;
-}
-
-.download-box > p {
-    text-align: center;
-    font-size: 20px;
-}
-
-.download-box > .download-buttons img {
-    width: 175px;
-}
-
-.download-box > .download-buttons a:first-child {
-    margin-right: 10px;
-}
-
 .none {
     display: none;
 }

@@ -1,8 +1,8 @@
 import Landpage from '../pages/Landpage/index';
-import Login from '../pages/Login/index';
-import SignUp from '../pages/SignUp/index';
-import ResetPassword from '../pages/ResetPassword/index';
-import ForgotPassword from '../pages/ForgotPassword/index';
+import Login from '../pages/Authentication/Login/index';
+import SignUp from '../pages/Authentication/SignUp/index';
+import ResetPassword from '../pages/Authentication/ResetPassword/index';
+import ForgotPassword from '../pages/Authentication/ForgotPassword/index';
 import Documentation from '../pages/Documentation/index';
 
 const routes = {
