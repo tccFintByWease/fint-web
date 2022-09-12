@@ -68,38 +68,52 @@
     transition: ease all 0.3s;
 }
 
-.authentication-form a {
+.authentication-box a {
     font-size: 18px;
     color: var(--detailsGreen);
 }
 
-.authentication-form a:hover {
+.authentication-box a:hover {
     color: var(--secundaryGreen);
 }
 
-.authentication-form .row, .authentication-form .col-sm-12 {
-    height: 100% !important;
-}
-
-.authentication-form hr {
+.authentication-box hr {
     height: 1px;
     margin: 20px 0px;
     background: var(--detailsGray);
     border: none;
 }
 
-.authentication-form .password svg {
-    margin: -40px 140px;
-    position: absolute;
+.authentication-form .row, .authentication-form .col-sm-12 {
+    height: 100% !important;
+}
 
-    font-size: 20px;
-    color: var(--detailsGray);
+.authentication-form .password img {
+    position: relative;
+    float: right;
+    margin: -40px 20px;
+    
+    width: 20px;
+    /* color: var(--detailsGray); */
+    opacity: 0.6;
     
     cursor: pointer;
 }
 
-.authentication-form .password svg:hover {
-    color: rgba(129, 129, 129, 0.6);
+.authentication-form .password img:hover {
+    opacity: 0.4;
+    /* color: rgba(129, 129, 129, 0.6); */
+}
+
+.authentication-form .error-message {
+    position: relative;
+
+    font-size: 14px;
+    color: var(--red);
+}
+
+.authentication-form .input-error {
+    border-color: var(--red) !important;
 }
 
 .authentication-box .btn-facebook {
@@ -134,8 +148,8 @@
 }
 
 .authentication-box button:hover {
-    background: transparent;
-    color: var(--primaryGreen);
+    background-color: var(--detailsGreen);
+    border-color: var(--detailsGreen);
 }
 
 .authentication-box button svg {

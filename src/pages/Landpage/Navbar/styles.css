@@ -25,7 +25,7 @@
     letter-spacing: var(--maxSpacing);
 }
 
-#landpage__navnav > span > a:last-child {
+#landpage__nav nav > span > a:last-child {
     margin-right: 0px;
 }
 
@@ -43,16 +43,16 @@
     color: var(--primaryGreen);
 }
 
-#landpage__navnav > .nav-actions > a { 
+#landpage__nav nav > .nav-actions > a { 
     color: var(--primaryGreen);
     transition: var(--transition-hover);
 }
 
-#landpage__navnav > .nav-actions > a:hover {
+#landpage__nav nav > .nav-actions > a:hover {
     color:var(--detailsGreen);
 }
 
-#landpage__navnav > .nav-actions > .linkButton {
+#landpage__nav nav > .nav-actions > .linkButton {
     height: 3.125vw;
     padding: 0.834vw 1.67vw;
     background-color: var(--primaryGreen);

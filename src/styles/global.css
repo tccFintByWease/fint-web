@@ -22,6 +22,8 @@
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+
+    outline: none;
 }
 
 body, a {
@@ -38,7 +40,27 @@ p {
     display: flex;
 }
 
-input:focus {
+input:focus, select:focus {
     border-color: var(--secundaryGray) !important;
+    outline: none;
     box-shadow: none !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.is-invalid, .is-valid {
+    background-image: none !important;
+}
+
+form {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

@@ -1,1 +1,147 @@
 @import url(./../../../styles/global.css);
+
+/* Form */
+/* ------------------------------------------------------------- */
+
+/* Date input */
+
+
+::-webkit-datetime-edit-text,
+::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-year-field {
+    color: var(--black);
+}
+
+::-webkit-datetime-edit-month-field:focus, ::-webkit-datetime-edit-day-field:focus, ::-webkit-datetime-edit-year-field:focus {
+    background-color: transparent;
+}
+
+::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+}
+
+/* Sign-up Steps */
+.sign-up-step {
+    font-size: 24px !important;
+}
+
+.sign-up-step > p {
+    margin-bottom: 20px;
+    
+    font-size: 24px !important;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.sign-up-step > .steps-bar {
+    margin-bottom: 40px;
+    
+    justify-content: space-between;
+    align-items: center;
+}
+
+.steps-bar > .step-progress {
+    height: 4px;
+    border-radius: 50px;
+}
+
+.sign-up-step, .sign-up-step span {
+    justify-content: center;
+    align-items: center;
+}
+
+/* Step One */
+.steps-bar {
+    justify-content: none;
+}
+
+.step-progress {
+    background-color: var(--detailsGray) !important;
+    transition: ease all 0.5s;
+}
+
+.steps-bar > .step-progress:first-of-type {
+    width: 5%;
+    background-color: var(--primaryGreen) !important;
+}
+
+.steps-bar > .step-progress:last-of-type {
+    width: 95%;
+}
+
+.sign-up-step span {
+    width: 32px;
+    height: 32px;
+    background-color: var(--detailsGray);
+    border-radius: 50px;
+
+    position: absolute;
+
+    font-size: 18px;
+    color: var(--white);
+
+    transition-delay: 0.8s;
+    transition: ease all 0.3s;
+}
+
+.sign-up-step span:first-child {
+    background-color: var(--primaryGreen);
+}
+
+.sign-up-step span:nth-of-type(2) {
+    margin-left: 163.75px;
+}
+
+.sign-up-step span:last-child {
+    margin-left: 327.5px;
+}
+
+.sign-up-step-two span:first-child {
+    background-color: var(--primaryGreen);
+}
+
+/* Step Three */
+.sign-up-step-three .col {
+    justify-content: center;
+    align-items: center;
+}
+
+.sign-up-step-three .col #initialValue,
+.sign-up-step-three .col select {
+    width: 50%;
+    height: 60px;
+    margin: 0px;
+
+    border: none;
+    border-radius: 0px;
+
+    font-size: 36px;
+    text-align: center;
+}
+
+.sign-up-step-three .col select option {
+    font-size: 24px;
+}
+
+.sign-up-step-three .col > .form-check {
+    padding: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sign-up-step-three #termsOfUse {
+    width: 20px;
+    height: 20px;
+    margin: 0px !important;
+    padding: 0px;
+    border-radius: 5px;
+}
+
+.sign-up-step-three label {
+    width: 330px;
+}
+
+.sign-up-step-three label > p, .sign-up-step-three label > p > a {
+    font-size: 16px;
+    text-align: left;
+}
