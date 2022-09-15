@@ -4,8 +4,6 @@
 /* ------------------------------------------------------------- */
 
 /* Date input */
-
-
 ::-webkit-datetime-edit-text,
 ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-year-field {
     color: var(--black);
@@ -81,10 +79,8 @@
 
     transition-delay: 0.8s;
     transition: ease all 0.3s;
-}
 
-.sign-up-step span:first-child {
-    background-color: var(--primaryGreen);
+    user-select: none;
 }
 
 .sign-up-step span:nth-of-type(2) {
@@ -95,8 +91,23 @@
     margin-left: 327.5px;
 }
 
-.sign-up-step-two span:first-child {
-    background-color: var(--primaryGreen);
+.sign-up-step span.achieved-step {
+    background-color: var(--primaryGreen) !important;
+
+    cursor: pointer;
+}
+
+.sign-up-step span.current-step {
+    border: solid 2px var(--primaryGreen);
+    background-color: var(--white) !important;
+
+    color: var(--primaryGreen);
+}
+
+.sign-up-step span.achieved-step:hover {
+    background-color: var(--detailsGreen) !important;
+    border-color: var(--detailsGreen) !important;
+    color: var(--white);
 }
 
 /* Step Three */

@@ -20,6 +20,7 @@ const handlePasswordVisibility = (event) => {
 
         button.src = faEyeSlash;
         passwordVisibility = true;
+        console.log('passwordVisibility:' + passwordVisibility);
     } else {
         if (button === passwordButton) {
             password.type = 'password';

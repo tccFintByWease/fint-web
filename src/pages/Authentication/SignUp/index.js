@@ -2,157 +2,111 @@ import React, { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 import logo from './../../../assets/images/black-logo.png';
 import { Formik } from 'formik';
-import * as yup from 'yup';
+import { schemaStepOne, schemaStepTwo, schemaStepThree } from '../../../store/schemas/sign-up-schemas';
 import faEye from './../../../assets/images/eye-solid.png';
 import { A } from 'hookrouter';
 import './styles.css';
 import './../styles.css';
-import Button from '../../../components/Button/index';
-import ListCurrencies from '../../../store/Currencies/index';
-import { validateCPF, formatCPF } from '../../../utils/cpf-utils';
-import { handlePasswordVisibility } from '../../../utils/password-utils';
-import { formatPhone } from '../../../utils/phone-utils';
-import DownloadBox from './../components/DownloadBox/index';
+import Button from './../../../components/Button/index';
+import DownloadBox from './../components/DownloadBox/index'
+import ListCurrencies from './../../../store/currencies';
+import { formatCPF } from './../../../utils/cpf-utils'
+import { formatPhone } from './../../../utils/phone-utils';
+import { handlePasswordVisibility } from './../../../utils/password-utils';
 import axios from 'axios';
-
-// LISTA:
-
-/*
-    - CRIAR OS BOTÕES PRA VOLTAR NOS PASSOS (COM AUTO PREENCHIMENTO DOS FORMS USANDO O LOCAL STORAGE)
-    - CRIAR UMA PÁGINA PRA CADA COMPONENTE DE AUTENTICAÇÃO (ACHO QUE FOI)
-    - MUDAR OS NOMES PRA INGLÊS
-    - CRIAR A PASSWORD UTILS (SÓ FUNCIONA UMA VEZ O BOTÃO)
-*/
 
 function SignUp() {
 
-    const [step, setStep] = useState(1);
-    const [currentStep, setCurrentStep] = useState(1);
-    const [stepOneValues, setStepOneValues] = useState('');
-    const [stepTwoValues, setStepTwoValues] = useState('');
+    const [achievedStep, setAchievedStep] = useState(1); // the steps reached by the user
+    const [currentStep, setCurrentStep] = useState(1); // the step in which the user is
+    const [stepOneValues, OneValues] = useState('');
+    const [stepTwoValues, TwoValues] = useState('');
 
     const SIGN_UP_URL = '';
 
-    const schemaStepOne = yup.object({
-
-        email: yup.string()
-            .email('Insira um email válido')
-            .required('Insira seu email')
-            .max(320, 'O email deve ter no máximo 320 caracteres'),
-
-        password: yup.string()
-            .required('Insira sua senha')
-            .min(10, 'A senha deve ter no mínimo 10 caracteres')
-            .max(20, 'A senha deve ter entre 10 e 20 caracteres'),
-
-        passwordConfirmation: yup.string()
-            .required('Confirme sua senha')
-            .oneOf([yup.ref('password'), null], 'As senhas não coincidem')
-    });
-
-    const schemaStepTwo = yup.object({
-        name: yup.string()
-            .required('Insira seu nome completo'),
-
-        cpf: yup.string()
-            .required('Insira seu CPF')
-            .min(14, 'Insira um CPF válido').max(14)
-            .test('validated-cpf', 'Insira um CPF válido', (cpf) => validateCPF(cpf)),
-
-        phone: yup.string()
-            .required('Insira seu telefone')
-            .min(15, 'Insira um telefone válido').max(15),
-
-        birthDate: yup.date()
-            .required('Insira sua data de nascimento')
-    });
-
-    const schemaStepThree = yup.object({
-        initialValue: yup.number()
-            .required(),
-
-        currentCurrency: yup.string()
-            .required()
-    });
-
-    const selectStep = (step) => {
-        const root = document.querySelector(':root');
-        const variables = getComputedStyle(root);
+    const handleFormVisibility = (step) => {
         const stepDescription = document.querySelector('.step-description');
 
         const stepOne = document.querySelector('.sign-up-step-one');
         const stepTwo = document.querySelector('.sign-up-step-two');
         const stepThree = document.querySelector('.sign-up-step-three');
 
-        const stepProgress = document.querySelectorAll('.step-progress');
-
-        const steps = document.querySelectorAll('.step');
-
-        // Arrumar o step e o CurrentStep: quando estiver em um passo, poder voltar pros que já avançou tanto no botão quanto nos botões de passo, e não pular passos
-        // Arrumar o CSS disso (passo selecionado, passo alcançado, hover etc)
         if (step === 1) {
             stepOne.classList.remove('none');
             stepTwo.classList.add('none');
             stepThree.classList.add('none');
 
-            stepProgress[0].style.width = "5%";
-            stepProgress[1].style.width = "95%";
-            
-            steps[0].style.backgroundColor = variables.getPropertyValue('--primaryGreen');
-            steps[1].style.backgroundColor = variables.getPropertyValue('--detailsGray');
-            steps[2].style.backgroundColor = variables.getPropertyValue('--detailsGray');
-
-            stepDescription.innerText = '2. Dados pessoais';
-        } else if (step === 2 && currentStep >= 2) {
+            stepDescription.innerText = '1. Email e senha';
+        } else if (step === 2) {
             stepOne.classList.add('none');
             stepTwo.classList.remove('none');
             stepThree.classList.add('none');
 
-            stepProgress[0].style.width = "50%";
-            stepProgress[1].style.width = "50%";
-            
-            steps[0].style.backgroundColor = variables.getPropertyValue('--primaryGreen');
-            steps[1].style.backgroundColor = variables.getPropertyValue('--primaryGreen');
-            steps[2].style.backgroundColor = variables.getPropertyValue('--detailsGray');
-
             stepDescription.innerText = '2. Dados pessoais';
-
-            setStep(step);
-        } else if (step === 3 && currentStep === 3) {
+        } else if (step === 3) {
             stepOne.classList.add('none');
             stepTwo.classList.add('none');
             stepThree.classList.remove('none');
 
-            stepProgress[0].style.width = "95%";
-            stepProgress[1].style.width = "5%";
-
-            steps[0].style.backgroundColor = variables.getPropertyValue('--primaryGreen');
-            steps[1].style.backgroundColor = variables.getPropertyValue('--primaryGreen');
-            steps[2].style.backgroundColor = variables.getPropertyValue('--primaryGreen');
-
             stepDescription.innerText = '3. Moeda padrão';
-
-            setStep(step);
         }
     }
 
-    const passStep = (values) => {
-        if (step === 1) {
-            localStorage.setItem('stepOneValues', JSON.stringify(values));
+    // ARRUMAR ISSO
+    const handleStep = (values, step, completeStep) => {
+        const stepProgress = document.querySelectorAll('.step-progress');
+        const steps = document.querySelectorAll('.step');
 
-            selectStep(2);
-            setCurrentStep(2);
-        } else if (step === 2) {
-            localStorage.setItem('stepTwoValues', JSON.stringify(values));
-
-            selectStep(3);
-            setCurrentStep(3);
+        if (completeStep) {
+            if (achievedStep === 1) {
+                localStorage.setItem('stepOneValues', JSON.stringify(values));
+    
+                stepProgress[0].style.width = "50%";
+                stepProgress[1].style.width = "50%";
+    
+                if (currentStep === achievedStep) setAchievedStep(2);
+    
+                handleFormVisibility(2);
+                
+            } else if (achievedStep === 2) {
+                localStorage.setItem('stepTwoValues', JSON.stringify(values));
+    
+                stepProgress[0].style.width = "95%";
+                stepProgress[1].style.width = "5%";
+    
+                if (currentStep === achievedStep) setAchievedStep(3);
+                
+                handleFormVisibility(3);
+            }
+        } else {
+            if (step === 1) {
+                steps[0].classList.add('current-step');
+                steps[1].classList.remove('current-step');
+                steps[2].classList.remove('current-step');
+    
+                handleFormVisibility(1);
+                setCurrentStep(1);
+            } else if (step === 2 && achievedStep >= 2) {
+                steps[0].classList.remove('current-step');
+                steps[1].classList.add('current-step');
+                steps[2].classList.remove('current-step');
+    
+                handleFormVisibility(2);
+                setCurrentStep(2);
+            } else if (step === 3 && achievedStep === 3) {
+                steps[0].classList.remove('current-step');
+                steps[1].classList.remove('current-step');
+                steps[2].classList.add('current-step');
+    
+                handleFormVisibility(3);
+                setCurrentStep(3);
+            }
         }
     }
 
-    const finishSignUp = (values) => {
-        setStepOneValues(JSON.parse(localStorage.getItem('stepOneValues')));
-        setStepTwoValues(JSON.parse(localStorage.getItem('stepTwoValues')));
+    const signUp = (values) => {
+        OneValues(JSON.parse(localStorage.getItem('stepOneValues')));
+        TwoValues(JSON.parse(localStorage.getItem('stepTwoValues')));
 
         const userData = {...stepOneValues, ...stepTwoValues, ...values}
         localStorage.setItem('userData', JSON.stringify(userData));
@@ -175,15 +129,15 @@ function SignUp() {
                 <div className="sign-up-step">
                     <p className="step-description">1. Email e senha</p>
                     <div className="steps-bar flex">
-                        <span className="step flex" onClick={() => selectStep(1)}>1</span>
+                        <span className={achievedStep >= 1 ? 'step flex current-step achieved-step' : 'step flex current-step'} onClick={() => handleStep('', 1, false)}>1</span>
                         <div className="step-progress"></div>
-                        <span className="step flex" onClick={() => selectStep(2)}>2</span>
+                        <span className={achievedStep >= 2 ? 'step flex achieved-step' : 'step flex'} onClick={() => handleStep('', 2, false)}>2</span>
                         <div className="step-progress"></div>
-                        <span className="step flex" onClick={() => selectStep(3)}>3</span>
+                        <span className={achievedStep === 3 ? 'step flex achieved-step' : 'step flex'} onClick={() => handleStep('', 3, false)}>3</span>
                     </div>
                 </div>
                 <Formik
-                    onSubmit={(values) => passStep(values)}
+                    onSubmit={(values) => handleStep(values, 2, true)}
                     initialValues={{
                         email: '',
                         password: '',
@@ -257,7 +211,7 @@ function SignUp() {
                                     <img src={faEye} alt="Ícone de olho" id="passwordConfirmationButton" onClick={(event) => handlePasswordVisibility(event)} />
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} controlId="passStepOne">
+                            <Form.Group as={Row} controlId="handleStepOne">
                                 <Col>
                                     <Button type="submit" text="Avançar" transparent={false} />
                                 </Col>
@@ -266,7 +220,7 @@ function SignUp() {
                     )}
                 </Formik>
                 <Formik
-                    onSubmit={(values) => passStep(values)}
+                    onSubmit={(values) => handleStep(values, 3, true)}
                     initialValues={{
                         name: '',
                         cpf: '',
@@ -361,7 +315,7 @@ function SignUp() {
                                     )}
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} controlId="passStepTwo">
+                            <Form.Group as={Row} controlId="handleStepTwo">
                                 <Col>
                                     <Button type="submit" text="Avançar" transparent={false} />
                                 </Col>
@@ -370,7 +324,7 @@ function SignUp() {
                     )}
                 </Formik>
                 <Formik
-                    onSubmit={(values) => finishSignUp(values)}
+                    onSubmit={(values) => signUp(values)}
                     initialValues={{
                         initialValue: '',
                         currentCurrency: ''
