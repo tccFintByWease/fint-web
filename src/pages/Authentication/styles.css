@@ -88,13 +88,21 @@
     height: 100% !important;
 }
 
+.authentication-form .password {
+    justify-content: right;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.authentication-form .password input {
+    width: 360px;
+}
+
 .authentication-form .password img {
-    position: relative;
-    float: right;
-    margin: -40px 20px;
+    position: absolute;
+    margin: 0px -20px;
     
     width: 20px;
-    /* color: var(--detailsGray); */
     opacity: 0.6;
     
     cursor: pointer;
@@ -102,12 +110,10 @@
 
 .authentication-form .password img:hover {
     opacity: 0.4;
-    /* color: rgba(129, 129, 129, 0.6); */
 }
 
 .authentication-form .error-message {
-    position: relative;
-
+    margin: 0px;
     font-size: 14px;
     color: var(--red);
 }

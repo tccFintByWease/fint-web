@@ -53,7 +53,9 @@
 }
 
 #landpage__nav nav > .nav-actions > .linkButton {
+    width: 200px;
     height: 3.125vw;
+    margin: 20px auto;
     padding: 0.834vw 1.67vw;
     background-color: var(--primaryGreen);
     border: solid 2px var(--primaryGreen);

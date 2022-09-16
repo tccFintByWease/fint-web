@@ -49,7 +49,7 @@ const compare = (currency1, currency2) => {
 return CURRENCIES.sort(compare).map(currency => {
         if (currency.code === 'BRL') {
             return (
-                <option value={currency.code} key={currency.code} selected>
+                <option value={currency.code} key={currency.code} defaultValue>
                     {currency.code}
                 </option>
             );

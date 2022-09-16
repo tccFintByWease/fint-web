@@ -2,24 +2,19 @@
 
 ## TODO
 
-### CRÍTICO
-
-- Resolver o erro do CSS se aplicar a todas as páginas
-
 ### LANDPAGE
 
 - Carregar o conteúdo dinamicamente com o scroll
 - Adicionar e configurar as ilustrações
+- Resolver o erro do delay do menu mobile quando abre / fecha (o fundo some antes das letras)
 
 ### PÁGINAS DE LOGIN
 
-- Criar mais componentes
-- Integrar todas as telas de cadastro em uma só tela com diversos componentes
-- Criar a validação adequada dos formulários
-- Refatorar todos os CSS
-- Criar a funcionalidade de exibir ou ocultar a senha
+- Criar a "Receita Inicial" na tela de cadastro (Inserir receita pela API)
+- Enviar o código de verificação por email
 
 ### TERMOS DE USO E POLÍTICA DE PRIVACIDADE
 
 - Adicionar o menu lateral com os tópicos da página
 - Adicionar um botão para download do arquivos em PDF dos Termos de Uso e da Política de Privacidade
+- Remover a borda do container no menor tamanho de media query

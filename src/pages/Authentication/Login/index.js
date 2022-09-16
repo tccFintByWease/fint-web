@@ -3,34 +3,56 @@ import { Form, Row, Col } from 'react-bootstrap';
 import logo from './../../../assets/images/black-logo.png';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+// import { schema } from '../../../store/schemas/login-schemas';
+import faEye from './../../../assets/images/eye-solid.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { A } from 'hookrouter';
 import DownloadBox from './../components/DownloadBox/index';
+import { handlePasswordVisibility } from './../../../utils/password-utils';
 import './styles.css';
 import './../styles.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { jsx } from '@emotion/react';
 
 function Login() {
     
-    const AUTHENTICATE_URL = '';
+    const AUTHENTICATE_URL = 'http://localhost:3001/api/login';
 
-    const schema = yup.object({
-        email: yup.string().email().required(),
-        password: yup.string().required().min(10).max(20)
-    })
-
-    const authenticateUser = (data) => {
+    const authenticateUser = async (data) => {
         try {
-            // ADICIONAR ASYNC NA FUNÇÃO (async (data) => {})
-            // await axios.post(AUTHENTICATE_URL, data);
-        } catch(error) {
+            const teste = {
+                "emailUsuario": "felipperdz@gmail.com",
+                "senhaUsuario": "1234567891"
+            }
 
+            const userData = await axios.post(AUTHENTICATE_URL, teste);
+            console.log(userData);
+            console.log(teste);
+            
+            if (userData.data.result.emailUsuario === teste.emailUsuario && userData.data.result.senhaUsuario === teste.senhaUsuario) {
+                console.log('Realizar o login');
+            } else {
+                console.log('Exibir mensagem de login / senha incorretos');
+            }
+            
+        } catch(error) {
+            console.log(error);
         }
 
     }
+
+    const schema = yup.object({
+        email: yup.string()
+            .email('Insira um email válido')
+            .required('Insira seu email')
+            .max(320, 'O email deve ter no máximo 320 caracteres'),
+
+        password: yup.string()
+            .required('Insira sua senha')
+            .min(10, 'A senha deve ter no mínimo 10 caracteres')
+            .max(20, 'A senha deve ter entre 10 e 20 caracteres')
+    });
 
     return (
         <section className="authentication">
@@ -46,6 +68,7 @@ function Login() {
                     {({
                         handleSubmit,
                         handleChange,
+                        handleBlur,
                         values,
                         touched,
                         errors
@@ -54,34 +77,40 @@ function Login() {
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
-                                        type="email"
-                                        placeholder="Email" name="email"
+                                        type="text"
+                                        placeholder="Email"
+                                        maxLength={320}
+                                        name="email"
                                         value={values.email}
                                         onChange={handleChange}
-                                        isValid={touched.email && !errors.email}
-                                        isInvalid={touched.email && !!errors.email}
+                                        onBlur={handleBlur}
+                                        className={errors.email && touched.email ? "input-error" : ""}
                                         data-testid="txt-email"
                                     />
-                                <Form.Control.Feedback type="invalid">
-                                    Insira um email válido
-                                </Form.Control.Feedback>
+                                    {errors.email && touched.email && (
+                                        <p className="error-message">{errors.email}</p>
+                                    )}
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="password">
-                                <Col className="password">
+                                <Col className="password flex">
                                     <Form.Control
                                         type="password"
                                         placeholder="Senha"
+                                        minLength={10}
+                                        maxLength={20}
                                         name="password"
                                         value={values.password}
                                         onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        className={errors.password && touched.password ? "input-error" : ""}
                                         data-testid="txt-password"
                                     />
-                                    <Form.Control.Feedback type="invalid">
-                                        Senha incorreta
-                                    </Form.Control.Feedback>
-                                    <FontAwesomeIcon icon={faEye} />
+                                    <img src={faEye} alt="Ícone de olho" id="passwordButton" onClick={(event) => handlePasswordVisibility(event)} />
                                 </Col>
+                                {errors.password && touched.password && (
+                                    <p className="error-message msg-password">{errors.password}</p>
+                                )}
                             </Form.Group>
                             <Form.Group as={Row} controlId="login">
                                 <Col sm={12}>

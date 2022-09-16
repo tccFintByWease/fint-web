@@ -4,13 +4,13 @@ import logo from './../../../assets/images/black-logo.png';
 import { Formik } from 'formik';
 import { schemaStepOne, schemaStepTwo, schemaStepThree } from '../../../store/schemas/sign-up-schemas';
 import faEye from './../../../assets/images/eye-solid.png';
-import { A } from 'hookrouter';
+import { A, navigate } from 'hookrouter';
 import './styles.css';
 import './../styles.css';
 import Button from './../../../components/Button/index';
-import DownloadBox from './../components/DownloadBox/index'
+import DownloadBox from './../components/DownloadBox/index';
 import ListCurrencies from './../../../store/currencies';
-import { formatCPF } from './../../../utils/cpf-utils'
+import { formatCPF } from './../../../utils/cpf-utils';
 import { formatPhone } from './../../../utils/phone-utils';
 import { handlePasswordVisibility } from './../../../utils/password-utils';
 import axios from 'axios';
@@ -19,10 +19,10 @@ function SignUp() {
 
     const [achievedStep, setAchievedStep] = useState(1); // the steps reached by the user
     const [currentStep, setCurrentStep] = useState(1); // the step in which the user is
-    const [stepOneValues, OneValues] = useState('');
-    const [stepTwoValues, TwoValues] = useState('');
+    const [stepOneValues, setStepOneValues] = useState('');
+    const [stepTwoValues, setStepTwoValues] = useState('');
 
-    const SIGN_UP_URL = '';
+    const SIGN_UP_URL = 'http://localhost:3001/api/usuario';
 
     const handleFormVisibility = (step) => {
         const stepDescription = document.querySelector('.step-description');
@@ -36,90 +36,102 @@ function SignUp() {
             stepTwo.classList.add('none');
             stepThree.classList.add('none');
 
-            stepDescription.innerText = '1. Email e senha';
+            stepDescription.innerText = '1. Email e Senha';
         } else if (step === 2) {
             stepOne.classList.add('none');
             stepTwo.classList.remove('none');
             stepThree.classList.add('none');
 
-            stepDescription.innerText = '2. Dados pessoais';
+            stepDescription.innerText = '2. Dados Pessoais';
         } else if (step === 3) {
             stepOne.classList.add('none');
             stepTwo.classList.add('none');
             stepThree.classList.remove('none');
 
-            stepDescription.innerText = '3. Moeda padrão';
+            stepDescription.innerText = '3. Moeda Padrão';
         }
     }
 
-    // ARRUMAR ISSO
     const handleStep = (values, step, completeStep) => {
         const stepProgress = document.querySelectorAll('.step-progress');
-        const steps = document.querySelectorAll('.step');
 
         if (completeStep) {
             if (achievedStep === 1) {
                 localStorage.setItem('stepOneValues', JSON.stringify(values));
-    
-                stepProgress[0].style.width = "50%";
-                stepProgress[1].style.width = "50%";
-    
-                if (currentStep === achievedStep) setAchievedStep(2);
-    
-                handleFormVisibility(2);
+                
+                if (currentStep === achievedStep) {
+                    stepProgress[0].style.width = "50%";
+                    stepProgress[1].style.width = "50%";
+
+                    handleStep('', currentStep + 1, false, achievedStep + 1);
+                    setAchievedStep(2);
+                }
                 
             } else if (achievedStep === 2) {
                 localStorage.setItem('stepTwoValues', JSON.stringify(values));
-    
-                stepProgress[0].style.width = "95%";
-                stepProgress[1].style.width = "5%";
-    
-                if (currentStep === achievedStep) setAchievedStep(3);
                 
-                handleFormVisibility(3);
+                if (currentStep === achievedStep) {
+                    stepProgress[0].style.width = "95%";
+                    stepProgress[1].style.width = "5%";
+
+                    setAchievedStep(3);
+                }
             }
+
+            handleStep('', currentStep + 1, false);
         } else {
-            if (step === 1) {
-                steps[0].classList.add('current-step');
-                steps[1].classList.remove('current-step');
-                steps[2].classList.remove('current-step');
-    
-                handleFormVisibility(1);
-                setCurrentStep(1);
-            } else if (step === 2 && achievedStep >= 2) {
-                steps[0].classList.remove('current-step');
-                steps[1].classList.add('current-step');
-                steps[2].classList.remove('current-step');
-    
-                handleFormVisibility(2);
-                setCurrentStep(2);
-            } else if (step === 3 && achievedStep === 3) {
-                steps[0].classList.remove('current-step');
-                steps[1].classList.remove('current-step');
-                steps[2].classList.add('current-step');
-    
-                handleFormVisibility(3);
-                setCurrentStep(3);
+            if (values === 'click') {
+                if (step === 1) {
+                    handleFormVisibility(1);
+                    setCurrentStep(1);
+                } else if (step === 2 && achievedStep >= 2) {
+                    handleFormVisibility(2);
+                    setCurrentStep(2);
+                } else if (step === 3 && achievedStep >= 3) {
+                    handleFormVisibility(3);
+                    setCurrentStep(3);
+                }
+            } else {
+                if (step === 1) {
+                    handleFormVisibility(1);
+                    setCurrentStep(1);
+                } else if (step === 2 && achievedStep + 1 >= 2) {
+                    handleFormVisibility(2);
+                    setCurrentStep(2);
+                } else if (step === 3 && achievedStep + 1 >= 3) {
+                    handleFormVisibility(3);
+                    setCurrentStep(3);
+                }
             }
         }
     }
 
-    const signUp = (values) => {
-        OneValues(JSON.parse(localStorage.getItem('stepOneValues')));
-        TwoValues(JSON.parse(localStorage.getItem('stepTwoValues')));
+    const signUp = async (values) => {
+        setStepOneValues(JSON.parse(localStorage.getItem('stepOneValues')));
+        setStepTwoValues(JSON.parse(localStorage.getItem('stepTwoValues')));
 
-        const userData = {...stepOneValues, ...stepTwoValues, ...values}
+        // const moeda = values.moeda; // pegar o id da moeda no banco
+        const idMoeda = 1;
+        const date = new Date(); 
+        const dataCadastroUsuario = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`; 
+
+        const userData = {...stepOneValues, ...stepTwoValues, idMoeda, dataCadastroUsuario}
         localStorage.setItem('userData', JSON.stringify(userData));
-        console.log(userData);
+        delete userData.confirmarSenha;
 
         try {
-            // ADICIONAR ASYNC NA FUNÇÃO (async (data) => {})
-            // await axios.post(SIGN_UP_URL, data);
+            const apiData = await axios.post(SIGN_UP_URL, userData);
+            console.log(apiData);
+            console.log(apiData.data.result);
+            if (Object.is(apiData.data.result, userData)) {
+                console.log('Cadastrado com sucesso');
+                // navigate('/dashboard');
+            } else {
+                console.log('Cadastro incorreto');
+            }
         } catch(error) {
-
+            console.log(error);
         }
-
-        console.log(values);
     }
 
     return (
@@ -129,19 +141,19 @@ function SignUp() {
                 <div className="sign-up-step">
                     <p className="step-description">1. Email e senha</p>
                     <div className="steps-bar flex">
-                        <span className={achievedStep >= 1 ? 'step flex current-step achieved-step' : 'step flex current-step'} onClick={() => handleStep('', 1, false)}>1</span>
+                        <span className={`${achievedStep >= 1 ? 'step flex achieved-step' : 'step flex'} ${currentStep === 1 ? 'current-step' : ''}`} onClick={() => handleStep('click', 1, false)}>1</span>
                         <div className="step-progress"></div>
-                        <span className={achievedStep >= 2 ? 'step flex achieved-step' : 'step flex'} onClick={() => handleStep('', 2, false)}>2</span>
+                        <span className={`${achievedStep >= 2 ? 'step flex achieved-step' : 'step flex'} ${currentStep === 2 ? 'current-step' : ''}`} onClick={() => handleStep('click', 2, false)}>2</span>
                         <div className="step-progress"></div>
-                        <span className={achievedStep === 3 ? 'step flex achieved-step' : 'step flex'} onClick={() => handleStep('', 3, false)}>3</span>
+                        <span className={`${achievedStep >= 3 ? 'step flex achieved-step' : 'step flex'} ${currentStep === 3 ? 'current-step' : ''}`} onClick={() => handleStep('click', 3, false)}>3</span>
                     </div>
                 </div>
                 <Formik
                     onSubmit={(values) => handleStep(values, 2, true)}
                     initialValues={{
-                        email: '',
-                        password: '',
-                        passwordConfirmation: ''
+                        emailUsuario: '',
+                        senhaUsuario: '',
+                        confirmarSenha: ''
                     }}
                     validationSchema={schemaStepOne}>
                     {({
@@ -156,60 +168,63 @@ function SignUp() {
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
-                                        type="text"
+                                        type="email"
                                         placeholder="Email"
                                         maxLength={320}
-                                        name="email"
-                                        value={values.email}
+                                        name="emailUsuario"
+                                        value={values.emailUsuario}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        className={errors.email && touched.email ? "input-error" : ""}
-                                        data-testid="txt-email"
+                                        className={errors.emailUsuario && touched.emailUsuario ? "input-error" : ""}
+                                        data-testid="txt-email-usuario"
+                                        autoComplete="email"
                                     />
-                                    {errors.email && touched.email && (
-                                        <p className="error-message">{errors.email}</p>
+                                    {errors.emailUsuario && touched.emailUsuario && (
+                                        <p className="error-message">{errors.emailUsuario}</p>
                                     )}
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="password">
-                                <Col className="password">
+                                <Col className="password flex">
                                     <Form.Control
                                         type="password"
                                         placeholder="Senha"
                                         minLength={10}
                                         maxLength={20}
-                                        name="password"
-                                        value={values.password}
+                                        name="senhaUsuario"
+                                        value={values.senhaUsuario}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        className={errors.password && touched.password ? "input-error" : ""}
-                                        data-testid="txt-password"
+                                        className={errors.senhaUsuario && touched.senhaUsuario ? "input-error" : ""}
+                                        data-testid="txt-senha-usuario"
+                                        autoComplete="new-password"
                                     />
-                                    {errors.password && touched.password && (
-                                        <p className="error-message">{errors.password}</p>
-                                    )}
                                     <img src={faEye} alt="Ícone de olho" id="passwordButton" onClick={(event) => handlePasswordVisibility(event)} />
                                 </Col>
+                                {errors.senhaUsuario && touched.senhaUsuario && (
+                                    <p className="error-message">{errors.senhaUsuario}</p>
+                                )}
                             </Form.Group>
                             <Form.Group as={Row} controlId="passwordConfirmation">
-                                <Col className="password">
+                                <Col className="password flex">
                                     <Form.Control
                                         type="password"
                                         placeholder="Confirme sua senha"
                                         minLength={10}
                                         maxLength={20}
-                                        name="passwordConfirmation"
-                                        value={values.passwordConfirmation}
+                                        name="confirmarSenha"
+                                        value={values.confirmarSenha}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        className={errors.passwordConfirmation && touched.passwordConfirmation ? "input-error" : ""}
-                                        data-testid="txt-password-confirmation"
+                                        className={errors.confirmarSenha && touched.confirmarSenha ? "input-error" : ""}
+                                        data-testid="txt-confirmar-senha"
+                                        autoComplete="new-password"
                                     />
-                                    {errors.passwordConfirmation && touched.passwordConfirmation && (
-                                        <p className="error-message">{errors.passwordConfirmation}</p>
-                                    )}
                                     <img src={faEye} alt="Ícone de olho" id="passwordConfirmationButton" onClick={(event) => handlePasswordVisibility(event)} />
                                 </Col>
+                                {errors.confirmarSenha && touched.confirmarSenha && (
+                                    <p className="error-message">{errors.confirmarSenha}</p>
+                                )}
                             </Form.Group>
                             <Form.Group as={Row} controlId="handleStepOne">
                                 <Col>
@@ -222,10 +237,10 @@ function SignUp() {
                 <Formik
                     onSubmit={(values) => handleStep(values, 3, true)}
                     initialValues={{
-                        name: '',
-                        cpf: '',
-                        phone: '',
-                        birthDate: ''
+                        nomeUsuario: '',
+                        cpfUsuario: '',
+                        foneUsuario: '',
+                        dataNascUsuario: ''
                     }}
                     validationSchema={schemaStepTwo}>
                     {({
@@ -240,18 +255,19 @@ function SignUp() {
                             <Form.Group as={Row} controlId="name">
                             <Col>
                                 <Form.Control
-                                    type="name"
+                                    type="text"
                                     placeholder="Nome completo"
                                     maxLength={255}
-                                    name="name"
-                                    value={values.name}
+                                    name="nomeUsuario"
+                                    value={values.nomeUsuario}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    className={errors.name && touched.name ? "input-error" : ""}
-                                    data-testid="txt-name"
+                                    className={errors.nomeUsuario && touched.nomeUsuario ? "input-error" : ""}
+                                    data-testid="txt-nomeUsuario"
+                                    autoComplete="name"
                                 />
-                                {errors.name && touched.name && (
-                                    <p className="error-message">{errors.name}</p>
+                                {errors.nomeUsuario && touched.nomeUsuario && (
+                                    <p className="error-message">{errors.nomeUsuario}</p>
                                 )}
                             </Col>
                             </Form.Group>
@@ -262,18 +278,19 @@ function SignUp() {
                                         placeholder="CPF"
                                         minLength={15}
                                         maxLength={15}
-                                        name="cpf"
-                                        value={values.cpf}
+                                        name="cpfUsuario"
+                                        value={values.cpfUsuario}
                                         onChange={e => {
                                             e.currentTarget.value = formatCPF(e.currentTarget.value);
                                             handleChange(e);
                                         }}
                                         onBlur={handleBlur}
-                                        className={errors.cpf && touched.cpf ? "input-error" : ""}
-                                        data-testid="txt-cpf"
+                                        className={errors.cpfUsuario && touched.cpfUsuario ? "input-error" : ""}
+                                        data-testid="txt-cpf-usuario"
+                                        autoComplete="off"
                                     />
-                                    {errors.cpf && touched.cpf && (
-                                        <p className="error-message">{errors.cpf}</p>
+                                    {errors.cpfUsuario && touched.cpfUsuario && (
+                                        <p className="error-message">{errors.cpfUsuario}</p>
                                     )}
                                 </Col>
                             </Form.Group>
@@ -284,18 +301,19 @@ function SignUp() {
                                         placeholder="Número de telefone"
                                         minLength={15}
                                         maxLength={15}
-                                        name="phone"
+                                        name="foneUsuario"
                                         value={values.passwordConfirmation}
                                         onChange={e => {
                                             e.currentTarget.value = formatPhone(e.currentTarget.value);
                                             handleChange(e);
                                         }}
                                         onBlur={handleBlur}
-                                        className={errors.phone && touched.phone ? "input-error" : ""}
-                                        data-testid="txt-phone"
+                                        className={errors.foneUsuario && touched.foneUsuario ? "input-error" : ""}
+                                        data-testid="txt-fone-usuario"
+                                        autoComplete="tel-national"
                                     />
-                                    {errors.phone && touched.phone && (
-                                        <p className="error-message">{errors.phone}</p>
+                                    {errors.foneUsuario && touched.foneUsuario && (
+                                        <p className="error-message">{errors.foneUsuario}</p>
                                     )}
                                 </Col>
                             </Form.Group>
@@ -303,15 +321,16 @@ function SignUp() {
                                 <Col>
                                     <Form.Control
                                         type="date"
-                                        name="birthDate"
-                                        value={values.birthDate}
+                                        name="dataNascUsuario"
+                                        value={values.dataNascUsuario}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        className={errors.birthDate && touched.birthDate ? "input-error" : ""}
-                                        data-testid="txt-birth-date"
+                                        className={errors.dataNascUsuario && touched.dataNascUsuario ? "input-error" : ""}
+                                        data-testid="txt-data-nasc-usuario"
+                                        autoComplete="bday"
                                     />
-                                    {errors.birthDate && touched.birthDate && (
-                                        <p className="error-message">{errors.birthDate}</p>
+                                    {errors.dataNascUsuario && touched.dataNascUsuario && (
+                                        <p className="error-message">{errors.dataNascUsuario}</p>
                                     )}
                                 </Col>
                             </Form.Group>
@@ -326,8 +345,8 @@ function SignUp() {
                 <Formik
                     onSubmit={(values) => signUp(values)}
                     initialValues={{
-                        initialValue: '',
-                        currentCurrency: ''
+                        valorInicial: '',
+                        moeda: ''
                     }}
                     validationSchema={schemaStepThree}>
                     {({
@@ -342,17 +361,18 @@ function SignUp() {
                                     <Form.Control
                                         type="number"
                                         placeholder="0"
-                                        name="initialValue"
-                                        value={values.initialValue}
+                                        name="valorInicial"
+                                        value={values.valorInicial}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        data-testid="txt-initial-value"
+                                        data-testid="txt-valor-inicial"
+                                        autoComplete="off"
                                     />
                                     <select
-                                        name="currentCurrency"
+                                        name="moeda"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        data-testid="select-current-currency"
+                                        data-testid="select-moeda"
                                     >
                                         <ListCurrencies />
                                     </select>

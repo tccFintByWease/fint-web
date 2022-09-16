@@ -1,9 +1,9 @@
 import faEye from './../assets/images//eye-solid.png';
 import faEyeSlash from './../assets/images/eye-slash-solid.png';
 
-const handlePasswordVisibility = (event) => {
-    let passwordVisibility = false;
+let passwordVisibility = false;
 
+const handlePasswordVisibility = (event) => {
     const password = document.querySelector('#password');
     const passwordConfirmation = document.querySelector('#passwordConfirmation');
 
@@ -20,8 +20,7 @@ const handlePasswordVisibility = (event) => {
 
         button.src = faEyeSlash;
         passwordVisibility = true;
-        console.log('passwordVisibility:' + passwordVisibility);
-    } else {
+    } else if (passwordVisibility === true) {
         if (button === passwordButton) {
             password.type = 'password';
         } else if (button === passwordConfirmationButton) {

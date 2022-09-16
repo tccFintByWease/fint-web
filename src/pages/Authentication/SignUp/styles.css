@@ -38,7 +38,7 @@
 }
 
 .steps-bar > .step-progress {
-    height: 4px;
+    height: 2px;
     border-radius: 50px;
 }
 
@@ -92,19 +92,25 @@
 }
 
 .sign-up-step span.achieved-step {
-    background-color: var(--primaryGreen) !important;
+    border: solid 2px var(--primaryGreen);
+    background-color: var(--white) !important;
+
+    color: var(--primaryGreen);
 
     cursor: pointer;
 }
 
 .sign-up-step span.current-step {
-    border: solid 2px var(--primaryGreen);
-    background-color: var(--white) !important;
-
-    color: var(--primaryGreen);
+    background-color: var(--primaryGreen) !important;
+    color: var(--white);
 }
 
 .sign-up-step span.achieved-step:hover {
+    border-color: var(--detailsGreen) !important;
+    color: var(--detailsGreen);
+}
+
+.sign-up-step span.current-step:hover {
     background-color: var(--detailsGreen) !important;
     border-color: var(--detailsGreen) !important;
     color: var(--white);
@@ -131,28 +137,4 @@
 
 .sign-up-step-three .col select option {
     font-size: 24px;
-}
-
-.sign-up-step-three .col > .form-check {
-    padding: 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sign-up-step-three #termsOfUse {
-    width: 20px;
-    height: 20px;
-    margin: 0px !important;
-    padding: 0px;
-    border-radius: 5px;
-}
-
-.sign-up-step-three label {
-    width: 330px;
-}
-
-.sign-up-step-three label > p, .sign-up-step-three label > p > a {
-    font-size: 16px;
-    text-align: left;
 }
