@@ -1,57 +1,78 @@
-import React from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
-import logo from './../../../assets/images/black-logo.png';
+/* libraries */
+import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-// import { schema } from '../../../store/schemas/login-schemas';
-import faEye from './../../../assets/images/eye-solid.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { A } from 'hookrouter';
-import DownloadBox from './../components/DownloadBox/index';
-import { handlePasswordVisibility } from './../../../utils/password-utils';
+import axios from 'axios';
+/* stylesheets and assets */
 import './styles.css';
 import './../styles.css';
-import axios from 'axios';
-import { jsx } from '@emotion/react';
+import logo from './../../../assets/images/black-logo.png';
+import faEye from './../../../assets/images/eye-solid.png';
+/* components */
+import { Form, Row, Col } from 'react-bootstrap';
+import DownloadBox from './../components/DownloadBox/index';
+import { A } from 'hookrouter';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
+/* utils */
+import { handlePasswordVisibility } from './../../../utils/password-utils';
 
 function Login() {
-    
+
     const AUTHENTICATE_URL = 'http://localhost:3001/api/login';
 
-    const authenticateUser = async (data) => {
-        try {
-            const teste = {
-                "emailUsuario": "felipperdz@gmail.com",
-                "senhaUsuario": "1234567891"
-            }
+    // TODO - APÓS ACABAR ESSA PÁGINA:
+    /*
+        - Fazer o mesmo no Cadastro, Esqueci a senha (enviar link de recuperação), Código de Recuperação (inserir código), Trocar Senha (código de recuperação)
+        - Arrumar todos os links de todas as páginas até então + criar a página de dashboard (início) e deixar linkada
+    */
 
-            const userData = await axios.post(AUTHENTICATE_URL, teste);
-            console.log(userData);
-            console.log(teste);
+    const authenticateUser = async (userData) => {
+        try {
+
+            // returns true if login and password exist
+            const apiData = await axios.post(AUTHENTICATE_URL, userData);
             
-            if (userData.data.result.emailUsuario === teste.emailUsuario && userData.data.result.senhaUsuario === teste.senhaUsuario) {
-                console.log('Realizar o login');
+            // TODO [API] - O MÉTODO DE LOGIN DEVE:
+            /*
+                - Receber o email e senha do campos do formulário;
+                - Verificar se o email existe;
+                    - Se sim, retornar o email
+                    - Se não, retornar uma mensagem de erro
+                - Verificar se a senha existe;
+                    - Se sim, retornar a senha
+                    - Se não, retornar uma mensagem de erro
+            */
+
+            // TODO: validar se o email existe no banco e exibir mensagem de erro
+            // TODO: validar se a senha existe no banco e exibir mensagem de erro
+            if (apiData.data.result.emailUsuario !== userData.emailUsuario) {
+                // exibir mensagem de erro quando o email é incorreto
+                document.querySelectorAll('error-message')[0].innerHTML = 'teste';
+            } else if (apiData.data.result.senhaUsuario !== userData.senhaUsuario) {
+                // exibir mensagem de erro quando a senha é incorreta
+                document.querySelectorAll('error-message')[1].innerHTML = 'teste';
             } else {
-                console.log('Exibir mensagem de login / senha incorretos');
+                console.log('Realizar o login');
             }
-            
         } catch(error) {
             console.log(error);
         }
 
     }
 
+    // TODO: se possível, transferir esse schema para um arquivo separado
     const schema = yup.object({
-        email: yup.string()
+        emailUsuario: yup.string()
             .email('Insira um email válido')
             .required('Insira seu email')
-            .max(320, 'O email deve ter no máximo 320 caracteres'),
-
-        password: yup.string()
+            .max(100, 'O email deve conter um máximo de 100 caracteres'),
+    
+        senhaUsuario: yup.string()
             .required('Insira sua senha')
-            .min(10, 'A senha deve ter no mínimo 10 caracteres')
-            .max(20, 'A senha deve ter entre 10 e 20 caracteres')
+            .min(8, 'A senha deve conter um mínimo de 8 caracteres')
+            .max(50, 'A senha deve conter entre 8 e 50 caracteres')
+            
     });
 
     return (
@@ -61,8 +82,8 @@ function Login() {
                 <Formik
                     onSubmit={(values) => authenticateUser(values)}
                     initialValues={{
-                        email: '',
-                        password: ''
+                        emailUsuario: '',
+                        senhaUsuario: '',
                     }}
                     validationSchema={schema}>
                     {({
@@ -73,22 +94,23 @@ function Login() {
                         touched,
                         errors
                     }) => (
-                        <Form className="authentication-form" noValidate onSubmit={handleSubmit}>
+                        <Form className="authentication-form sign-up-step-one" noValidate onSubmit={handleSubmit}>
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
-                                        type="text"
+                                        type="email"
                                         placeholder="Email"
-                                        maxLength={320}
-                                        name="email"
-                                        value={values.email}
+                                        maxLength={100}
+                                        name="emailUsuario"
+                                        value={values.emailUsuario}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        className={errors.email && touched.email ? "input-error" : ""}
-                                        data-testid="txt-email"
+                                        className={errors.emailUsuario && touched.emailUsuario ? "input-error" : ""}
+                                        data-testid="txt-email-usuario"
+                                        autoComplete="email"
                                     />
-                                    {errors.email && touched.email && (
-                                        <p className="error-message">{errors.email}</p>
+                                    {errors.emailUsuario && touched.emailUsuario && (
+                                        <p className="error-message">{errors.emailUsuario}</p>
                                     )}
                                 </Col>
                             </Form.Group>
@@ -97,19 +119,20 @@ function Login() {
                                     <Form.Control
                                         type="password"
                                         placeholder="Senha"
-                                        minLength={10}
-                                        maxLength={20}
-                                        name="password"
-                                        value={values.password}
+                                        minLength={8}
+                                        maxLength={50}
+                                        name="senhaUsuario"
+                                        value={values.senhaUsuario}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        className={errors.password && touched.password ? "input-error" : ""}
-                                        data-testid="txt-password"
+                                        className={errors.senhaUsuario && touched.senhaUsuario ? "input-error" : ""}
+                                        data-testid="txt-senha-usuario"
+                                        autoComplete="current-password"
                                     />
                                     <img src={faEye} alt="Ícone de olho" id="passwordButton" onClick={(event) => handlePasswordVisibility(event)} />
                                 </Col>
-                                {errors.password && touched.password && (
-                                    <p className="error-message msg-password">{errors.password}</p>
+                                {errors.senhaUsuario && touched.senhaUsuario && (
+                                    <p className="error-message">{errors.senhaUsuario}</p>
                                 )}
                             </Form.Group>
                             <Form.Group as={Row} controlId="login">

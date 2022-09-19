@@ -7,6 +7,7 @@
 - Carregar o conteúdo dinamicamente com o scroll
 - Adicionar e configurar as ilustrações
 - Resolver o erro do delay do menu mobile quando abre / fecha (o fundo some antes das letras)
+- Arrumar o botão flutuante de assinatura na responsividade
 
 ### PÁGINAS DE LOGIN
 

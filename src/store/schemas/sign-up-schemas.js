@@ -16,6 +16,12 @@ const schemaStepOne = yup.object({
         .required('Confirme sua senha')
         .oneOf([yup.ref('senhaUsuario'), null], 'As senhas não coincidem')
 });
+/*
+.matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+                'Sua senha deve conter '
+            ),
+*/
 
 const schemaStepTwo = yup.object({
     nomeUsuario: yup.string()
