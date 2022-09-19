@@ -1,1 +1,6 @@
 @import url(./../../../styles/global.css);
+
+.authentication-form .authentication-error {
+    background-color: rgba(248, 73, 73, 0.5);
+    color: var(--red);
+}

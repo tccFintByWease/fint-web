@@ -19,6 +19,7 @@ import { handlePasswordVisibility } from './../../../utils/password-utils';
 
 function Login() {
 
+    const [authenticationError, setAuthenticatedError] = useState(false);
     const AUTHENTICATE_URL = 'http://localhost:3001/api/login';
 
     // TODO - APÓS ACABAR ESSA PÁGINA:
@@ -32,29 +33,15 @@ function Login() {
 
             // returns true if login and password exist
             const apiData = await axios.post(AUTHENTICATE_URL, userData);
-            
-            // TODO [API] - O MÉTODO DE LOGIN DEVE:
-            /*
-                - Receber o email e senha do campos do formulário;
-                - Verificar se o email existe;
-                    - Se sim, retornar o email
-                    - Se não, retornar uma mensagem de erro
-                - Verificar se a senha existe;
-                    - Se sim, retornar a senha
-                    - Se não, retornar uma mensagem de erro
-            */
 
             // TODO: validar se o email existe no banco e exibir mensagem de erro
             // TODO: validar se a senha existe no banco e exibir mensagem de erro
-            if (apiData.data.result.emailUsuario !== userData.emailUsuario) {
-                // exibir mensagem de erro quando o email é incorreto
-                document.querySelectorAll('error-message')[0].innerHTML = 'teste';
-            } else if (apiData.data.result.senhaUsuario !== userData.senhaUsuario) {
-                // exibir mensagem de erro quando a senha é incorreta
-                document.querySelectorAll('error-message')[1].innerHTML = 'teste';
-            } else {
+            if (apiData.data.result) {
                 console.log('Realizar o login');
+            } else {
+                console.log('Não realizar o login');
             }
+
         } catch(error) {
             console.log(error);
         }
@@ -83,7 +70,7 @@ function Login() {
                     onSubmit={(values) => authenticateUser(values)}
                     initialValues={{
                         emailUsuario: '',
-                        senhaUsuario: '',
+                        senhaUsuario: ''
                     }}
                     validationSchema={schema}>
                     {({
@@ -94,7 +81,7 @@ function Login() {
                         touched,
                         errors
                     }) => (
-                        <Form className="authentication-form sign-up-step-one" noValidate onSubmit={handleSubmit}>
+                        <Form className="authentication-form" noValidate onSubmit={handleSubmit}>
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
@@ -135,6 +122,9 @@ function Login() {
                                     <p className="error-message">{errors.senhaUsuario}</p>
                                 )}
                             </Form.Group>
+                            {authenticationError ?
+                                (<p className="authentication-error">Email ou senha incorretos</p>) : ''
+                            }
                             <Form.Group as={Row} controlId="login">
                                 <Col sm={12}>
                                     <button type="submit"
