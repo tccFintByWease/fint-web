@@ -1,8 +1,9 @@
 /* libraries */
 import React, { useState } from 'react';
 import { Formik } from 'formik';
-import * as yup from 'yup';
 import axios from 'axios';
+/* schemas */
+import { loginSchema } from './../../../store/schemas/login-schema';
 /* stylesheets and assets */
 import './styles.css';
 import './../styles.css';
@@ -11,22 +12,18 @@ import faEye from './../../../assets/images/eye-solid.png';
 /* components */
 import { Form, Row, Col } from 'react-bootstrap';
 import DownloadBox from './../components/DownloadBox/index';
-import { A } from 'hookrouter';
+import AuthenticationErrorMessage from './../../../components/AuthenticationErrorMessage/index';
+import { A, navigate } from 'hookrouter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
+
 /* utils */
 import { handlePasswordVisibility } from './../../../utils/password-utils';
 
 function Login() {
 
-    const [authenticationError, setAuthenticatedError] = useState(false);
+    const [authenticationError, setAuthenticationError] = useState(false);
     const AUTHENTICATE_URL = 'http://localhost:3001/api/login';
-
-    // TODO - APÓS ACABAR ESSA PÁGINA:
-    /*
-        - Fazer o mesmo no Cadastro, Esqueci a senha (enviar link de recuperação), Código de Recuperação (inserir código), Trocar Senha (código de recuperação)
-        - Arrumar todos os links de todas as páginas até então + criar a página de dashboard (início) e deixar linkada
-    */
 
     const authenticateUser = async (userData) => {
         try {
@@ -34,33 +31,19 @@ function Login() {
             // returns true if login and password exist
             const apiData = await axios.post(AUTHENTICATE_URL, userData);
 
-            // TODO: validar se o email existe no banco e exibir mensagem de erro
-            // TODO: validar se a senha existe no banco e exibir mensagem de erro
             if (apiData.data.result) {
-                console.log('Realizar o login');
+                navigate('/dashboard')
             } else {
-                console.log('Não realizar o login');
+                const authenticateErrorMessage = document.querySelector('.authentication-error-message');
+                authenticateErrorMessage.innerText = 'Email ou senha incorretos';
+                setAuthenticationError(true);
             }
 
         } catch(error) {
-            console.log(error);
+            setAuthenticationError(true);
         }
 
     }
-
-    // TODO: se possível, transferir esse schema para um arquivo separado
-    const schema = yup.object({
-        emailUsuario: yup.string()
-            .email('Insira um email válido')
-            .required('Insira seu email')
-            .max(100, 'O email deve conter um máximo de 100 caracteres'),
-    
-        senhaUsuario: yup.string()
-            .required('Insira sua senha')
-            .min(8, 'A senha deve conter um mínimo de 8 caracteres')
-            .max(50, 'A senha deve conter entre 8 e 50 caracteres')
-            
-    });
 
     return (
         <section className="authentication">
@@ -72,7 +55,7 @@ function Login() {
                         emailUsuario: '',
                         senhaUsuario: ''
                     }}
-                    validationSchema={schema}>
+                    validationSchema={loginSchema}>
                     {({
                         handleSubmit,
                         handleChange,
@@ -82,6 +65,7 @@ function Login() {
                         errors
                     }) => (
                         <Form className="authentication-form" noValidate onSubmit={handleSubmit}>
+                            <AuthenticationErrorMessage authenticationError={authenticationError} />
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
@@ -122,9 +106,6 @@ function Login() {
                                     <p className="error-message">{errors.senhaUsuario}</p>
                                 )}
                             </Form.Group>
-                            {authenticationError ?
-                                (<p className="authentication-error">Email ou senha incorretos</p>) : ''
-                            }
                             <Form.Group as={Row} controlId="login">
                                 <Col sm={12}>
                                     <button type="submit"

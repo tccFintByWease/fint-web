@@ -1,6 +1,18 @@
 @import url(./../../../styles/global.css);
 
-.authentication-form .authentication-error {
-    background-color: rgba(248, 73, 73, 0.5);
-    color: var(--red);
+.authentication-form .alert-danger {
+    justify-content: center;
+    align-items: center;
+}
+
+.authentication-form .alert-danger svg {
+    margin-right: 40px;
+}
+
+.authentication-form .alert-danger p {
+    text-align: justify;
+}
+
+.authentication-form .alert-danger p, .authentication-form .alert-danger svg {
+    font-size: 16px;
 }

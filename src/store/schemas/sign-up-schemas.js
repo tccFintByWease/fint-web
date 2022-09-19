@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { validateCPF } from './../../utils/cpf-utils';
 
-const schemaStepOne = yup.object({
+const stepOneSchema = yup.object({
     emailUsuario: yup.string()
         .email('Insira um email válido')
         .required('Insira seu email')
@@ -23,7 +23,7 @@ const schemaStepOne = yup.object({
             ),
 */
 
-const schemaStepTwo = yup.object({
+const stepTwoSchema = yup.object({
     nomeUsuario: yup.string()
         .required('Insira seu nome completo'),
 
@@ -40,7 +40,7 @@ const schemaStepTwo = yup.object({
         .required('Insira sua data de nascimento')
 });
 
-const schemaStepThree = yup.object({
+const stepThreeSchema = yup.object({
     valorInicial: yup.number()
         .required(),
 
@@ -49,7 +49,7 @@ const schemaStepThree = yup.object({
 });
 
 export {
-    schemaStepOne,
-    schemaStepTwo,
-    schemaStepThree
+    stepOneSchema,
+    stepTwoSchema,
+    stepThreeSchema
 }

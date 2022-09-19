@@ -1,28 +1,46 @@
+/* libraries */
 import React, { useState } from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
-import logo from './../../../assets/images/black-logo.png';
 import { Formik } from 'formik';
-import { schemaStepOne, schemaStepTwo, schemaStepThree } from '../../../store/schemas/sign-up-schemas';
-import faEye from './../../../assets/images/eye-solid.png';
-import { A, navigate } from 'hookrouter';
+import axios from 'axios';
+/* schemas */
+import { stepOneSchema, stepTwoSchema, stepThreeSchema } from '../../../store/schemas/sign-up-schemas';
+/* stylesheets and assets */
 import './styles.css';
 import './../styles.css';
+import logo from './../../../assets/images/black-logo.png';
+import faEye from './../../../assets/images/eye-solid.png';
+/* components */
+import { Form, Row, Col } from 'react-bootstrap';
+import { A, navigate } from 'hookrouter';
 import Button from './../../../components/Button/index';
 import DownloadBox from './../components/DownloadBox/index';
-import ListCurrencies from './../../../store/currencies';
+import AuthenticationErrorMessage from './../../../components/AuthenticationErrorMessage/index';
+/* utils */
 import { formatCPF } from './../../../utils/cpf-utils';
 import { formatPhone } from './../../../utils/phone-utils';
 import { handlePasswordVisibility } from './../../../utils/password-utils';
-import axios from 'axios';
+/* store */
+import ListCurrencies from './../../../store/currencies';
+
+// TODO - APÓS ACABAR ESSA PÁGINA:
+/*
+    - Fazer o mesmo no Esqueci a senha (enviar link de recuperação), Código de Recuperação (inserir código), Trocar Senha (código de recuperação)
+    - Arrumar todos os links de todas as páginas até então + criar a página de dashboard (início) e deixar linkada
+*/
+
+// TODO - Deixar mais claro o cadastro da primeira receita na última tela de cadastro
 
 function SignUp() {
 
+    const [authenticationError, setAuthenticationError] = useState(false);
     const [achievedStep, setAchievedStep] = useState(1); // the steps reached by the user
     const [currentStep, setCurrentStep] = useState(1); // the step in which the user is
     const [stepOneValues, setStepOneValues] = useState('');
     const [stepTwoValues, setStepTwoValues] = useState('');
 
     const SIGN_UP_URL = 'http://localhost:3001/api/usuario';
+    const GET_CURRENCY = '';
+    const INSERT_MOVEMENT = '';
 
     const handleFormVisibility = (step) => {
         const stepDescription = document.querySelector('.step-description');
@@ -110,27 +128,41 @@ function SignUp() {
         setStepOneValues(JSON.parse(localStorage.getItem('stepOneValues')));
         setStepTwoValues(JSON.parse(localStorage.getItem('stepTwoValues')));
 
-        // const moeda = values.moeda; // pegar o id da moeda no banco
+        // get the currency ID by the code
+        const moeda = await (await axios.post(GET_CURRENCY, values.moeda)).data.result;
+
         const idMoeda = 1;
         const date = new Date(); 
-        const dataCadastroUsuario = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`; 
+        const dataCadastroUsuario = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 
-        const userData = {...stepOneValues, ...stepTwoValues, idMoeda, dataCadastroUsuario}
+        const userData = {...stepOneValues, ...stepTwoValues, idMoeda, dataCadastroUsuario};
         localStorage.setItem('userData', JSON.stringify(userData));
         delete userData.confirmarSenha;
 
         try {
+            // returns a user object
             const apiData = await axios.post(SIGN_UP_URL, userData);
-            console.log(apiData);
-            console.log(apiData.data.result);
-            if (Object.is(apiData.data.result, userData)) {
-                console.log('Cadastrado com sucesso');
-                // navigate('/dashboard');
-            } else {
-                console.log('Cadastro incorreto');
+
+            const primeiraMovimentacao = {
+                idUsuario: 0,
+                idCategoria: 0,
+                idDetalheMovimentacao: 1,
+                idTipoMovimentacao: 1,
+                valorMovimentacao: values.valorInicial,
+                observacaoMovimentacao: 'Receita inicial'
             }
+
+            // returns a movimentation object
+            const apiData_tblMovimentacao = await axios.post(INSERT_MOVEMENT, primeiraMovimentacao);
+
+            if (apiData.data.result === userData && apiData_tblMovimentacao.data.result === primeiraMovimentacao) {
+                navigate('/dashboard');
+            }
+
         } catch(error) {
-            console.log(error);
+            const authenticateErrorMessage = document.querySelector('.authentication-error-message');
+            authenticateErrorMessage.innerText = 'Erro ao autenticar o usuário.\nTente novamente em instantes';
+            setAuthenticationError(true);
         }
     }
 
@@ -155,7 +187,7 @@ function SignUp() {
                         senhaUsuario: '',
                         confirmarSenha: ''
                     }}
-                    validationSchema={schemaStepOne}>
+                    validationSchema={stepOneSchema}>
                     {({
                         handleSubmit,
                         handleChange,
@@ -165,6 +197,7 @@ function SignUp() {
                         errors
                     }) => (
                         <Form className="authentication-form sign-up-step-one" noValidate onSubmit={handleSubmit}>
+                            <AuthenticationErrorMessage authenticationError={authenticationError} />
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
@@ -242,7 +275,7 @@ function SignUp() {
                         foneUsuario: '',
                         dataNascUsuario: ''
                     }}
-                    validationSchema={schemaStepTwo}>
+                    validationSchema={stepTwoSchema}>
                     {({
                         handleSubmit,
                         handleChange,
@@ -310,7 +343,7 @@ function SignUp() {
                                         onBlur={handleBlur}
                                         className={errors.foneUsuario && touched.foneUsuario ? "input-error" : ""}
                                         data-testid="txt-fone-usuario"
-                                        autoComplete="tel-national"
+                                        autoComplete="tel"
                                     />
                                     {errors.foneUsuario && touched.foneUsuario && (
                                         <p className="error-message">{errors.foneUsuario}</p>
@@ -348,7 +381,7 @@ function SignUp() {
                         valorInicial: '',
                         moeda: ''
                     }}
-                    validationSchema={schemaStepThree}>
+                    validationSchema={stepThreeSchema}>
                     {({
                         handleSubmit,
                         handleChange,
@@ -383,7 +416,7 @@ function SignUp() {
                                     <Button type="submit" text="Cadastrar-se" transparent={false} />
                                 </Col>
                             </Form.Group>
-                            <p>Ao cadastrar-se, você concorda com nossos <A href="/documentacao" onClick={() => window.location.reload()}>Termos de Uso e Política de Privacidade</A></p>
+                            <p>Ao cadastrar-se, você concorda com nossos <A href="/documentacao">Termos de Uso e Política de Privacidade</A></p>
                             <hr />
                         </Form>
                     )}
