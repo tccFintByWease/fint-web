@@ -5,42 +5,69 @@ import axios from 'axios';
 /* schemas */
 import { loginSchema } from './../../../store/schemas/login-schema';
 /* stylesheets and assets */
-import './styles.css';
 import './../styles.css';
 import logo from './../../../assets/images/black-logo.png';
 import faEye from './../../../assets/images/eye-solid.png';
 /* components */
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form, Row, Col, Spinner } from 'react-bootstrap';
 import DownloadBox from './../components/DownloadBox/index';
 import AuthenticationErrorMessage from './../../../components/AuthenticationErrorMessage/index';
 import { A, navigate } from 'hookrouter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
-
 /* utils */
 import { handlePasswordVisibility } from './../../../utils/password-utils';
 
 function Login() {
 
+    const [showSpinner, setShowSpinner] = useState(false);
+    const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(false);
+
     const [authenticationError, setAuthenticationError] = useState(false);
     const AUTHENTICATE_URL = 'http://localhost:3001/api/login';
 
-    const authenticateUser = async (userData) => {
-        try {
+    const handleShowSpinner = (value) => {
+        setShowSpinner(value);
+    }
 
+    const handleIsLoginBtnDisabled = (value) => {
+        setIsLoginBtnDisabled(value);
+    }
+
+    const authenticateUser = async (userData) => {
+        const authenticateErrorMessage = document.querySelector('.authentication-error-message');
+        
+        try {
             // returns true if login and password exist
             const apiData = await axios.post(AUTHENTICATE_URL, userData);
 
-            if (apiData.data.result) {
-                navigate('/dashboard')
-            } else {
-                const authenticateErrorMessage = document.querySelector('.authentication-error-message');
-                authenticateErrorMessage.innerText = 'Email ou senha incorretos';
-                setAuthenticationError(true);
-            }
+            // disable the button until the API returns
+            handleShowSpinner(true);
+            handleIsLoginBtnDisabled(true);
 
+            // TODO: PARA TESTES, REMOVER O SETTIMEOUT DEPOIS
+            setTimeout(() => {
+                // if (apiData.data.result) {
+                if (apiData.data.result.emailUsuario === userData.emailUsuario && apiData.data.result.senhaUsuario === userData.senhaUsuario) {
+                    console.log('Login sucesso');
+                    // navigate('/dashboard');
+                } else {
+                    authenticateErrorMessage.innerText = 'Email ou senha incorretos';
+                    setAuthenticationError(true);
+
+                    document.querySelector('#email').classList.add('input-error');
+                    document.querySelector('#password').classList.add('input-error');
+                }
+
+                // the button remains disabled until a field is changed
+                handleShowSpinner(false);
+
+            }, 1000);
+            
         } catch(error) {
+            authenticateErrorMessage.innerText = `Erro ao autenticar o usuário.\nTente novamente em instantes`;
             setAuthenticationError(true);
+            console.log(error);
         }
 
     }
@@ -74,7 +101,15 @@ function Login() {
                                         maxLength={100}
                                         name="emailUsuario"
                                         value={values.emailUsuario}
-                                        onChange={handleChange}
+                                        onChange={e => {
+                                            if (isLoginBtnDisabled) {
+                                                handleIsLoginBtnDisabled(false);
+                                                e.currentTarget.classList.remove('input-error');
+                                                document.querySelector('#password').classList.remove('input-error');
+                                                setAuthenticationError(false);
+                                            }
+                                            handleChange(e);
+                                        }}
                                         onBlur={handleBlur}
                                         className={errors.emailUsuario && touched.emailUsuario ? "input-error" : ""}
                                         data-testid="txt-email-usuario"
@@ -94,7 +129,15 @@ function Login() {
                                         maxLength={50}
                                         name="senhaUsuario"
                                         value={values.senhaUsuario}
-                                        onChange={handleChange}
+                                        onChange={e => {
+                                            if (isLoginBtnDisabled) {
+                                                handleIsLoginBtnDisabled(false);
+                                                document.querySelector('#email').classList.remove('input-error');
+                                                e.currentTarget.classList.remove('input-error');
+                                                setAuthenticationError(false);
+                                            }
+                                            handleChange(e);
+                                        }}
                                         onBlur={handleBlur}
                                         className={errors.senhaUsuario && touched.senhaUsuario ? "input-error" : ""}
                                         data-testid="txt-senha-usuario"
@@ -106,11 +149,13 @@ function Login() {
                                     <p className="error-message">{errors.senhaUsuario}</p>
                                 )}
                             </Form.Group>
-                            <Form.Group as={Row} controlId="login">
-                                <Col sm={12}>
-                                    <button type="submit"
-                                    data-testid="btn-authenticate-user">
-                                        Entrar
+                            <Form.Group as={Row} controlId="loginButton">
+                                <Col>
+                                    <button type="submit" disabled={isLoginBtnDisabled}>
+                                        <div className={!showSpinner ? '' : 'none'}>Entrar</div>
+                                        <Spinner className={showSpinner ? '' : 'none'} animation="border" role="status" size="sm">
+                                            <span className="visually-hidden">Carregando...</span>
+                                        </Spinner>
                                     </button>
                                 </Col>
                             </Form.Group>

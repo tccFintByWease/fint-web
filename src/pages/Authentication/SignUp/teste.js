@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import axios from 'axios';
-import _ from 'lodash';
 /* schemas */
 import { stepOneSchema, stepTwoSchema, stepThreeSchema } from '../../../store/schemas/sign-up-schemas';
 /* stylesheets and assets */
@@ -30,11 +29,6 @@ import ListCurrencies from './../../../store/currencies';
     - Arrumar todos os links de todas as páginas até então + criar a página de dashboard (início) e deixar linkada
 */
 
-// TODO - Arrumar pro achieved step e current step se tornarem um só, assim evito problemas de não ter como atualizar os valores quando volto um passo
-// TODO - Deixar o cadastro funcional 100% das vezes
-// TODO - Arrumar o valor padrão do select
-// TODO - Implementar o firstMovement
-// TODO - Arrumar a mensagem de erro + spinner
 // TODO - Deixar mais claro o cadastro da primeira receita na última tela de cadastro
 
 function SignUp() {
@@ -46,8 +40,13 @@ function SignUp() {
 
     const [achievedStep, setAchievedStep] = useState(1); // the steps reached by the user
     const [currentStep, setCurrentStep] = useState(1); // the step in which the user is
+    const [stepOneValues, setStepOneValues] = useState('');
+    const [stepTwoValues, setStepTwoValues] = useState('');
+
 
     const SIGN_UP_URL = 'http://localhost:3001/api/usuario';
+    const GET_CURRENCY = '';
+    const INSERT_MOVEMENT = '';
 
     const handleShowSpinner = (value) => {
         setShowSpinner(value);
@@ -90,8 +89,6 @@ function SignUp() {
 
         if (completeStep) {
             if (achievedStep === 1) {
-                console.log('stepOneValues:');
-                console.log(values);
                 localStorage.setItem('stepOneValues', JSON.stringify(values));
                 
                 if (currentStep === achievedStep) {
@@ -103,8 +100,6 @@ function SignUp() {
                 }
                 
             } else if (achievedStep === 2) {
-                console.log('stepTwoValues:');
-                console.log(values);
                 localStorage.setItem('stepTwoValues', JSON.stringify(values));
                 
                 if (currentStep === achievedStep) {
@@ -144,41 +139,58 @@ function SignUp() {
     }
 
     const completeSignUp = async (values) => {
-        const stepOneData = JSON.parse(localStorage.getItem('stepOneValues'));
-        const stepTwoData = JSON.parse(localStorage.getItem('stepTwoValues'));
+        setStepOneValues(JSON.parse(localStorage.getItem('stepOneValues')));
+        setStepTwoValues(JSON.parse(localStorage.getItem('stepTwoValues')));
+
+        // get the currency ID by the code
+        const moeda = await (await axios.post(GET_CURRENCY, values.moeda)).data.result;
 
         const idMoeda = 1;
-        const dataCadastroUsuario = getTodayDate();
+        const date = new Date(); 
+        const dataCadastroUsuario = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 
-        const userData = {...stepOneData, ...stepTwoData, idMoeda, dataCadastroUsuario};
+        const userData = {...stepOneValues, ...stepTwoValues, idMoeda, dataCadastroUsuario};
         localStorage.setItem('userData', JSON.stringify(userData));
         delete userData.confirmarSenha;
 
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
-        
+
         try {
-            console.log('apiData:');
             // returns a user object
             const apiData = await axios.post(SIGN_UP_URL, userData);
-            
-            console.log(apiData);
-            console.log('userData:');
-            console.log(userData);
 
             // disable the button until the API returns
-            handleShowSpinner(true);
-            handleIsSignUpBtnDisabled(true);
+            // handleShowSpinner(true);
+            // handleIsSignUpBtnDisabled(true);
 
-            setTimeout(() => {
-                if (_.isEqual(apiData.data.result, userData)) {
-                    // navigate('/dashboard');
-                    console.log('Cadastro concluído com sucesso');
+            if (values.valorInicial === '0') {
+                console.log('teste');
+                const firstMovement = {
+                    idUsuario: 0,
+                    idCategoria: 0,
+                    idDetalheMovimentacao: 1,
+                    idTipoMovimentacao: 1,
+                    valorMovimentacao: values.valorInicial,
+                    observacaoMovimentacao: 'Receita inicial'
                 }
-            }, 2000)
+
+                // returns a movimentation object
+                /*const apiData_tblMovimentacao = await axios.post(INSERT_MOVEMENT, firstMovement);
+
+                if (apiData.data.result === userData && apiData_tblMovimentacao.data.result === firstMovement) {
+                    navigate('/dashboard');
+                }*/
+            } else {
+                console.log('teste - é diferente de string');
+
+                if (apiData.data.result === userData) {
+                    navigate('/dashboard');
+                }
+            }
 
             handleShowSpinner(false);
             handleIsSignUpBtnDisabled(false);
-
+            
         } catch(error) {
             authenticateErrorMessage.innerText = 'Erro ao autenticar o usuário.\nTente novamente em instantes';
             setAuthenticationError(true);
@@ -216,12 +228,13 @@ function SignUp() {
                         errors
                     }) => (
                         <Form className="authentication-form sign-up-step-one" noValidate onSubmit={handleSubmit}>
+                            <AuthenticationErrorMessage authenticationError={authenticationError} />
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
                                         type="email"
                                         placeholder="Email"
-                                        maxLength={100}
+                                        maxLength={320}
                                         name="emailUsuario"
                                         value={values.emailUsuario}
                                         onChange={handleChange}
@@ -240,8 +253,8 @@ function SignUp() {
                                     <Form.Control
                                         type="password"
                                         placeholder="Senha"
-                                        minLength={8}
-                                        maxLength={50}
+                                        minLength={10}
+                                        maxLength={20}
                                         name="senhaUsuario"
                                         value={values.senhaUsuario}
                                         onChange={handleChange}
@@ -261,8 +274,8 @@ function SignUp() {
                                     <Form.Control
                                         type="password"
                                         placeholder="Confirme sua senha"
-                                        minLength={8}
-                                        maxLength={50}
+                                        minLength={10}
+                                        maxLength={20}
                                         name="confirmarSenha"
                                         value={values.confirmarSenha}
                                         onChange={handleChange}
@@ -361,7 +374,7 @@ function SignUp() {
                                         onBlur={handleBlur}
                                         className={errors.foneUsuario && touched.foneUsuario ? "input-error" : ""}
                                         data-testid="txt-fone-usuario"
-                                        autoComplete="tel-national"
+                                        autoComplete="tel"
                                     />
                                     {errors.foneUsuario && touched.foneUsuario && (
                                         <p className="error-message">{errors.foneUsuario}</p>
@@ -398,7 +411,7 @@ function SignUp() {
                 <Formik
                     onSubmit={(values) => completeSignUp(values)}
                     initialValues={{
-                        valorInicial: '',
+                        valorInicial: 0,
                         moeda: ''
                     }}
                     validationSchema={stepThreeSchema}>
@@ -426,15 +439,18 @@ function SignUp() {
                                         name="moeda"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
+                                        defaultValue='BRL'
                                         data-testid="select-moeda"
                                     >
                                         <ListCurrencies />
                                     </select>
                                 </Col>
+                                {/* <p>Cadastre uma renda inicial para começar a utilizar a plataforma.</p>
+                                <p>Caso deseje, isso poderá ser feito há qualquer momento após o cadastro.</p> */}
                             </Form.Group>
                             <Form.Group as={Row} controlId="signUpButton">
                                 <Col>
-                                <button type="submit" disabled={isSignUpBtnDisabled}>
+                                    <button type="submit" disabled={isSignUpBtnDisabled}>
                                         <div className={!showSpinner ? '' : 'none'}>Cadastrar-se</div>
                                         <Spinner className={showSpinner ? '' : 'none'} animation="border" role="status" size="sm">
                                             <span className="visually-hidden">Carregando...</span>
@@ -442,7 +458,7 @@ function SignUp() {
                                     </button>
                                 </Col>
                             </Form.Group>
-                            <p>Ao cadastrar-se, você concorda com nossos <A href="/documentacao" onClick={() => window.location.reload()}>Termos de Uso e Política de Privacidade</A></p>
+                            <p>Ao cadastrar-se, você concorda com nossos <A href="/documentacao">Termos de Uso e Política de Privacidade</A></p>
                             <hr />
                         </Form>
                     )}

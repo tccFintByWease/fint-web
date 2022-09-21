@@ -96,6 +96,7 @@
 
 .authentication-form .password input {
     width: 360px;
+    padding-right: 60px;
 }
 
 .authentication-form .password img {
@@ -168,6 +169,17 @@
     margin-right: 20px;
 }
 
+.authentication-box button:disabled {
+    background-color: var(--detailsGray);
+    border: var(--detailsGray);
+
+    cursor: pointer;
+}
+
+.authentication-box button:disabled:hover {
+    background-color: rgba(129, 129, 129, 0.6);
+}
+
 .none {
-    display: none;
+    display: none !important;
 }

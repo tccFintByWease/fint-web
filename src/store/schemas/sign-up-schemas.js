@@ -1,3 +1,4 @@
+import { min } from 'date-fns';
 import * as yup from 'yup';
 import { validateCPF } from './../../utils/cpf-utils';
 
@@ -5,27 +6,34 @@ const stepOneSchema = yup.object({
     emailUsuario: yup.string()
         .email('Insira um email válido')
         .required('Insira seu email')
-        .max(320, 'O email deve ter no máximo 320 caracteres'),
+        .max(100, 'O email deve ter no máximo 100 caracteres'),
 
     senhaUsuario: yup.string()
         .required('Insira sua senha')
-        .min(10, 'A senha deve ter no mínimo 10 caracteres')
-        .max(20, 'A senha deve ter entre 10 e 20 caracteres'),
+        .min(8, 'A senha deve ter no mínimo 8 caracteres')
+        .max(50, 'A senha deve ter entre 8 e 50 caracteres')
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+            'Sua senha deve conter letras maiúsculas e minúsculas e ao menos um número e um caractere especial'
+        ),
 
     confirmarSenha: yup.string()
         .required('Confirme sua senha')
         .oneOf([yup.ref('senhaUsuario'), null], 'As senhas não coincidem')
 });
-/*
-.matches(
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
-                'Sua senha deve conter '
-            ),
-*/
+
+const minDate = new Date();
+minDate.setHours(0, 0, 0, 0)
+minDate.setFullYear(new Date().getFullYear() - 100);
+
+const maxDate = new Date();
+maxDate.setHours(0, 0, 0, 0)
+maxDate.setFullYear(new Date().getFullYear() - 16);
 
 const stepTwoSchema = yup.object({
     nomeUsuario: yup.string()
-        .required('Insira seu nome completo'),
+        .required('Insira seu nome completo')
+        .max(200, 'O email deve ter no máximo 200 caracteres'),
 
     cpfUsuario: yup.string()
         .required('Insira seu CPF')
@@ -38,6 +46,8 @@ const stepTwoSchema = yup.object({
 
     dataNascUsuario: yup.date()
         .required('Insira sua data de nascimento')
+        .min(minDate, 'Insira uma data de nascimento válida')
+        .max(maxDate, 'É necessário ser maior de 16 anos para se cadastrar em nossa plataforma')
 });
 
 const stepThreeSchema = yup.object({

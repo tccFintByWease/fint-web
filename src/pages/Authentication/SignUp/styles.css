@@ -122,7 +122,7 @@
     align-items: center;
 }
 
-.sign-up-step-three .col #initialValue,
+.sign-up-step-three .col #firstMovement,
 .sign-up-step-three .col select {
     width: 50%;
     height: 60px;
