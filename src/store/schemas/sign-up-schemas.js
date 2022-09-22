@@ -23,11 +23,11 @@ const stepOneSchema = yup.object({
 });
 
 const minDate = new Date();
-minDate.setHours(0, 0, 0, 0)
+minDate.setHours(0, 0, 0, 0);
 minDate.setFullYear(new Date().getFullYear() - 100);
 
 const maxDate = new Date();
-maxDate.setHours(0, 0, 0, 0)
+maxDate.setHours(0, 0, 0, 0);
 maxDate.setFullYear(new Date().getFullYear() - 16);
 
 const stepTwoSchema = yup.object({
@@ -51,11 +51,9 @@ const stepTwoSchema = yup.object({
 });
 
 const stepThreeSchema = yup.object({
-    valorInicial: yup.number()
-        .required(),
+    valorInicial: yup.number(),
 
     moeda: yup.string()
-        .required()
 });
 
 export {

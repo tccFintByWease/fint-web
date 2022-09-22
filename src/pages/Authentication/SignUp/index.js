@@ -31,7 +31,6 @@ import ListCurrencies from './../../../store/currencies';
 */
 
 // TODO - Arrumar pro achieved step e current step se tornarem um só, assim evito problemas de não ter como atualizar os valores quando volto um passo
-// TODO - Deixar o cadastro funcional 100% das vezes
 // TODO - Arrumar o valor padrão do select
 // TODO - Implementar o firstMovement
 // TODO - Arrumar a mensagem de erro + spinner
@@ -167,7 +166,7 @@ function SignUp() {
 
             // disable the button until the API returns
             handleShowSpinner(true);
-            handleIsSignUpBtnDisabled(true);
+            // handleIsSignUpBtnDisabled(true);
 
             setTimeout(() => {
                 if (_.isEqual(apiData.data.result, userData)) {
@@ -177,7 +176,7 @@ function SignUp() {
             }, 2000)
 
             handleShowSpinner(false);
-            handleIsSignUpBtnDisabled(false);
+            // handleIsSignUpBtnDisabled(false);
 
         } catch(error) {
             authenticateErrorMessage.innerText = 'Erro ao autenticar o usuário.\nTente novamente em instantes';
@@ -399,7 +398,7 @@ function SignUp() {
                     onSubmit={(values) => completeSignUp(values)}
                     initialValues={{
                         valorInicial: '',
-                        moeda: ''
+                        moeda: 0
                     }}
                     validationSchema={stepThreeSchema}>
                     {({
@@ -424,13 +423,17 @@ function SignUp() {
                                     />
                                     <select
                                         name="moeda"
+                                        id="currenciesSelect"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
+                                        defaultValue="BRL"
                                         data-testid="select-moeda"
                                     >
                                         <ListCurrencies />
                                     </select>
                                 </Col>
+                                <p>Cadastre uma renda inicial para começar a utilizar a plataforma</p>
+                                <p>Caso deseje, isso poderá ser feito há qualquer momento após o cadastro</p>
                             </Form.Group>
                             <Form.Group as={Row} controlId="signUpButton">
                                 <Col>
