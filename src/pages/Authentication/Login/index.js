@@ -20,6 +20,8 @@ import { handlePasswordVisibility } from './../../../utils/password-utils';
 
 function Login() {
 
+    // TODO: BOTÃO DE MANTER OU NÃO LOGADO
+    
     const [showSpinner, setShowSpinner] = useState(false);
     const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(false);
 
@@ -38,36 +40,33 @@ function Login() {
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
         
         try {
-            // returns true if login and password exist
-            const apiData = await axios.post(AUTHENTICATE_URL, userData);
-
             // disable the button until the API returns
             handleShowSpinner(true);
             handleIsLoginBtnDisabled(true);
 
+            // returns true if login and password exist
+            const apiData = await axios.post(AUTHENTICATE_URL, userData);
+
             // TODO: PARA TESTES, REMOVER O SETTIMEOUT DEPOIS
-            setTimeout(() => {
-                // if (apiData.data.result) {
-                if (apiData.data.result.emailUsuario === userData.emailUsuario && apiData.data.result.senhaUsuario === userData.senhaUsuario) {
-                    console.log('Login sucesso');
-                    // navigate('/dashboard');
-                } else {
-                    authenticateErrorMessage.innerText = 'Email ou senha incorretos';
-                    setAuthenticationError(true);
+            // if (apiData.data.result) {
+            if (apiData.data.result.emailUsuario === userData.emailUsuario && apiData.data.result.senhaUsuario === userData.senhaUsuario) {
+                console.log('Login sucesso');
+                // navigate('/dashboard');
+            } else {
+                authenticateErrorMessage.innerText = 'Email ou senha incorretos';
+                setAuthenticationError(true);
 
-                    document.querySelector('#email').classList.add('input-error');
-                    document.querySelector('#password').classList.add('input-error');
-                }
+                document.querySelector('#email').classList.add('input-error');
+                document.querySelector('#password').classList.add('input-error');
+            }
 
-                // the button remains disabled until a field is changed
-                handleShowSpinner(false);
-
-            }, 1000);
+            // the button remains disabled until a field is changed
+            handleShowSpinner(false);
             
         } catch(error) {
             authenticateErrorMessage.innerText = `Erro ao autenticar o usuário.\nTente novamente em instantes`;
             setAuthenticationError(true);
-            console.log(error);
+            handleShowSpinner(false);
         }
 
     }

@@ -138,3 +138,8 @@
 .sign-up-step-three .col select option {
     font-size: 24px;
 }
+
+.sign-up-step-three .first-movement-info {
+    font-size: 16px !important;
+    color: var(--detailsGray);
+}

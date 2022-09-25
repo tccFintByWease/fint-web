@@ -23,6 +23,7 @@ import { handlePasswordVisibility } from './../../../utils/password-utils';
 import { getTodayDate } from './../../../utils/date-utils';
 /* store */
 import ListCurrencies from './../../../store/currencies';
+import { reverse } from 'lodash';
 
 // TODO - APÓS ACABAR ESSA PÁGINA:
 /*
@@ -30,11 +31,7 @@ import ListCurrencies from './../../../store/currencies';
     - Arrumar todos os links de todas as páginas até então + criar a página de dashboard (início) e deixar linkada
 */
 
-// TODO - Arrumar pro achieved step e current step se tornarem um só, assim evito problemas de não ter como atualizar os valores quando volto um passo
-// TODO - Arrumar o valor padrão do select
-// TODO - Implementar o firstMovement
-// TODO - Arrumar a mensagem de erro + spinner
-// TODO - Deixar mais claro o cadastro da primeira receita na última tela de cadastro
+// TODO - Listar as moedas com o banco
 
 function SignUp() {
 
@@ -47,6 +44,7 @@ function SignUp() {
     const [currentStep, setCurrentStep] = useState(1); // the step in which the user is
 
     const SIGN_UP_URL = 'http://localhost:3001/api/usuario';
+    const INSERT_MOVEMENT = '';
 
     const handleShowSpinner = (value) => {
         setShowSpinner(value);
@@ -90,8 +88,8 @@ function SignUp() {
         if (completeStep) {
             if (achievedStep === 1) {
                 console.log('stepOneValues:');
-                console.log(values);
                 localStorage.setItem('stepOneValues', JSON.stringify(values));
+                console.log(values);
                 
                 if (currentStep === achievedStep) {
                     stepProgress[0].style.width = "50%";
@@ -103,8 +101,8 @@ function SignUp() {
                 
             } else if (achievedStep === 2) {
                 console.log('stepTwoValues:');
-                console.log(values);
                 localStorage.setItem('stepTwoValues', JSON.stringify(values));
+                console.log(values);
                 
                 if (currentStep === achievedStep) {
                     stepProgress[0].style.width = "95%";
@@ -120,23 +118,45 @@ function SignUp() {
                 if (step === 1) {
                     handleFormVisibility(1);
                     setCurrentStep(1);
+                    setAchievedStep(1);
+
+                    stepProgress[0].style.width = "5%";
+                    stepProgress[1].style.width = "95%";
                 } else if (step === 2 && achievedStep >= 2) {
                     handleFormVisibility(2);
                     setCurrentStep(2);
+                    setAchievedStep(2);
+
+                    stepProgress[0].style.width = "50%";
+                    stepProgress[1].style.width = "50%";
                 } else if (step === 3 && achievedStep >= 3) {
                     handleFormVisibility(3);
                     setCurrentStep(3);
+
+                    stepProgress[0].style.width = "95%";
+                    stepProgress[1].style.width = "5%";
                 }
             } else {
                 if (step === 1) {
                     handleFormVisibility(1);
                     setCurrentStep(1);
+                    setAchievedStep(1);
+
+                    stepProgress[0].style.width = "5%";
+                    stepProgress[1].style.width = "95%";
                 } else if (step === 2 && achievedStep + 1 >= 2) {
                     handleFormVisibility(2);
                     setCurrentStep(2);
+                    setAchievedStep(2);
+
+                    stepProgress[0].style.width = "50%";
+                    stepProgress[1].style.width = "50%";
                 } else if (step === 3 && achievedStep + 1 >= 3) {
                     handleFormVisibility(3);
                     setCurrentStep(3);
+
+                    stepProgress[0].style.width = "95%";
+                    stepProgress[1].style.width = "5%";
                 }
             }
         }
@@ -156,31 +176,47 @@ function SignUp() {
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
         
         try {
-            console.log('apiData:');
-            // returns a user object
-            const apiData = await axios.post(SIGN_UP_URL, userData);
-            
-            console.log(apiData);
-            console.log('userData:');
-            console.log(userData);
-
             // disable the button until the API returns
             handleShowSpinner(true);
-            // handleIsSignUpBtnDisabled(true);
+            handleIsSignUpBtnDisabled(true);
+
+            // returns a user object
+            const apiData = await axios.post(SIGN_UP_URL, userData);
+
+            // if (!isNaN(Number(values.valorInicial)) || Number(values.valorInicial) !== 0) {
+            //     const firstMovement = {
+            //         idUsuario: 0, // changed by API
+            //         idCategoria: 0,
+            //         idDetalheMovimentacao: 1,
+            //         idTipoMovimentacao: 1,
+            //         valorMovimentacao: values.valorInicial,
+            //         observacaoMovimentacao: 'Receita inicial'
+            //     }
+
+            //     // returns a movimentation object
+            //     const apiData_tblMovimentacao = await axios.post(INSERT_MOVEMENT, firstMovement);
+
+            //     if (_.isEqual(apiData_tblMovimentacao.data.result, firstMovement)) {
+            //         console.log('Primeira movimentação cadastrada com sucesso');
+            //     }
+            // }
 
             setTimeout(() => {
                 if (_.isEqual(apiData.data.result, userData)) {
                     // navigate('/dashboard');
                     console.log('Cadastro concluído com sucesso');
                 }
-            }, 2000)
 
-            handleShowSpinner(false);
-            // handleIsSignUpBtnDisabled(false);
+                handleShowSpinner(false);
+                handleIsSignUpBtnDisabled(false);
+            }, 2000);
 
         } catch(error) {
             authenticateErrorMessage.innerText = 'Erro ao autenticar o usuário.\nTente novamente em instantes';
             setAuthenticationError(true);
+
+            handleShowSpinner(false);
+            handleIsSignUpBtnDisabled(false);
         }
     }
 
@@ -370,13 +406,33 @@ function SignUp() {
                             <Form.Group as={Row} controlId="birthDate">
                                 <Col>
                                     <Form.Control
-                                        type="date"
+                                        type="text"
+                                        placeholder="Data de Nascimento"
                                         min='1922-01-01'
                                         max={getTodayDate()}
                                         name="dataNascUsuario"
                                         value={values.dataNascUsuario}
                                         onChange={handleChange}
-                                        onBlur={handleBlur}
+                                        onBlur={e => {
+                                            e.currentTarget.type = 'text';
+                                            if (e.currentTarget.value === '') {
+                                                e.currentTarget.value = '';
+                                                handleChange(e);
+                                            } else {
+                                                const date = e.currentTarget.value.replaceAll('-', '/');
+                                                const day = date.split('/')[2];
+                                                const month = date.split('/')[1];
+                                                const year = date.split('/')[0];
+
+                                                e.currentTarget.value = `${day}/${month}/${year}`;
+                                                handleChange(e);
+                                            }
+                                            handleBlur(e);
+                                        }}
+                                        onFocus={e => {
+                                            e.currentTarget.type = 'date';
+                                            handleChange(e);
+                                        }}
                                         className={errors.dataNascUsuario && touched.dataNascUsuario ? "input-error" : ""}
                                         data-testid="txt-data-nasc-usuario"
                                         autoComplete="bday"
@@ -432,12 +488,11 @@ function SignUp() {
                                         <ListCurrencies />
                                     </select>
                                 </Col>
-                                <p>Cadastre uma renda inicial para começar a utilizar a plataforma</p>
-                                <p>Caso deseje, isso poderá ser feito há qualquer momento após o cadastro</p>
+                                <p className="first-movement-info">Caso deseje, cadastre sua primeira receita. Receitas podem ser cadastradas há qualquer momento na plataforma</p>
                             </Form.Group>
                             <Form.Group as={Row} controlId="signUpButton">
                                 <Col>
-                                <button type="submit" disabled={isSignUpBtnDisabled}>
+                                    <button type="submit" disabled={isSignUpBtnDisabled}>
                                         <div className={!showSpinner ? '' : 'none'}>Cadastrar-se</div>
                                         <Spinner className={showSpinner ? '' : 'none'} animation="border" role="status" size="sm">
                                             <span className="visually-hidden">Carregando...</span>
