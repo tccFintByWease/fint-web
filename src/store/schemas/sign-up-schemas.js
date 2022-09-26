@@ -1,4 +1,3 @@
-import { min } from 'date-fns';
 import * as yup from 'yup';
 import { validateCPF } from './../../utils/cpf-utils';
 

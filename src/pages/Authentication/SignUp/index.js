@@ -25,12 +25,6 @@ import { getTodayDate } from './../../../utils/date-utils';
 import ListCurrencies from './../../../store/currencies';
 import { reverse } from 'lodash';
 
-// TODO - APÓS ACABAR ESSA PÁGINA:
-/*
-    - Fazer o mesmo no Esqueci a senha (enviar link de recuperação), Código de Recuperação (inserir código), Trocar Senha (código de recuperação)
-    - Arrumar todos os links de todas as páginas até então + criar a página de dashboard (início) e deixar linkada
-*/
-
 // TODO - Listar as moedas com o banco
 
 function SignUp() {

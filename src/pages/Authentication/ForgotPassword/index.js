@@ -9,28 +9,50 @@ import './styles.css';
 import './../styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// TODO - APÓS ACABAR ESSA PÁGINA:
+/*
+    - Fazer o mesmo no Esqueci a senha (enviar link de recuperação), Código de Recuperação (inserir código), Trocar Senha (código de recuperação)
+    - Arrumar todos os links de todas as páginas até então + criar a página de dashboard (início) e deixar linkada
+*/
+
 function RecuperarSenha() {
     return (
         <section className="authentication">
             <div className="authentication-box">
                 <img src={logo} alt="Fint" className="logo" />
-                <Form className="authentication-form">
-                    <Form.Group as={Row} controlId="email">
-                        <Col>
-                            <Form.Control type="email" placeholder="Email" name="email" />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="recuperar-senha">
-                        <Col sm={12}>
-                            <button type="submit">
-                                Enviar link de recuperação
-                            </button>
-                        </Col>
-                    </Form.Group>
-                    <p>Verifique seu email ou telefone e acesse o link enviado para recuperar sua conta</p>
-                    <hr />
-                    <p><A href="/sign-up">Criar uma nova conta</A> ou <A href="/login">Conectar-se</A></p>
-                </Form>
+                <Formik
+                    onSubmit={(values) => sendVerificationCode(values)}
+                    initialValues={{
+                        emailUsuario: ''
+                    }}
+                    validationSchema={loginSchema}>
+                    {({
+                        handleSubmit,
+                        handleChange,
+                        handleBlur,
+                        values,
+                        touched,
+                        errors
+                    }) => (
+                        <Form className="authentication-form">
+                            <Form.Group as={Row} controlId="email">
+                                <Col>
+                                    <Form.Control type="email" placeholder="Email" name="email" />
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="recuperar-senha">
+                                <Col sm={12}>
+                                    <button type="submit">
+                                        Enviar link de recuperação
+                                    </button>
+                                </Col>
+                            </Form.Group>
+                            <p>Verifique seu email ou telefone e acesse o link enviado para recuperar sua conta</p>
+                            <hr />
+                            <p><A href="/sign-up">Criar uma nova conta</A> ou <A href="/login">Conectar-se</A></p>
+                        </Form>
+                    )}
+                </Formik>
             </div>
             <DownloadBox />
         </section>

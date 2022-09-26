@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-import { validateCPF } from './../../utils/cpf-utils';
 
 const loginSchema = yup.object({
     emailUsuario: yup.string()
