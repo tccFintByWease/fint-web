@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { Formik } from 'formik';
 import axios from 'axios';
 /* schemas */
-import { forgotPasswordSchema } from './../../../store/schemas/forgot-password-schema';
+import { forgotPasswordSchema, recoverPasswordSchema } from './../../../store/schemas/forgot-password-schema';
 /* stylesheets and assets */
+import './styles.css';
 import './../styles.css';
 import logo from './../../../assets/images/black-logo.png';
 import faEye from './../../../assets/images/eye-solid.png';
@@ -13,8 +14,6 @@ import { Form, Row, Col, Spinner } from 'react-bootstrap';
 import DownloadBox from './../components/DownloadBox/index';
 import AuthenticationErrorMessage from './../../../components/AuthenticationErrorMessage/index';
 import { A, navigate } from 'hookrouter';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 /* utils */
 import { handlePasswordVisibility } from './../../../utils/password-utils';
 
@@ -26,8 +25,12 @@ import { handlePasswordVisibility } from './../../../utils/password-utils';
 
 function ForgotPassword() {
 
+    // TODO: gerar um código aleatório com a API
+
     const [showSpinner, setShowSpinner] = useState(false);
     const [isRecoverBtnDisabled, setIsRecoverBtnDisabled] = useState(false);
+    
+    const [verificationCode, setVerificationCode] = useState(972348);
 
     const [authenticationError, setAuthenticationError] = useState(false);
     const RECOVER_PASSWORD_URL = '';
@@ -70,7 +73,7 @@ function ForgotPassword() {
         try {
             // disable the button until the API returns
             handleShowSpinner(true);
-            handleIsLoginBtnDisabled(true);
+            handleIsRecoverBtnDisabled(true);
 
             // returns true if login and password exist
             const apiData = await axios.post(RECOVER_PASSWORD_URL, userData);
@@ -144,7 +147,7 @@ function ForgotPassword() {
                             </Form.Group>
                             <Form.Group as={Row} controlId="forgotPasswordButton">
                                 <Col sm={12}>
-                                    <button type="submit" disabled={isLoginBtnDisabled}>
+                                    <button type="submit" disabled={isRecoverBtnDisabled}>
                                         <div className={!showSpinner ? '' : 'none'}>Enviar link de recuperação</div>
                                         <Spinner className={showSpinner ? '' : 'none'} animation="border" role="status" size="sm">
                                             <span className="visually-hidden">Carregando...</span>
@@ -179,37 +182,161 @@ function ForgotPassword() {
                     }) => (
                         <Form className="authentication-form recover-password" noValidate onSubmit={handleSubmit}>
                             <AuthenticationErrorMessage authenticationError={authenticationError} />
-                            <Form.Group as={Row} controlId="firstDigit">
-                                <Col>
-                                    <Form.Control
-                                        type="number"
-                                        placeholder="0"
-                                        minLength="1"
-                                        maxLength="1"
-                                        name="primeiroDigito"
-                                        value={values.primeiroDigito}
-                                        onChange={e => {
-                                            if (isRecoverBtnDisabled) {
-                                                handleIsRecoverBtnDisabled(false);
-                                                e.currentTarget.classList.remove('input-error');
-                                                // TODO: método que seleciona todos os inputs de dígito e remove a classe de erro
-                                                setAuthenticationError(false);
-                                            }
-                                            handleChange(e);
-                                        }}
-                                        onBlur={handleBlur}
-                                        className={errors.primeiroDigito && touched.primeiroDigito ? "input-error" : ""}
-                                        data-testid="txt-primeiro-digito"
-                                        autoComplete="off"
-                                    />
-                                    {errors.primeiroDiito && touched.primeiroDiito && (
-                                        <p className="error-message">{errors.primeiroDiito}</p>
-                                    )}
-                                </Col>
-                            </Form.Group>
+                            <div className="digits-box flex">
+                                <Form.Group as={Row} controlId="firstDigit">
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="0"
+                                            minLength={1}
+                                            maxLength={1}
+                                            name="primeiroDigito"
+                                            value={values.primeiroDigito}
+                                            onChange={e => {
+                                                if (isRecoverBtnDisabled) {
+                                                    handleIsRecoverBtnDisabled(false);
+                                                    e.currentTarget.classList.remove('input-error');
+                                                    // TODO: método que seleciona todos os inputs de dígito e remove a classe de erro
+                                                    setAuthenticationError(false);
+                                                }
+                                                handleChange(e);
+                                            }}
+                                            onBlur={handleBlur}
+                                            className={errors.primeiroDigito && touched.primeiroDigito ? "input-error digit" : "digit"}
+                                            data-testid="txt-primeiro-digito"
+                                            autoComplete="off"
+                                        />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="secondDigit">
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="0"
+                                            minLength={1}
+                                            maxLength={1}
+                                            name="segundoDigito"
+                                            value={values.segundoDigito}
+                                            onChange={e => {
+                                                if (isRecoverBtnDisabled) {
+                                                    handleIsRecoverBtnDisabled(false);
+                                                    e.currentTarget.classList.remove('input-error');
+                                                    // TODO: método que seleciona todos os inputs de dígito e remove a classe de erro
+                                                    setAuthenticationError(false);
+                                                }
+                                                handleChange(e);
+                                            }}
+                                            onBlur={handleBlur}
+                                            className={errors.segundoDigito && touched.segundoDigito ? "input-error digit" : "digit"}
+                                            data-testid="txt-segundo-digito"
+                                            autoComplete="off"
+                                        />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="thirdDigit">
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="0"
+                                            minLength={1}
+                                            maxLength={1}
+                                            name="terceiroDigito"
+                                            value={values.terceiroDigito}
+                                            onChange={e => {
+                                                if (isRecoverBtnDisabled) {
+                                                    handleIsRecoverBtnDisabled(false);
+                                                    e.currentTarget.classList.remove('input-error');
+                                                    // TODO: método que seleciona todos os inputs de dígito e remove a classe de erro
+                                                    setAuthenticationError(false);
+                                                }
+                                                handleChange(e);
+                                            }}
+                                            onBlur={handleBlur}
+                                            className={errors.terceiroDigito && touched.terceiroDigito ? "input-error digit" : "digit"}
+                                            data-testid="txt-terceiro-digito"
+                                            autoComplete="off"
+                                        />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="fourthDigit">
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="0"
+                                            minLength={1}
+                                            maxLength={1}
+                                            name="quartoDigito"
+                                            value={values.quartoDigito}
+                                            onChange={e => {
+                                                if (isRecoverBtnDisabled) {
+                                                    handleIsRecoverBtnDisabled(false);
+                                                    e.currentTarget.classList.remove('input-error');
+                                                    // TODO: método que seleciona todos os inputs de dígito e remove a classe de erro
+                                                    setAuthenticationError(false);
+                                                }
+                                                handleChange(e);
+                                            }}
+                                            onBlur={handleBlur}
+                                            className={errors.quartoDigito && touched.quartoDigito ? "input-error digit" : "digit"}
+                                            data-testid="txt-quarto-digito"
+                                            autoComplete="off"
+                                        />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="fifthDigit">
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="0"
+                                            minLength={1}
+                                            maxLength={1}
+                                            name="quintoDigito"
+                                            value={values.quintoDigito}
+                                            onChange={e => {
+                                                if (isRecoverBtnDisabled) {
+                                                    handleIsRecoverBtnDisabled(false);
+                                                    e.currentTarget.classList.remove('input-error');
+                                                    // TODO: método que seleciona todos os inputs de dígito e remove a classe de erro
+                                                    setAuthenticationError(false);
+                                                }
+                                                handleChange(e);
+                                            }}
+                                            onBlur={handleBlur}
+                                            className={errors.quintoDigito && touched.quintoDigito ? "input-error digit" : "digit"}
+                                            data-testid="txt-quinto-digito"
+                                            autoComplete="off"
+                                        />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="sixthDigit">
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="0"
+                                            min={1}
+                                            max={1}
+                                            name="sextoDigito"
+                                            value={values.sextoDigito}
+                                            onChange={e => {
+                                                if (isRecoverBtnDisabled) {
+                                                    handleIsRecoverBtnDisabled(false);
+                                                    e.currentTarget.classList.remove('input-error');
+                                                    // TODO: método que seleciona todos os inputs de dígito e remove a classe de erro
+                                                    setAuthenticationError(false);
+                                                }
+                                                handleChange(e);
+                                            }}
+                                            onBlur={handleBlur}
+                                            className={errors.sextoDigito && touched.sextoDigito ? "input-error digit" : "digit"}
+                                            data-testid="txt-sexto-digito"
+                                            autoComplete="off"
+                                        />
+                                    </Col>
+                                </Form.Group>
+                            </div>
                             <Form.Group as={Row} controlId="forgotPasswordButton">
                                 <Col sm={12}>
-                                    <button type="submit" disabled={isLoginBtnDisabled}>
+                                    <button type="submit" disabled={isRecoverBtnDisabled}>
                                         <div className={!showSpinner ? '' : 'none'}>Enviar link de recuperação</div>
                                         <Spinner className={showSpinner ? '' : 'none'} animation="border" role="status" size="sm">
                                             <span className="visually-hidden">Carregando...</span>
