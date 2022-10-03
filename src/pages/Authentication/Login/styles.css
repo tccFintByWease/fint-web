@@ -1,0 +1,46 @@
+@import url(./../../../styles/global.css);
+
+.authentication-box .btn-facebook {
+    margin-bottom: 10px;
+    padding: 0px 48px;
+    background: #476EC1;
+    border: solid 2px #476EC1;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.authentication-box .btn-facebook:hover {
+    color: #476EC1;
+    border-color: #476EC1;
+}
+
+.authentication-box .btn-google {
+    margin-top: 10px;
+    padding-left: 48px;
+    padding-right: 72px;
+    background: var(--red);
+    border: solid 2px var(--red);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.authentication-box .btn-google:hover {
+    color: var(--red);
+    border-color: var(--red);
+}
+
+.authentication-box .btn-facebook:hover, .authentication-box .btn-google:hover {
+    background-color: transparent;
+}
+
+.authentication-box .btn-google:after {
+    content: 'Entrar com o Google';
+}
+
+.authentication-box .btn-facebook:after {
+    content: 'Entrar com o Facebook';
+}

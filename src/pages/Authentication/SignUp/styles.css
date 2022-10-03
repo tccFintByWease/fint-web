@@ -1,5 +1,7 @@
 @import url(./../../../styles/global.css);
 
+/*TODO: TRAZER O CSS DOS BOTÕES GOOGLE / FACEBOOK PRA PASTA DE LOGIN*/
+
 /* Form */
 /* ------------------------------------------------------------- */
 
@@ -20,6 +22,21 @@
 /* Sign-up Steps */
 .sign-up-step {
     font-size: 24px !important;
+
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.sign-up-step > .step-description {
+    width: 100%;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.sign-up-step > .steps-bar {
+    flex: 1;
+    flex-wrap: wrap;
 }
 
 .sign-up-step > p {
@@ -141,5 +158,4 @@
 
 .sign-up-step-three .first-movement-info {
     font-size: 16px !important;
-    color: var(--detailsGray);
 }

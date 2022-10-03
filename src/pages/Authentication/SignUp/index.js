@@ -7,7 +7,9 @@ import _ from 'lodash';
 import { stepOneSchema, stepTwoSchema, stepThreeSchema } from '../../../store/schemas/sign-up-schemas';
 /* stylesheets and assets */
 import './styles.css';
+import './media-queries.css';
 import './../styles.css';
+import './../media-queries.css';
 import logo from './../../../assets/images/black-logo.png';
 import faEye from './../../../assets/images/eye-solid.png';
 /* components */
@@ -218,7 +220,7 @@ function SignUp() {
         <section className="authentication">
             <div className="authentication-box">
                 <img src={logo} alt="Fint" className="logo" />
-                <div className="sign-up-step">
+                <div className="sign-up-step flex">
                     <p className="step-description">1. Email e senha</p>
                     <div className="steps-bar flex">
                         <span className={`${achievedStep >= 1 ? 'step flex achieved-step' : 'step flex'} ${currentStep === 1 ? 'current-step' : ''}`} onClick={() => handleStep('click', 1, false)}>1</span>

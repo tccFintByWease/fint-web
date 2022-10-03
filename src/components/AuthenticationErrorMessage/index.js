@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import './styles.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function AuthenticationErrorMessage(props) {
     return (

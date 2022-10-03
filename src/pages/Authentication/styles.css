@@ -2,7 +2,8 @@
 
 .authentication {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 20px 0px;
 
     background-image: linear-gradient(to bottom right, var(--primaryGreen), var(--secundaryGreen), var(--detailsGreen));
 
@@ -36,6 +37,10 @@
 .authentication-box > .logo {
     width: 126px;
     margin: 0px auto 60px;
+}
+
+.authentication-box > .authentication-form p:not(.authentication-error-message) {
+    color: var(--detailsGray);
 }
 
 .authentication-box > .authentication-form input {
@@ -116,48 +121,11 @@
 .authentication-form .error-message {
     margin: 0px;
     font-size: 14px;
-    color: var(--red);
+    color: var(--red) !important;
 }
 
 .authentication-form .input-error {
     border-color: var(--red) !important;
-}
-
-.authentication-box .btn-facebook {
-    margin-bottom: 10px;
-    padding: 0px 48px;
-    background: #476EC1;
-    border: solid 2px #476EC1;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.authentication-box .btn-facebook:hover {
-    color: #476EC1;
-    border-color: #476EC1;
-}
-
-.authentication-box .btn-google {
-    margin-top: 10px;
-    padding-left: 48px;
-    padding-right: 72px;
-    background: var(--red);
-    border: solid 2px var(--red);
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.authentication-box .btn-google:hover {
-    color: var(--red);
-    border-color: var(--red);
-}
-
-.authentication-box .btn-facebook:hover, .authentication-box .btn-google:hover {
-    background-color: transparent;
 }
 
 .authentication-box button:hover {

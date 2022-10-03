@@ -1,4 +1,4 @@
-/* Tablet */
+/* Desktop */
 @media only screen and (max-width: 1299px) {
     .explore-text > p,
     .list > ul > li,
@@ -49,7 +49,7 @@
     }
 }
 
-/* Mobile */
+/* Tablet */
 @media only screen and (max-width: 960px) {
     .hero, .explore-simulation, .explore-control, .subscriptions, .about-us {
         height: 100%;
@@ -160,6 +160,7 @@
     }
 }
 
+/* Mobile */
 @media only screen and (max-width: 720px) {
     .hero {
         margin-top: 20px;

@@ -1,4 +1,4 @@
-/* Tablet */
+/* Desktop */
 @media only screen and (max-width: 1299px) {
     .documentation {
         width: 78.829869vw;
@@ -9,7 +9,7 @@
     }
 }
 
-/* Mobile */
+/* Tablet */
 @media only screen and (max-width: 960px) {
     .documentation-header {
         height: 80px !important;
@@ -21,6 +21,7 @@
     }
 }
 
+/* Mobile */
 @media only screen and (max-width: 720px) {
     .documentation {
         width: 83.333vw;

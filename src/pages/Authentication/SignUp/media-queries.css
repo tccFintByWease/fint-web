@@ -1,0 +1,8 @@
+@import url(./../../../styles/global.css);
+
+/* Mobile */
+@media only screen and (max-width: 520px) {
+    .sign-up-step {
+        background-color: red !important;
+    }
+}

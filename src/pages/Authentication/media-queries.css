@@ -1,0 +1,48 @@
+@import url(./../../styles/global.css);
+
+/* Mobile */
+@media only screen and (max-width: 520px) {
+    .authentication {
+        width: 100vw;
+        height: 100vh;
+        padding: 0px;
+        background-image: none;
+    }
+    
+    .authentication > .authentication-box, .authentication > .download-box {
+        width: 100vw;
+        box-shadow: none;
+    }
+
+    .authentication > .authentication-box {
+        padding: 60px 20px 0px;
+    }
+
+    .authentication > .download-box {
+        height: 100%;
+        background-color: var(--primaryGray);
+        border-top: solid 1px var(--secundaryGray);
+        padding: 20px 20px !important;
+    }
+
+    .download-box .download-buttons {
+        display: flex;
+        flex-direction: column;
+
+        justify-content: center;
+        align-items: center;
+    }
+
+    .download-buttons a {
+        margin: 10px 0px !important;
+    }
+
+    .authentication > .authentication-box button, .authentication > .authentication-box input {
+        width: 100%;
+    }
+
+    .authentication .alert-danger p  {
+        font-size: 14px !important;
+        text-align: left !important;
+    }
+}

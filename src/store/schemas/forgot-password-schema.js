@@ -27,7 +27,23 @@ const recoverPasswordSchema = yup.object({
     .required('Insira todos os dígitos do código')
 });
 
+const resetPasswordSchema = yup.object({
+    senhaUsuario: yup.string()
+        .required('Insira sua senha')
+        .min(8, 'A senha deve ter no mínimo 8 caracteres')
+        .max(50, 'A senha deve ter entre 8 e 50 caracteres')
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+            'Sua senha deve conter letras maiúsculas e minúsculas e ao menos um número e um caractere especial'
+        ),
+
+    confirmarSenha: yup.string()
+        .required('Confirme sua senha')
+        .oneOf([yup.ref('senhaUsuario'), null], 'As senhas não coincidem')
+});
+
 export {
     forgotPasswordSchema,
-    recoverPasswordSchema
+    recoverPasswordSchema,
+    resetPasswordSchema
 }

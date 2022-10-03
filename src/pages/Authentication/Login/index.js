@@ -5,7 +5,10 @@ import axios from 'axios';
 /* schemas */
 import { loginSchema } from './../../../store/schemas/login-schema';
 /* stylesheets and assets */
+import './styles.css';
+import './media-queries.css';
 import './../styles.css';
+import './../media-queries.css';
 import logo from './../../../assets/images/black-logo.png';
 import faEye from './../../../assets/images/eye-solid.png';
 /* components */
@@ -166,7 +169,7 @@ function Login() {
                                 <Col sm={12}>
                                     <button className="btn-facebook">
                                         <FontAwesomeIcon icon={faFacebook} />
-                                        Entrar com o Facebook
+                                        {/* Entrar com o Facebook - text in CSS after selector */}
                                     </button>
                                 </Col>
                             </Form.Group>
@@ -174,7 +177,7 @@ function Login() {
                                 <Col>
                                     <button className="btn-google">
                                         <FontAwesomeIcon icon={faGoogle} />
-                                        Entrar com o Google
+                                        {/* Entrar com o Google - text in CSS after selector */}
                                     </button>
                                 </Col>
                             </Form.Group>

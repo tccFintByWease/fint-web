@@ -1,18 +1,18 @@
 @import url(./../../styles/global.css);
 
-.authentication-form .alert-danger {
+.authentication .alert-danger {
     justify-content: center;
     align-items: center;
 }
 
-.authentication-form .alert-danger svg {
+.authentication .alert-danger svg {
     margin-right: 40px;
 }
 
-.authentication-form .alert-danger p {
+.authentication .alert-danger p {
     text-align: justify;
 }
 
-.authentication-form .alert-danger p, .authentication-form .alert-danger svg {
+.authentication .alert-danger p, .authentication-form .alert-danger svg {
     font-size: 16px;
 }

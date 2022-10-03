@@ -1,6 +1,6 @@
 @import url(./../../../styles/global.css);
 
-/* Tablet */
+/* Desktop */
 @media only screen and (max-width: 1299px) {
     #landpage__nav header {
         flex-wrap: wrap;
@@ -56,7 +56,7 @@
     }
 }
 
-/* Mobile */
+/* tablet */
 @media only screen and (max-width: 960px) {
     #landpage__nav header {
         height: 10.4167vw !important;
@@ -91,6 +91,7 @@
     }
 }
 
+/* Mobile */
 @media only screen and (max-width: 720px) {
     #landpage__nav header {
         height: 60px !important;
