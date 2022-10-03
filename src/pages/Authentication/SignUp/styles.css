@@ -1,7 +1,5 @@
 @import url(./../../../styles/global.css);
 
-/*TODO: TRAZER O CSS DOS BOTÕES GOOGLE / FACEBOOK PRA PASTA DE LOGIN*/
-
 /* Form */
 /* ------------------------------------------------------------- */
 
@@ -30,13 +28,13 @@
 
 .sign-up-step > .step-description {
     width: 100%;
-    flex: 1;
-    flex-wrap: wrap;
 }
 
 .sign-up-step > .steps-bar {
-    flex: 1;
-    flex-wrap: wrap;
+    width: 100%;
+
+    justify-content: space-between;
+    align-items: center;
 }
 
 .sign-up-step > p {
@@ -75,12 +73,13 @@
 }
 
 .steps-bar > .step-progress:first-of-type {
-    width: 5%;
+    width: 50%;
     background-color: var(--primaryGreen) !important;
 }
 
 .steps-bar > .step-progress:last-of-type {
-    width: 95%;
+    width: 50%;
+    background-color: aqua !important;
 }
 
 .sign-up-step span {
@@ -89,7 +88,7 @@
     background-color: var(--detailsGray);
     border-radius: 50px;
 
-    position: absolute;
+    /* position: absolute; */
 
     font-size: 18px;
     color: var(--white);
@@ -100,12 +99,19 @@
     user-select: none;
 }
 
+.steps-bar {
+    height: 50px;
+    background-color: red !important;
+}
+
 .sign-up-step span:nth-of-type(2) {
-    margin-left: 163.75px;
+    /* margin-left: 163.75px; */
+    /* margin-left: 66%; */
 }
 
 .sign-up-step span:last-child {
-    margin-left: 327.5px;
+    /* margin-left: 327.5px; */
+    /* margin-left: 99%; */
 }
 
 .sign-up-step span.achieved-step {

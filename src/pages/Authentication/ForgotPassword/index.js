@@ -184,7 +184,7 @@ function ForgotPassword() {
                         touched,
                         errors
                     }) => (
-                        <Form className="authentication-form forgot-password" noValidate onSubmit={handleSubmit}>
+                        <Form className="authentication-form forgot-password none" noValidate onSubmit={handleSubmit}>
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
@@ -465,7 +465,7 @@ function ForgotPassword() {
                         touched,
                         errors
                     }) => (
-                        <Form className="authentication-form reset-password none" noValidate onSubmit={handleSubmit}>
+                        <Form className="authentication-form reset-password" noValidate onSubmit={handleSubmit}>
                             <Form.Group as={Row} controlId="password">
                                 <Col className="password flex">
                                     <Form.Control

@@ -1,7 +1,6 @@
 @import url(./../../styles/global.css);
 
 .authentication {
-    width: 100vw;
     min-height: 100vh;
     padding: 20px 0px;
 
