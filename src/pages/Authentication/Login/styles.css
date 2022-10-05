@@ -44,3 +44,28 @@
 .authentication-box .btn-facebook:after {
     content: 'Entrar com o Facebook';
 }
+
+.authentication-box #stayLoggedInCheckbox {
+    width: 18px;
+    height: 18px;
+    padding: 0px;
+    margin: 0px;
+    margin-right: 10px;
+    border-radius: 5px;
+
+    accent-color: var(--primaryGreen) !important;
+}
+
+.authentication-box .form-check {
+    height: 40px;
+    padding: 0px 5px;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+.authentication-box #stayLoggedInCheckbox{
+    /* TODO: COLOR-ACCENT NÃO FUNCIONA */
+}

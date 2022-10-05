@@ -23,8 +23,6 @@ import { handlePasswordVisibility } from './../../../utils/password-utils';
 
 function Login() {
 
-    // TODO: BOTÃO DE MANTER OU NÃO LOGADO
-    
     const [showSpinner, setShowSpinner] = useState(false);
     const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(false);
 
@@ -82,7 +80,8 @@ function Login() {
                     onSubmit={(values) => authenticateUser(values)}
                     initialValues={{
                         emailUsuario: '',
-                        senhaUsuario: ''
+                        senhaUsuario: '',
+                        manterConectado: false
                     }}
                     validationSchema={loginSchema}>
                     {({
@@ -150,6 +149,19 @@ function Login() {
                                 {errors.senhaUsuario && touched.senhaUsuario && (
                                     <p className="error-message">{errors.senhaUsuario}</p>
                                 )}
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="stayLoggedInCheckbox">
+                                <Col>
+                                    <Form.Check 
+                                        type="checkbox"
+                                        name="manterConectado"
+                                        label="Manter-se conectado"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        data-testid="checkbox-manter-conectado"
+                                        autoComplete="none"
+                                    />
+                                </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="loginButton">
                                 <Col>

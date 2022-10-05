@@ -43,7 +43,7 @@ const stepTwoSchema = yup.object({
         .required('Insira seu telefone')
         .min(15, 'Insira um telefone válido').max(15),
 
-    dataNascUsuario: yup.date()
+    dataNascUsuario: yup.date('Insira sua data de nascimento novamente')
         .required('Insira sua data de nascimento')
         .min(minDate, 'Insira uma data de nascimento válida')
         .max(maxDate, 'É necessário ser maior de 16 anos para se cadastrar em nossa plataforma')

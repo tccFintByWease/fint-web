@@ -68,18 +68,9 @@
 }
 
 .step-progress {
+    width: 36.67%;
     background-color: var(--detailsGray) !important;
     transition: ease all 0.5s;
-}
-
-.steps-bar > .step-progress:first-of-type {
-    width: 50%;
-    background-color: var(--primaryGreen) !important;
-}
-
-.steps-bar > .step-progress:last-of-type {
-    width: 50%;
-    background-color: aqua !important;
 }
 
 .sign-up-step span {
@@ -88,8 +79,6 @@
     background-color: var(--detailsGray);
     border-radius: 50px;
 
-    /* position: absolute; */
-
     font-size: 18px;
     color: var(--white);
 
@@ -97,21 +86,6 @@
     transition: ease all 0.3s;
 
     user-select: none;
-}
-
-.steps-bar {
-    height: 50px;
-    background-color: red !important;
-}
-
-.sign-up-step span:nth-of-type(2) {
-    /* margin-left: 163.75px; */
-    /* margin-left: 66%; */
-}
-
-.sign-up-step span:last-child {
-    /* margin-left: 327.5px; */
-    /* margin-left: 99%; */
 }
 
 .sign-up-step span.achieved-step {

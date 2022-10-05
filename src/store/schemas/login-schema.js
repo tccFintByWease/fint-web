@@ -9,7 +9,9 @@ const loginSchema = yup.object({
     senhaUsuario: yup.string()
         .required('Insira sua senha')
         .min(8, 'A senha deve conter um mínimo de 8 caracteres')
-        .max(50, 'A senha deve conter entre 8 e 50 caracteres')
+        .max(50, 'A senha deve conter entre 8 e 50 caracteres'),
+
+    senhaUsuario: yup.bool()
         
 });
 

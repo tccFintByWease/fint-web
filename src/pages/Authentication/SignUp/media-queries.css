@@ -2,12 +2,11 @@
 
 /* Mobile */
 @media only screen and (max-width: 520px) {
-    .sign-up-step span:nth-of-type(2) {
-        margin-left: 31.49vw;
+    .step-progress {
+        width: 40%;
     }
-    
-    .sign-up-step span:last-child {
-        margin-left: 327.5px;
-        /* margin-left: 99%; */
+
+    .sign-up-step span {
+        min-width: 32px;
     }
 }

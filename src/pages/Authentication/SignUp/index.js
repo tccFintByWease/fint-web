@@ -62,19 +62,19 @@ function SignUp() {
             stepTwo.classList.add('none');
             stepThree.classList.add('none');
 
-            stepDescription.innerText = '1. Email e Senha';
+            stepDescription.innerText = '1. Email e senha';
         } else if (step === 2) {
             stepOne.classList.add('none');
             stepTwo.classList.remove('none');
             stepThree.classList.add('none');
 
-            stepDescription.innerText = '2. Dados Pessoais';
+            stepDescription.innerText = '2. Dados pessoais';
         } else if (step === 3) {
             stepOne.classList.add('none');
             stepTwo.classList.add('none');
             stepThree.classList.remove('none');
 
-            stepDescription.innerText = '3. Moeda Padrão';
+            stepDescription.innerText = '3. Moeda padrão';
         }
     }
 
@@ -88,8 +88,11 @@ function SignUp() {
                 console.log(values);
                 
                 if (currentStep === achievedStep) {
-                    stepProgress[0].style.width = "50%";
-                    stepProgress[1].style.width = "50%";
+                    stepProgress[0].style.backgroundColor = "green";
+                    stepProgress[1].style.backgroundColor = "gray";
+
+                    // stepProgress[0].style.width = "50%";
+                    // stepProgress[1].style.width = "50%";
 
                     handleStep('', currentStep + 1, false, achievedStep + 1);
                     setAchievedStep(2);
@@ -101,8 +104,11 @@ function SignUp() {
                 console.log(values);
                 
                 if (currentStep === achievedStep) {
-                    stepProgress[0].style.width = "95%";
-                    stepProgress[1].style.width = "5%";
+                    stepProgress[0].style.backgroundColor = "green";
+                    stepProgress[1].style.backgroundColor = "green";
+
+                    // stepProgress[0].style.width = "95%";
+                    // stepProgress[1].style.width = "5%";
 
                     setAchievedStep(3);
                 }
@@ -116,21 +122,27 @@ function SignUp() {
                     setCurrentStep(1);
                     setAchievedStep(1);
 
-                    stepProgress[0].style.width = "5%";
-                    stepProgress[1].style.width = "95%";
+                    stepProgress[0].style.backgroundColor = "gray";
+                    stepProgress[1].style.backgroundColor = "gray";
+                    // stepProgress[0].style.width = "5%";
+                    // stepProgress[1].style.width = "95%";
                 } else if (step === 2 && achievedStep >= 2) {
                     handleFormVisibility(2);
                     setCurrentStep(2);
                     setAchievedStep(2);
 
-                    stepProgress[0].style.width = "50%";
-                    stepProgress[1].style.width = "50%";
+                    stepProgress[0].style.backgroundColor = "green";
+                    stepProgress[1].style.backgroundColor = "#E1E1E1";
+                    // stepProgress[0].style.width = "50%";
+                    // stepProgress[1].style.width = "50%";
                 } else if (step === 3 && achievedStep >= 3) {
                     handleFormVisibility(3);
                     setCurrentStep(3);
 
-                    stepProgress[0].style.width = "95%";
-                    stepProgress[1].style.width = "5%";
+                    stepProgress[0].style.backgroundColor = "green";
+                    stepProgress[1].style.backgroundColor = "green";
+                    // stepProgress[0].style.width = "95%";
+                    // stepProgress[1].style.width = "5%";
                 }
             } else {
                 if (step === 1) {
@@ -138,21 +150,27 @@ function SignUp() {
                     setCurrentStep(1);
                     setAchievedStep(1);
 
-                    stepProgress[0].style.width = "5%";
-                    stepProgress[1].style.width = "95%";
+                    stepProgress[0].style.backgroundColor = "gray";
+                    stepProgress[1].style.backgroundColor = "gray";
+                    // stepProgress[0].style.width = "5%";
+                    // stepProgress[1].style.width = "95%";
                 } else if (step === 2 && achievedStep + 1 >= 2) {
                     handleFormVisibility(2);
                     setCurrentStep(2);
                     setAchievedStep(2);
 
-                    stepProgress[0].style.width = "50%";
-                    stepProgress[1].style.width = "50%";
+                    stepProgress[0].style.backgroundColor = "green";
+                    stepProgress[1].style.backgroundColor = "gray";
+                    // stepProgress[0].style.width = "50%";
+                    // stepProgress[1].style.width = "50%";
                 } else if (step === 3 && achievedStep + 1 >= 3) {
                     handleFormVisibility(3);
                     setCurrentStep(3);
 
-                    stepProgress[0].style.width = "95%";
-                    stepProgress[1].style.width = "5%";
+                    stepProgress[0].style.backgroundColor = "green";
+                    stepProgress[1].style.backgroundColor = "green";
+                    // stepProgress[0].style.width = "95%";
+                    // stepProgress[1].style.width = "5%";
                 }
             }
         }
