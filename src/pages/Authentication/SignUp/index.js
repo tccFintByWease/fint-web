@@ -25,7 +25,6 @@ import { handlePasswordVisibility } from './../../../utils/password-utils';
 import { getTodayDate } from './../../../utils/date-utils';
 /* store */
 import ListCurrencies from './../../../store/currencies';
-import { reverse } from 'lodash';
 
 // TODO - Listar as moedas com o banco
 

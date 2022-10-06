@@ -65,6 +65,6 @@ form {
     user-select: none;
 }
 
-button {
+button, input[type="checkbox"] {
     cursor: pointer;
 }

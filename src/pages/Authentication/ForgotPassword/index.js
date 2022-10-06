@@ -19,11 +19,6 @@ import { A, navigate } from 'hookrouter';
 /* utils */
 import { handlePasswordVisibility } from './../../../utils/password-utils';
 
-// TODO - APÓS ACABAR ESSA PÁGINA:
-/*
-    - Arrumar todos os links de todas as páginas até então + criar a página de dashboard (início) e deixar linkada
-*/
-
 function ForgotPassword() {
 
     // TODO: gerar um código aleatório com a API

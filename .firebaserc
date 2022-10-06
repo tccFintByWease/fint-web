@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "fint-48a30"
-  }
+    "default": "fint-48a30",
+    "fint": "fint-48a30"
+  },
+  "targets": {},
+  "etags": {}
 }

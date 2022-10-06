@@ -3,6 +3,7 @@ import Login from '../pages/Authentication/Login/index';
 import SignUp from '../pages/Authentication/SignUp/index';
 import ForgotPassword from '../pages/Authentication/ForgotPassword/index';
 import Documentation from '../pages/Documentation/index';
+import Dashboard from '../pages/Dashboard/index';
 
 const routes = {
     '/': () => <Landpage />,
@@ -10,6 +11,7 @@ const routes = {
     '/sign-up': () => <SignUp />,
     '/forgot-password': () => <ForgotPassword />,
     '/documentacao': () => <Documentation />,
+    '/dashboard': () => <Dashboard />,
 }
 
 export { routes };

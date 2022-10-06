@@ -4,9 +4,13 @@
 @media only screen and (max-width: 520px) {
     .authentication {
         width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
         padding: 0px;
         background-image: none;
+    }
+
+    .authentication-box {
+        min-height: calc(100vh - 252px);
     }
     
     .authentication > .authentication-box, .authentication > .download-box {
@@ -19,7 +23,6 @@
     }
 
     .authentication > .download-box {
-        height: 100%;
         background-color: var(--primaryGray);
         border-top: solid 1px var(--secundaryGray);
         padding: 20px 20px !important;
