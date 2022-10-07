@@ -216,8 +216,8 @@ function SignUp() {
 
             setTimeout(() => {
                 if (_.isEqual(apiData.data.result, userData)) {
-                    // navigate('/dashboard');
                     console.log('Cadastro concluído com sucesso');
+                    // navigate('/dashboard');
                 }
 
                 handleShowSpinner(false);

@@ -51,8 +51,8 @@ function Login() {
             // TODO: PARA TESTES, REMOVER O SETTIMEOUT DEPOIS
             // if (apiData.data.result) {
             if (apiData.data.result.emailUsuario === userData.emailUsuario && apiData.data.result.senhaUsuario === userData.senhaUsuario) {
-                console.log('Login sucesso');
-                // navigate('/dashboard');
+                    console.log('Login sucesso');
+                    // navigate('/dashboard');
             } else {
                 authenticateErrorMessage.innerText = 'Email ou senha incorretos';
                 setAuthenticationError(true);
