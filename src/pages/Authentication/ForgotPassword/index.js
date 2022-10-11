@@ -16,22 +16,34 @@ import { Form, Row, Col, Spinner } from 'react-bootstrap';
 import DownloadBox from './../components/DownloadBox/index';
 import AuthenticationErrorMessage from './../../../components/AuthenticationErrorMessage/index';
 import { A, navigate } from 'hookrouter';
+/* store */
+import { FORGOT_PASSWORD_URL, UPDATE_USER_URL, LOOK_FOR_EMAIL_URL } from './../../../store/api-urls';
 /* utils */
 import { handlePasswordVisibility } from './../../../utils/password-utils';
+import { formatDatetime } from './../../../utils/date-utils';
 
 function ForgotPassword() {
-
-    // TODO: gerar um código aleatório com a API
-
     const [showSpinner, setShowSpinner] = useState(false);
     const [isRecoverBtnDisabled, setIsRecoverBtnDisabled] = useState(false);
+    const [resendAlertVisibility, setResendAlertVisilibity] = useState(false);
     
-    const [verificationCode, setVerificationCode] = useState(972348);
-    const [user, setUser] = useState('');
+    const [verificationCode, setVerificationCode] = useState();
+    const [passwordChangeIsValid, setPasswordChangeIsValid] = useState(false);
+    const [user, setUser] = useState();
 
     const [authenticationError, setAuthenticationError] = useState(false);
-    const RECOVER_PASSWORD_URL = '';
-    const RESET_PASSWORD_URL = '';
+
+    const handleResendAlertVisibility = () => {
+        const resendAlert = document.querySelector('.resend-alert');
+
+        if (!resendAlertVisibility) {
+            resendAlert.classList.remove('none');
+            setResendAlertVisilibity(true);
+            setTimeout(() => { setResendAlertVisilibity(false); resendAlert.classList.add('none'); }, 3000);
+        }
+
+        console.log(resendAlertVisibility);
+    }
 
     const removeErrorClassFromInputs = () => {
         const digits = document.querySelectorAll('.digit');
@@ -81,25 +93,28 @@ function ForgotPassword() {
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
 
         // TODO: Implementar o NodeMail com a API
-        console.log('Botão funcionando');
 
         try {
             // disable the button until the API returns
             handleShowSpinner(true);
             handleIsRecoverBtnDisabled(true);
 
-            // returns true if email exist
-            const apiData = await axios.post(RECOVER_PASSWORD_URL, userData);
+            // const response = await axios.post(FORGOT_PASSWORD_URL, userData);
+            // ! VAI SER SUBSTITUIDO PELA CHAMADA ACIMA
+            const response = await axios.post(LOOK_FOR_EMAIL_URL, userData);
 
-            // if (apiData.data.result) {
-            if (apiData.data.result.emailUsuario === userData.emailUsuario) {
-                console.log('Email encontrado');
+            if (response.data.result.emailUsuario === userData.emailUsuario) {
+                response.data.result.dataNascUsuario = formatDatetime(response.data.result.dataNascUsuario);
+                response.data.result.dataCadastroUsuario = formatDatetime(response.data.result.dataCadastroUsuario);
 
-                setUser(apiData.data.result);
+                // ! setUser(response.data.result.usuario);
+                setUser(response.data.result);
 
-                // TODO: GERAR CÓDIGO E ENVIAR PARA O EMAIL
+                // ! setVerificationCode(response.data.result.codigo);
                 setVerificationCode(972348);
+                console.log('código:', verificationCode);
 
+                handleIsRecoverBtnDisabled(false);
                 handleFormVisibility(2);
             } else {
                 authenticateErrorMessage.innerText = 'O email inserido não foi encontrado';
@@ -125,6 +140,7 @@ function ForgotPassword() {
 
         if (code === verificationCode) {
             setAuthenticationError(false);
+            setPasswordChangeIsValid(true);
             handleFormVisibility(3);
         } else {
             authenticateErrorMessage.innerText = `Código de verificação incorreto.\nCaso necessário, solicite o reenvio`;
@@ -134,7 +150,7 @@ function ForgotPassword() {
         }
     }
 
-    const resetPassword = async (userData, user) => {
+    const resetPassword = async (userData, user, verificationCode) => {
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
 
         try {
@@ -142,19 +158,26 @@ function ForgotPassword() {
             handleShowSpinner(true);
             handleIsRecoverBtnDisabled(true);
 
-            const data = userData.user = user;
+            console.log(user);
+            console.log(passwordChangeIsValid);
+            if (user && passwordChangeIsValid) {
+                user.senhaUsuario = userData.senhaUsuario;
 
-            // returns true if login and password exist
-            const apiData = await axios.post(RESET_PASSWORD_URL, data);
+                await axios.put(UPDATE_USER_URL, user);
+
+                navigate('/login');
+                window.location.reload();
+            } else {
+                authenticateErrorMessage.innerText = `Erro ao alterar senha.`;
+                setAuthenticationError(true);
+                handleShowSpinner(false);
+            }
             
-            console.log('Senha alterada');
-            // navigate('/login');
-
             // the button remains disabled until a field is changed
             handleShowSpinner(false);
             
         } catch(error) {
-            authenticateErrorMessage.innerText = `Erro ao enviar o código de verificação.\nTente novamente em instantes`;
+            authenticateErrorMessage.innerText = `Erro ao alterar senha.\nTente novamente em instantes`;
             setAuthenticationError(true);
             handleShowSpinner(false);
         }
@@ -179,7 +202,7 @@ function ForgotPassword() {
                         touched,
                         errors
                     }) => (
-                        <Form className="authentication-form forgot-password none" noValidate onSubmit={handleSubmit}>
+                        <Form className="authentication-form forgot-password" noValidate onSubmit={handleSubmit}>
                             <Form.Group as={Row} controlId="email">
                                 <Col>
                                     <Form.Control
@@ -242,6 +265,7 @@ function ForgotPassword() {
                         errors
                     }) => (
                         <Form className="authentication-form recover-password none" noValidate onSubmit={handleSubmit}>
+                            <p className="resend-alert hidden none">Um novo código de verificação foi enviado para o seu email</p>
                             <div className="digits-box flex">
                                 <Form.Group as={Row} controlId="firstDigit">
                                     <Col>
@@ -441,12 +465,12 @@ function ForgotPassword() {
                                 <p>Verifique seu email e utilize o código enviado para recuperar sua conta</p>
                             </Form.Group>
                             <hr />
-                            <p><A href="#" onClick={() => sendVerificationCode(user)}>Reenviar código de verificação</A></p>
+                            <p><A href="#" onClick={() => { sendVerificationCode(user); handleResendAlertVisibility() }}>Reenviar código de verificação</A></p>
                         </Form>
                     )}
                 </Formik>
                 <Formik
-                    onSubmit={(values) => resetPassword(values, user)}
+                    onSubmit={(values) => resetPassword(values, user, verificationCode)}
                     initialValues={{
                         senhaUsuario: '',
                         confirmarSenha: ''
@@ -460,7 +484,7 @@ function ForgotPassword() {
                         touched,
                         errors
                     }) => (
-                        <Form className="authentication-form reset-password" noValidate onSubmit={handleSubmit}>
+                        <Form className="authentication-form reset-password none" noValidate onSubmit={handleSubmit}>
                             <Form.Group as={Row} controlId="password">
                                 <Col className="password flex">
                                     <Form.Control

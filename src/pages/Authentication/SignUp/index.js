@@ -25,10 +25,15 @@ import { handlePasswordVisibility } from './../../../utils/password-utils';
 import { getTodayDate } from './../../../utils/date-utils';
 /* store */
 import ListCurrencies from './../../../store/currencies';
-
-// TODO - Listar as moedas com o banco
+import { SIGN_UP_URL, INSERT_TRANSITION_URL } from './../../../store/api-urls';
+/* contexts */
+import { useAuth } from './../../../contexts/auth';
+/* models */
+import Movimentacao from './../../../models/Movimentacao';
 
 function SignUp() {
+
+    const { signIn } = useAuth();
 
     const [showSpinner, setShowSpinner] = useState(false);
     const [isSignUpBtnDisabled, setIsSignUpBtnDisabled] = useState(false);
@@ -37,9 +42,6 @@ function SignUp() {
 
     const [achievedStep, setAchievedStep] = useState(1); // the steps reached by the user
     const [currentStep, setCurrentStep] = useState(1); // the step in which the user is
-
-    const SIGN_UP_URL = 'http://localhost:3001/api/usuario';
-    const INSERT_MOVEMENT = '';
 
     const handleShowSpinner = (value) => {
         setShowSpinner(value);
@@ -82,32 +84,22 @@ function SignUp() {
 
         if (completeStep) {
             if (achievedStep === 1) {
-                console.log('stepOneValues:');
                 localStorage.setItem('stepOneValues', JSON.stringify(values));
-                console.log(values);
                 
                 if (currentStep === achievedStep) {
-                    stepProgress[0].style.backgroundColor = "green";
-                    stepProgress[1].style.backgroundColor = "gray";
-
-                    // stepProgress[0].style.width = "50%";
-                    // stepProgress[1].style.width = "50%";
+                    stepProgress[0].classList.add('completed-step');
+                    stepProgress[1].classList.remove('completed-step');
 
                     handleStep('', currentStep + 1, false, achievedStep + 1);
                     setAchievedStep(2);
                 }
                 
             } else if (achievedStep === 2) {
-                console.log('stepTwoValues:');
                 localStorage.setItem('stepTwoValues', JSON.stringify(values));
-                console.log(values);
                 
                 if (currentStep === achievedStep) {
-                    stepProgress[0].style.backgroundColor = "green";
-                    stepProgress[1].style.backgroundColor = "green";
-
-                    // stepProgress[0].style.width = "95%";
-                    // stepProgress[1].style.width = "5%";
+                    stepProgress[0].classList.add('completed-step');
+                    stepProgress[1].classList.add('completed-step');
 
                     setAchievedStep(3);
                 }
@@ -121,27 +113,21 @@ function SignUp() {
                     setCurrentStep(1);
                     setAchievedStep(1);
 
-                    stepProgress[0].style.backgroundColor = "gray";
-                    stepProgress[1].style.backgroundColor = "gray";
-                    // stepProgress[0].style.width = "5%";
-                    // stepProgress[1].style.width = "95%";
+                    stepProgress[0].classList.remove('completed-step');
+                    stepProgress[1].classList.remove('completed-step');
                 } else if (step === 2 && achievedStep >= 2) {
                     handleFormVisibility(2);
                     setCurrentStep(2);
                     setAchievedStep(2);
 
-                    stepProgress[0].style.backgroundColor = "green";
-                    stepProgress[1].style.backgroundColor = "#E1E1E1";
-                    // stepProgress[0].style.width = "50%";
-                    // stepProgress[1].style.width = "50%";
+                    stepProgress[0].classList.add('completed-step');
+                    stepProgress[1].classList.remove('completed-step');
                 } else if (step === 3 && achievedStep >= 3) {
                     handleFormVisibility(3);
                     setCurrentStep(3);
 
-                    stepProgress[0].style.backgroundColor = "green";
-                    stepProgress[1].style.backgroundColor = "green";
-                    // stepProgress[0].style.width = "95%";
-                    // stepProgress[1].style.width = "5%";
+                    stepProgress[0].classList.add('completed-step');
+                    stepProgress[1].classList.add('completed-step');
                 }
             } else {
                 if (step === 1) {
@@ -149,27 +135,21 @@ function SignUp() {
                     setCurrentStep(1);
                     setAchievedStep(1);
 
-                    stepProgress[0].style.backgroundColor = "gray";
-                    stepProgress[1].style.backgroundColor = "gray";
-                    // stepProgress[0].style.width = "5%";
-                    // stepProgress[1].style.width = "95%";
+                    stepProgress[0].classList.remove('completed-step');
+                    stepProgress[1].classList.remove('completed-step');
                 } else if (step === 2 && achievedStep + 1 >= 2) {
                     handleFormVisibility(2);
                     setCurrentStep(2);
                     setAchievedStep(2);
 
-                    stepProgress[0].style.backgroundColor = "green";
-                    stepProgress[1].style.backgroundColor = "gray";
-                    // stepProgress[0].style.width = "50%";
-                    // stepProgress[1].style.width = "50%";
+                    stepProgress[0].classList.add('completed-step');
+                    stepProgress[1].classList.remove('completed-step');
                 } else if (step === 3 && achievedStep + 1 >= 3) {
                     handleFormVisibility(3);
                     setCurrentStep(3);
 
-                    stepProgress[0].style.backgroundColor = "green";
-                    stepProgress[1].style.backgroundColor = "green";
-                    // stepProgress[0].style.width = "95%";
-                    // stepProgress[1].style.width = "5%";
+                    stepProgress[0].classList.add('completed-step');
+                    stepProgress[1].classList.add('completed-step');
                 }
             }
         }
@@ -179,11 +159,11 @@ function SignUp() {
         const stepOneData = JSON.parse(localStorage.getItem('stepOneValues'));
         const stepTwoData = JSON.parse(localStorage.getItem('stepTwoValues'));
 
-        const idMoeda = 1;
+        const select = document.querySelector('#currenciesSelect');
+        const idMoeda = select.value;
         const dataCadastroUsuario = getTodayDate();
 
         const userData = {...stepOneData, ...stepTwoData, idMoeda, dataCadastroUsuario};
-        localStorage.setItem('userData', JSON.stringify(userData));
         delete userData.confirmarSenha;
 
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
@@ -194,35 +174,29 @@ function SignUp() {
             handleIsSignUpBtnDisabled(true);
 
             // returns a user object
-            const apiData = await axios.post(SIGN_UP_URL, userData);
+            const response = await axios.post(SIGN_UP_URL, userData);
 
-            // if (!isNaN(Number(values.valorInicial)) || Number(values.valorInicial) !== 0) {
-            //     const firstMovement = {
-            //         idUsuario: 0, // changed by API
-            //         idCategoria: 0,
-            //         idDetalheMovimentacao: 1,
-            //         idTipoMovimentacao: 1,
-            //         valorMovimentacao: values.valorInicial,
-            //         observacaoMovimentacao: 'Receita inicial'
-            //     }
+            const userId = response.data.result.idUsuario;
+            userData.idUsuario = userId;
 
-            //     // returns a movimentation object
-            //     const apiData_tblMovimentacao = await axios.post(INSERT_MOVEMENT, firstMovement);
+            if (_.isEqual(response.data.result, userData)) {
+                // clear localStorage
+                localStorage.removeItem('stepOneValues');
+                localStorage.removeItem('stepTwoValues');
 
-            //     if (_.isEqual(apiData_tblMovimentacao.data.result, firstMovement)) {
-            //         console.log('Primeira movimentação cadastrada com sucesso');
-            //     }
-            // }
+                await signIn(userData);
+                navigate('/dashboard');
 
-            setTimeout(() => {
-                if (_.isEqual(apiData.data.result, userData)) {
-                    console.log('Cadastro concluído com sucesso');
-                    // navigate('/dashboard');
+                if (!isNaN(Number(values.valorInicial)) || Number(values.valorInicial) !== 0) {
+                    const firstTransition = new Movimentacao(userId, 1, 1, 1, values.valorInicial, 'Receita inicial', getTodayDate());
+    
+                    // returns a movimentation object
+                    await axios.post(INSERT_TRANSITION_URL, firstTransition);
                 }
-
-                handleShowSpinner(false);
-                handleIsSignUpBtnDisabled(false);
-            }, 2000);
+            }
+            
+            handleShowSpinner(false);
+            handleIsSignUpBtnDisabled(false);
 
         } catch(error) {
             authenticateErrorMessage.innerText = 'Erro ao autenticar o usuário.\nTente novamente em instantes';

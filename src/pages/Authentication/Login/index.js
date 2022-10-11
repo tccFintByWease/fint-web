@@ -20,14 +20,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 /* utils */
 import { handlePasswordVisibility } from './../../../utils/password-utils';
+/* contexts */
+import { useAuth } from './../../../contexts/auth';
 
 function Login() {
+    const { signed, signIn } = useAuth();
 
     const [showSpinner, setShowSpinner] = useState(false);
     const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(false);
 
     const [authenticationError, setAuthenticationError] = useState(false);
-    const AUTHENTICATE_URL = 'http://localhost:3001/api/login';
 
     const handleShowSpinner = (value) => {
         setShowSpinner(value);
@@ -45,14 +47,11 @@ function Login() {
             handleShowSpinner(true);
             handleIsLoginBtnDisabled(true);
 
-            // returns true if login and password exist
-            const apiData = await axios.post(AUTHENTICATE_URL, userData);
-
-            // TODO: PARA TESTES, REMOVER O SETTIMEOUT DEPOIS
-            // if (apiData.data.result) {
-            if (apiData.data.result.emailUsuario === userData.emailUsuario && apiData.data.result.senhaUsuario === userData.senhaUsuario) {
-                    console.log('Login sucesso');
-                    // navigate('/dashboard');
+            // returns an user object if exist
+            const response = await signIn(userData);
+            
+            if (response.data.result.emailUsuario === userData.emailUsuario && response.data.result.senhaUsuario === userData.senhaUsuario) {
+                    navigate('/dashboard');
             } else {
                 authenticateErrorMessage.innerText = 'Email ou senha incorretos';
                 setAuthenticationError(true);

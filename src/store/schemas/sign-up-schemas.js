@@ -1,11 +1,58 @@
+/* libraries */
 import * as yup from 'yup';
+import axios from 'axios';
+/* utils */
 import { validateCPF } from './../../utils/cpf-utils';
+/* store */
+import { LOOK_FOR_EMAIL_URL, LOOK_FOR_CPF_URL, LOOK_FOR_PHONE_URL } from './../api-urls';
+
+yup.addMethod(yup.string, "checkEmail", function (errorMessage) {
+    return this.test('check-email', errorMessage, async function (value) {
+        const { path, createError } = this;
+        const response = await axios.post(LOOK_FOR_EMAIL_URL, { emailUsuario: value });
+
+        return (
+            response.data.result.emailUsuario !== value || createError({ path, message: errorMessage })
+        );
+    });
+});
+
+yup.addMethod(yup.string, "checkCPF", function (errorMessage) {
+    return this.test('check-cpf', errorMessage, async function (value) {
+        const { path, createError } = this;
+        const response = await axios.post(LOOK_FOR_CPF_URL, { cpfUsuario: value });
+
+        return (
+            response.data.result.cpfUsuario !== value || createError({ path, message: errorMessage })
+        );
+    });
+});
+
+yup.addMethod(yup.string, "checkPhone", function (errorMessage) {
+    return this.test('check-phone', errorMessage, async function (value) {
+        const { path, createError } = this;
+        const response = await axios.post(LOOK_FOR_PHONE_URL, { foneUsuario: value });
+
+        return (
+            response.data.result.foneUsuario !== value || createError({ path, message: errorMessage })
+        );
+    });
+});
+
+const minDate = new Date();
+minDate.setHours(0, 0, 0, 0);
+minDate.setFullYear(new Date().getFullYear() - 100);
+
+const maxDate = new Date();
+maxDate.setHours(0, 0, 0, 0);
+maxDate.setFullYear(new Date().getFullYear() - 16);
 
 const stepOneSchema = yup.object({
     emailUsuario: yup.string()
         .email('Insira um email válido')
         .required('Insira seu email')
-        .max(100, 'O email deve ter no máximo 100 caracteres'),
+        .max(100, 'O email deve ter no máximo 100 caracteres')
+        .checkEmail("Esse email já está cadastrado na plataforma"),
 
     senhaUsuario: yup.string()
         .required('Insira sua senha')
@@ -21,14 +68,6 @@ const stepOneSchema = yup.object({
         .oneOf([yup.ref('senhaUsuario'), null], 'As senhas não coincidem')
 });
 
-const minDate = new Date();
-minDate.setHours(0, 0, 0, 0);
-minDate.setFullYear(new Date().getFullYear() - 100);
-
-const maxDate = new Date();
-maxDate.setHours(0, 0, 0, 0);
-maxDate.setFullYear(new Date().getFullYear() - 16);
-
 const stepTwoSchema = yup.object({
     nomeUsuario: yup.string()
         .required('Insira seu nome completo')
@@ -37,11 +76,13 @@ const stepTwoSchema = yup.object({
     cpfUsuario: yup.string()
         .required('Insira seu CPF')
         .min(14, 'Insira um CPF válido').max(14)
-        .test('validated-cpf', 'Insira um CPF válido', (cpf) => validateCPF(cpf)),
+        .test('validated-cpf', 'Insira um CPF válido', (cpf) => validateCPF(cpf))
+        .checkCPF("Esse CPF já está cadastrado na plataforma"),
 
     foneUsuario: yup.string()
         .required('Insira seu telefone')
-        .min(15, 'Insira um telefone válido').max(15),
+        .min(15, 'Insira um telefone válido').max(15)
+        .checkPhone("Esse telefone já está cadastrado na plataforma"),
 
     dataNascUsuario: yup.date('Insira sua data de nascimento novamente')
         .required('Insira sua data de nascimento')

@@ -1,8 +1,16 @@
-import { useRoutes } from 'hookrouter';
-import { routes } from './store/routes';
+/* libraries */
+import React from 'react';
+/* routes */
+import Routes from './store/routes/index';
+/* contexts */
+import { AuthProvider } from './contexts/auth';
 
 function App() {
-    return useRoutes(routes);
+    return (
+        <AuthProvider>
+            <Routes />
+        </AuthProvider>
+    );
 }
 
 export default App;

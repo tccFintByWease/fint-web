@@ -1,25 +1,8 @@
 const formatPhone = (phone) => {
-    switch (phone.length) {
-        case 1:
-            phone = phone.replace(/(\d{1})/, '($1');
-            break;
-        case 2:
-        case 3:
-            phone = phone.replace(/(\d{2})/, '$1) ');
-            break;
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-            phone = phone.replace(/(\d{5})/, '$1-');
-            break;
-        default:
-            break;
-    }
-    
+    phone = phone.replace(/\D/g,"");
+    phone = phone.replace(/^(\d{2})(\d)/g,"($1) $2");
+    phone = phone.replace(/(\d)(\d{4})$/,"$1-$2");
+
     return phone;
 }
 

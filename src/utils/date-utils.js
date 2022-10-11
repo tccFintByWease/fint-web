@@ -17,6 +17,17 @@ const getTodayDate = () => {
     return today.toString();
 }
 
+const formatDatetime = (date) => {
+    try {
+        const formatedDate = new Date(date).toISOString().slice(0, 19).replace('T', ' ');
+
+        return formatedDate;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export {
-    getTodayDate
+    getTodayDate,
+    formatDatetime
 }

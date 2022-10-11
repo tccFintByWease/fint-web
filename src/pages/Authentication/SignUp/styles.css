@@ -73,6 +73,10 @@
     transition: ease all 0.5s;
 }
 
+.completed-step {
+    background-color: var(--primaryGreen) !important;
+}
+
 .sign-up-step span {
     width: 32px;
     height: 32px;

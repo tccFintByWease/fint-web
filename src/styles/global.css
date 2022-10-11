@@ -68,3 +68,7 @@ form {
 button, input[type="checkbox"] {
     cursor: pointer;
 }
+
+.none {
+    display: none;
+}
