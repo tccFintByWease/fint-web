@@ -51,7 +51,7 @@ function Login() {
             const response = await signIn(userData);
             
             if (response.data.result.emailUsuario === userData.emailUsuario && response.data.result.senhaUsuario === userData.senhaUsuario) {
-                    navigate('/dashboard');
+                    navigate('/dashboard/home');
             } else {
                 authenticateErrorMessage.innerText = 'Email ou senha incorretos';
                 setAuthenticationError(true);

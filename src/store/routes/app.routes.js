@@ -1,9 +1,8 @@
 // O usuário já está autenticado
-import Dashboard from './../../pages/Dashboard/index';
+import Home from './../../pages/Dashboard/Home/index';
 
 const appRoutes = {
-    '/dashboard': () => <Dashboard />
+    '/dashboard/home': () => <Home />
 }
-
 
 export { appRoutes };
