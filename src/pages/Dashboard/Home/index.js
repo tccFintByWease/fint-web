@@ -43,13 +43,12 @@ function Home() {
             await getChartsList();
             setChartsList(freeCharts ? [...freeCharts.charts, ...premiumCharts.charts] : []);
             const success = await getUserCharts();
-            console.log('s:', success);
 
             if (!success) {
-                setUserCharts(freeCharts ? [...freeCharts.charts] : []);
+                setUserCharts(freeCharts ? freeCharts : {});
                 setSlidesNumber(freeCharts ? freeCharts.charts.length : 0);
             }
-            setChart(freeCharts ? freeCharts.charts[0] : []);
+            setChart(freeCharts ? freeCharts.charts[0] : {});
         }
         
         if (isChartsUpdatedRef.current) {
@@ -82,7 +81,7 @@ function Home() {
     const genCharts = async (type, charts, callback) => {
         let promises = charts.map(chart => {
             return {
-                id: chart.id,
+                id: chart.idGrafico,
                 isPremium: chart.exclusivo, // 0 false 1 true
                 name: chart.descricaoGrafico,
                 chartType: getChartType(chart.tipoGrafico),
@@ -143,8 +142,6 @@ function Home() {
 
             setPremiumCharts(premiumCharts);
         } else if (type === 'user') {
-            console.log(chartsArr);
-
             const userCharts = {
                 version: 1.0,
                 totalCharts: chartsArr.length,
@@ -158,36 +155,39 @@ function Home() {
     const backSlide = () => {
         if (slide === 0) {
             setSlide(slideNumbers - 1);
-            setChart(userCharts[slideNumbers - 1]);
+            setChart(userCharts.charts[slideNumbers - 1]);
         } else {
             setSlide(slide - 1);
-            setChart(userCharts[slide - 1]);
+            setChart(userCharts.charts[slide - 1]);
         }
     }
 
     const passSlide = () => {
-        if (slide === slideNumbers - 1) {
-            setSlide(0);
-            setChart(userCharts[0]);
-        } else {
-            setSlide(slide + 1);
-            setChart(userCharts[slide + 1]);
+        if (slideNumbers > 1) {
+            if (slide === slideNumbers - 1) {
+                setSlide(0);
+                setChart(userCharts.charts[0]);
+            } else {
+                setSlide(slide + 1);
+                setChart(userCharts.charts[slide + 1]);
+            }
         }
     }
 
     const selectSlide = (index) => {
-        const slideSelectors = document.querySelectorAll('.slide-selector');
-        for (let i = 0; i < slideSelectors.length; i++) {
-            slideSelectors[i].classList.remove('selected');
+        if (slideNumbers > 1) {
+            const slideSelectors = document.querySelectorAll('.slide-selector');
+            for (let i = 0; i < slideSelectors.length; i++) {
+                slideSelectors[i].classList.remove('selected');
+            }
+            slideSelectors[index].classList.add('selected');
+            setSlide(index);
+            setChart(userCharts.charts[index]);
         }
-        slideSelectors[index].classList.add('selected');
-        setSlide(index);
-        setChart(userCharts[index]);
     }
 
     const getUserCharts = async () => {
-        const response = await axios.post(GET_USER_CHARTS, user.idUsuario);
-        console.log(response);
+        const response = await axios.post(GET_USER_CHARTS, { idUsuario: user.idUsuario });
 
         if (response.data.result.length !== 0) {
             await genCharts('user', response.data.result, getChartsObject);
@@ -204,26 +204,33 @@ function Home() {
             if (slideNumbers >= 5) { // TODO: MUJDAR PARA 5 E LISTAR SÓ 5 SLIDES GRATUITOS
                 // TODO: Exibir um erro: remover um slide para adicionar outro.
             } else {
-                const response = axios.delete(INSERT_USER_CHART, user.idUsuario, chartSelected.id);
+                const response = await axios.post(INSERT_USER_CHART, user.idUsuario, chartSelected.id);
+                console.log(response);
             }
         } else if (type === 'remove') {
-            const response = axios.delete(DELETE_USER_CHART, user.idUsuario, chartSelected.id);
+            const response = await axios.delete(DELETE_USER_CHART, user.idUsuario, chartSelected.id);
+
+            console.log(response);
         }
+
+        isUserChartsUpdatedRef.current = true;
     }
 
     const createSlideSelectors = () => {
-        return userCharts.map((chart, index) => {
-            if (slide === index) {
-                return (
-                    <div className="slide-selector selected" onClick={() => selectSlide(index)} key={`slide-${index}`}></div>
-                );
-            } else {
-                return (
-                    <div className="slide-selector" onClick={() => selectSlide(index)} key={`slide-${index}`}></div>
-                );
-            }
-            
-        });
+        if (slideNumbers > 1) {
+            return userCharts.charts.map((chart, index) => {
+                if (slide === index) {
+                    return (
+                        <div className="slide-selector selected" onClick={() => selectSlide(index)} key={`slide-${index}`}></div>
+                    );
+                } else {
+                    return (
+                        <div className="slide-selector" onClick={() => selectSlide(index)} key={`slide-${index}`}></div>
+                    );
+                }
+                
+            }); 
+        }
     }
 
     const openChartsSelector = () => {
@@ -236,8 +243,8 @@ function Home() {
 
     const checkSelectedCharts = (type, chartName) => {
         if (type === 'selector') {
-            for (let i = 0; i < userCharts.length; i++) {
-                if (userCharts[i].name === chartName) {
+            for (let i = 0; i < userCharts.charts.length; i++) {
+                if (userCharts.charts[i].name === chartName) {
                     return (
                         <FontAwesomeIcon icon={faCheckCircle} className='chart-selected' />
                     );
@@ -248,8 +255,8 @@ function Home() {
                 <span className='chart-preview-selection'></span>
             );
         } else if (type === 'button') {
-            for (let i = 0; i < userCharts.length; i++) {
-                if (userCharts[i].name === chartName) {
+            for (let i = 0; i < userCharts.charts.length; i++) {
+                if (userCharts.charts[i].name === chartName) {
                     return (
                         <button className="btn-action btn-remove" onClick={() => updateUserCharts('remove', chart.id)}>
                             Desativar
@@ -304,9 +311,9 @@ function Home() {
                 <section className="home">
                     <h1>Bem-vindo de volta, <span className="username-title">{user?.nomeUsuario}</span></h1>
                     <div className="charts flex">
-                        <FontAwesomeIcon icon={faAngleLeft} className="slide-button" id="previousChartButton" onClick={backSlide} />
+                        <FontAwesomeIcon icon={faAngleLeft} className={slideNumbers > 1 ? 'slide-button' : 'none'} id="previousChartButton" onClick={backSlide} />
                         {chart ? (<Charts chart={chart} preview={false} />) : 'Carregando gráfico...'}
-                        <FontAwesomeIcon icon={faAngleRight} className="slide-button" id="nextChartButton" onClick={passSlide} />
+                        <FontAwesomeIcon icon={faAngleRight} className={slideNumbers > 1 ? 'slide-button' : 'none'} id="nextChartButton" onClick={passSlide} />
                         <button className='set-charts-button' onClick={openChartsSelector}>+</button>
                     </div>
                         <div className="chart-description flex">
