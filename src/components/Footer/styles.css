@@ -1,7 +1,9 @@
 @import url(./../../styles/global.css);
 
 footer {
+    background-color: var(--white);
     margin-top: 6.25vw;
+    z-index: 30;
 }
 
 .footer-text {

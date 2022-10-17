@@ -1,0 +1,69 @@
+@import url(./../../../../styles/global.css);
+
+/* Navbar */
+/* ------------------------------------------------------------- */
+#dashboard__aside > .aside {
+    width: 280px;
+    height: 100%;
+    margin-top: 80px;
+    background-color: var(--white);
+    border-right: solid 2px var(--secundaryGray);
+    box-shadow: none;
+
+    z-index: -1 !important;
+}
+
+#dashboard__aside .aside-nav {
+    margin: 60px auto;
+
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.aside-nav .nav-label {
+    margin-bottom: 10px;
+
+    font-size: 24px;
+    font-weight: 500;
+    font-variant: small-caps;
+}
+
+.aside-nav .nav-label, .aside-nav a {
+    width: 100%;
+}
+
+.aside-nav a {
+    margin-bottom: 20px;
+    
+    font-size: 24px;
+    font-weight: 500;
+    font-variant: small-caps;
+
+    display: flex;
+    align-items: center;
+
+    transition: ease all 0.1s;
+}
+
+.aside-nav a > svg {
+    margin-right: 20px;
+
+    font-size: 32px;
+}
+
+.aside-nav a:hover {
+    color: var(--primaryGreen);
+}
+
+.aside-nav a.active {
+    padding: 10px;
+    background-color: var(--primaryGray);
+    border-radius: 5px;
+
+    color: var(--primaryGreen);
+}
+
+.aside-nav a.active:hover {
+    color: var(--detailsGreen);
+}

@@ -1,7 +1,6 @@
 /* libraries */
 import React, { useState } from 'react';
 import { Formik } from 'formik';
-import axios from 'axios';
 /* schemas */
 import { loginSchema } from './../../../store/schemas/login-schema';
 /* stylesheets and assets */

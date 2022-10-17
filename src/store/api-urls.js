@@ -9,6 +9,10 @@ const LOOK_FOR_EMAIL_URL = `${API}/usuario/buscarUmPorEmail`;
 const LOOK_FOR_CPF_URL = `${API}/usuario/buscarUmPorCPF`;
 const LOOK_FOR_PHONE_URL = `${API}/usuario/buscarUmPorFone`;
 const FORGOT_PASSWORD_URL = `${API}/usuario/buscarUmPorFone`;
+const GET_CHARTS = `${API}/grafico/buscarTodos`;
+const GET_USER_CHARTS = `${API}/grafico/buscarGraficoUsuario`;
+const INSERT_USER_CHART = `${API}/grafico/inserirGraficoUsuario`;
+const DELETE_USER_CHART = `${API}/grafico/deletarGraficoUsuario`;
 
 export  {
     SIGN_UP_URL,
@@ -19,5 +23,9 @@ export  {
     LOOK_FOR_EMAIL_URL,
     LOOK_FOR_CPF_URL,
     LOOK_FOR_PHONE_URL,
-    FORGOT_PASSWORD_URL
+    FORGOT_PASSWORD_URL,
+    GET_CHARTS,
+    GET_USER_CHARTS,
+    INSERT_USER_CHART,
+    DELETE_USER_CHART
 }
