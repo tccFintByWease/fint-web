@@ -90,6 +90,7 @@ function Login() {
                         touched,
                         errors
                     }) => (
+                        // esse aqui é o formulário de login
                         <Form className="authentication-form" noValidate onSubmit={handleSubmit}>
                             <AuthenticationErrorMessage authenticationError={authenticationError} />
                             <Form.Group as={Row} controlId="email">

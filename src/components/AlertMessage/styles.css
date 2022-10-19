@@ -1,0 +1,18 @@
+@import url(./../../styles/global.css);
+
+.authentication .alert-danger {
+    justify-content: center;
+    align-items: center;
+}
+
+.authentication .alert-danger svg {
+    margin-right: 40px;
+}
+
+.authentication .alert-danger p {
+    text-align: justify;
+}
+
+.authentication .alert-danger p, .authentication-form .alert-danger svg {
+    font-size: 16px;
+}

@@ -72,3 +72,14 @@ button, input[type="checkbox"] {
 .none {
     display: none;
 }
+
+button:disabled {
+    background-color: var(--detailsGray) !important;
+    border: var(--detailsGray) !important;
+
+    cursor: pointer;
+}
+
+button:disabled:hover {
+    background-color: rgba(129, 129, 129, 0.6) !important;
+}

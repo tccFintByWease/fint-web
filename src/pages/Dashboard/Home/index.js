@@ -9,20 +9,26 @@ import logo from './../../../assets/images/black-logo.png';
 import { A, navigate } from 'hookrouter';
 import { Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faAngleRight, faCheckCircle, faLock } from '@fortawesome/free-solid-svg-icons';
 import TopNavbar from './../components/TopNavbar/index';
 import SideNavbar from './../components/SideNavbar/index';
 import Charts from './Charts/index';
+import AlertMessage from './../../../components/AlertMessage/index';
 import Button from './../../../components/Button/index';
 import Footer from './../../../components/Footer/index';
 /* contexts */
 import { useAuth } from './../../../contexts/auth';
 /* store */
 import { getChartType } from './../../../store/charts';
-import { GET_CHARTS, GET_USER_CHARTS, INSERT_USER_CHART, DELETE_USER_CHART } from './../../../store/api-urls';
+import { GET_CHARTS_URL, GET_USER_CHARTS_URL, INSERT_USER_CHART_URL, DELETE_USER_CHART_URL, CHECK_USER_TYPE_URL } from './../../../store/api-urls';
+
+// TODO: arrumar o remover gráfico favorito
 
 function Home() {
     const {user} = useAuth();
+    const [userType, setUserType] = useState(1);
+
+    const [alertMessage, setAlertMessage] = useState(false);
 
     const [chartsList, setChartsList] = useState()
     const [freeCharts, setFreeCharts] = useState();
@@ -33,10 +39,22 @@ function Home() {
     const [slideNumbers, setSlidesNumber] = useState(0);
     const [chart, setChart] = useState();
 
+    const [isPreviewAddBtnDisabled, setIsPreviewAddBtnDisabled] = useState(false);
+    const [isPreviewRemoveBtnDisabled, setIsPreviewRemoveBtnDisabled] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
+    const [updateChartsAfterChange, setUpdateChartsAfterChange] = useState(false);
     const isChartsUpdatedRef = useRef(true);
     const isUserChartsUpdatedRef = useRef(true);
+
+    useEffect(() => {
+        const getUserType = async () => {
+            const response = await axios.post(CHECK_USER_TYPE_URL, { idUsuario: user.idUsuario });
+            setUserType(response.data.result.idAssinatura);
+        }
+
+        getUserType();
+    }, []);
 
     useEffect(() => {
         const chartsUpdate = async () => {
@@ -45,10 +63,14 @@ function Home() {
             const success = await getUserCharts();
 
             if (!success) {
-                setUserCharts(freeCharts ? freeCharts : {});
-                setSlidesNumber(freeCharts ? freeCharts.charts.length : 0);
+                const defaultUserCharts = freeCharts ? { charts: [freeCharts.charts[0], freeCharts.charts[1], freeCharts.charts[2], freeCharts.charts[3], freeCharts.charts[4]] } : { charts: [{}]};
+
+                setChart(defaultUserCharts ? defaultUserCharts.charts[0] : {});
+                setUserCharts(defaultUserCharts ? defaultUserCharts : {});
+                setSlidesNumber(defaultUserCharts ? defaultUserCharts.charts.length : 0);
+            } else {
+                setChart(userCharts ? userCharts.charts[0] : {});
             }
-            setChart(freeCharts ? freeCharts.charts[0] : {});
         }
         
         if (isChartsUpdatedRef.current) {
@@ -56,11 +78,16 @@ function Home() {
         } else {
             chartsUpdate();
         }
+
+        if (updateChartsAfterChange) {
+            chartsUpdate();
+            setUpdateChartsAfterChange(false);
+        }
         
-    }, [isChartsUpdatedRef.current]);
+    }, [isChartsUpdatedRef.current, updateChartsAfterChange]);
 
     useEffect(() => {
-        if (isChartsUpdatedRef.current) {
+        if (isUserChartsUpdatedRef.current) {
             isUserChartsUpdatedRef.current = false;
         } else {
             getUserCharts();
@@ -68,8 +95,44 @@ function Home() {
         
     }, [isUserChartsUpdatedRef.current]);
 
+    const handleIsPreviewAddBtnDisabled = (value) => {
+        const addButtons = document.querySelectorAll('.chart-preview-add-btn');
+
+        if (value) {
+            for (let i = 0; i < addButtons.length; i++) {
+                addButtons[i].disabled = true;
+            }
+
+            setIsPreviewAddBtnDisabled(true);
+        } else {
+            for (let i = 0; i < addButtons.length; i++) {
+                addButtons[i].disabled = false;
+            }
+
+            setIsPreviewAddBtnDisabled(false);
+        }
+    }
+
+    const handleIsPreviewRemoveBtnDisabled = (value) => {
+        const removeButtons = document.querySelectorAll('.chart-preview-remove-btn');
+
+        if (value) {
+            for (let i = 0; i < removeButtons.length; i++) {
+                removeButtons[i].disabled = true;
+            }
+
+            setIsPreviewRemoveBtnDisabled(true);
+        } else {
+            for (let i = 0; i < removeButtons.length; i++) {
+                removeButtons[i].disabled = false;
+            }
+
+            setIsPreviewRemoveBtnDisabled(false);
+        }
+    }
+
     const getChartsList = async () => {
-        const response = await axios.get(GET_CHARTS);
+        const response = await axios.get(GET_CHARTS_URL);
     
         const freeChartsArr = response.data.result.filter(chart => chart.exclusivo === 0);
         const premiumChartsArr = response.data.result.filter(chart => chart.exclusivo === 1);
@@ -187,7 +250,7 @@ function Home() {
     }
 
     const getUserCharts = async () => {
-        const response = await axios.post(GET_USER_CHARTS, { idUsuario: user.idUsuario });
+        const response = await axios.post(GET_USER_CHARTS_URL, { idUsuario: user.idUsuario });
 
         if (response.data.result.length !== 0) {
             await genCharts('user', response.data.result, getChartsObject);
@@ -201,19 +264,40 @@ function Home() {
 
     const updateUserCharts = async (type, chartSelected) => {
         if (type === 'add') {
-            if (slideNumbers >= 5) { // TODO: MUJDAR PARA 5 E LISTAR SÓ 5 SLIDES GRATUITOS
-                // TODO: Exibir um erro: remover um slide para adicionar outro.
+            if (slideNumbers === 5) {
+                const alertMessage = document.querySelector('.alert-message');
+                alertMessage.innerText = 'Você atingiu o limite de 5 gráficos na tela inicial. Para adicionar um novo, remova um atual';
+                setAlertMessage(true);
+
+                handleIsPreviewAddBtnDisabled(true);
             } else {
-                const response = await axios.post(INSERT_USER_CHART, user.idUsuario, chartSelected.id);
-                console.log(response);
+                const response = await axios.post(INSERT_USER_CHART_URL, { idUsuario: user.idUsuario, idGrafico: chartSelected });
+
+                setUpdateChartsAfterChange(true);
+
+                if (isPreviewRemoveBtnDisabled) { handleIsPreviewRemoveBtnDisabled(false); }
+
+                setAlertMessage(false);
             }
         } else if (type === 'remove') {
-            const response = await axios.delete(DELETE_USER_CHART, user.idUsuario, chartSelected.id);
+            if (slideNumbers === 1) {
+                const alertMessage = document.querySelector('.alert-message');
+                alertMessage.innerText = 'Ao menos um gráfico deve permanecer ativo';
+                setAlertMessage(true);
 
-            console.log(response);
+                handleIsPreviewRemoveBtnDisabled(true);
+            } else {
+                const response = await axios.delete(DELETE_USER_CHART_URL, { idUsuario: user.idUsuario, idGrafico: chartSelected });
+                console.log(response);
+                console.log({ idUsuario: user.idUsuario, idGrafico: chartSelected });
+
+                setUpdateChartsAfterChange(true);
+
+                if (isPreviewAddBtnDisabled) { handleIsPreviewAddBtnDisabled(false); }
+
+                setAlertMessage(false);
+            }
         }
-
-        isUserChartsUpdatedRef.current = true;
     }
 
     const createSlideSelectors = () => {
@@ -239,34 +323,49 @@ function Home() {
 
     const closeChartsSelector = () => {
         setShowModal(false);
+        setAlertMessage(false);
     }
 
-    const checkSelectedCharts = (type, chartName) => {
+    const checkSelectedCharts = (type, chart) => {
         if (type === 'selector') {
-            for (let i = 0; i < userCharts.charts.length; i++) {
-                if (userCharts.charts[i].name === chartName) {
-                    return (
-                        <FontAwesomeIcon icon={faCheckCircle} className='chart-selected' />
-                    );
+            if (chart.isPremium && userType === 1) {
+                return (
+                    <FontAwesomeIcon icon={faLock} className='chart-premium' />
+                );
+            } else {
+                for (let i = 0; i < userCharts.charts.length; i++) {
+                    if (userCharts.charts[i].name === chart.name) {
+                        return (
+                            <FontAwesomeIcon icon={faCheckCircle} className='chart-selected' />
+                        );
+                    }
                 }
             }
-
+            
             return (
                 <span className='chart-preview-selection'></span>
             );
         } else if (type === 'button') {
-            for (let i = 0; i < userCharts.charts.length; i++) {
-                if (userCharts.charts[i].name === chartName) {
-                    return (
-                        <button className="btn-action btn-remove" onClick={() => updateUserCharts('remove', chart.id)}>
-                            Desativar
-                        </button>
-                    );
+            if (chart.isPremium && userType === 1) {
+                return (
+                    <button className="btn-action btn-remove chart-preview-remove-btn" onClick={() => updateUserCharts('remove', chart.id)} disabled>
+                        Gráfico premium
+                    </button>
+                );
+            } else {
+                for (let i = 0; i < userCharts.charts.length; i++) {
+                    if (userCharts.charts[i].name === chart.name) {
+                        return (
+                            <button className="btn-action btn-remove chart-preview-remove-btn" onClick={() => updateUserCharts('remove', chart.id)}>
+                                Desativar
+                            </button>
+                        );
+                    }
                 }
             }
-
+                
             return (
-                <button className="btn-action" onClick={() => updateUserCharts('add', chart.id)}>
+                <button className="btn-action chart-preview-add-btn" onClick={() => updateUserCharts('add', chart.id)}>
                     Ativar
                 </button>
             )
@@ -277,7 +376,6 @@ function Home() {
 
     const createChartsPreviews = () => {
         return chartsList ? chartsList.map((chart) => {
-            // TODO: LISTAR SE O GRÁFICO É PREMIUM E SE O USUÁRIO É OU NÃO ASSINANTE
             return (
                 <div className="chart-preview" key={`${chart.name}`}>
                     <div className="chart-preview-header flex" style={{
@@ -292,15 +390,16 @@ function Home() {
                             fontWeight: '500',
                             letterSpacing: '0.1'
                         }}>{chart.name}</p>
-                        {checkSelectedCharts('selector', chart.name)}
+                        {checkSelectedCharts('selector', chart)}
                     </div>
                     <Charts chart={chart} preview={true} />
                     <div className="chart-preview-footer">
-                        {checkSelectedCharts('button', chart.name)}
+                        {checkSelectedCharts('button', chart)}
                     </div>
                 </div>
             );
         }) : 'Carregando...';
+        
     }
 
     return (
@@ -328,10 +427,11 @@ function Home() {
                     <Modal.Title>Selecionar Gráficos</Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="flex">
-                    {userCharts ? createChartsPreviews() : ''}
+                        <AlertMessage alertMessage={alertMessage} />
+                        {userCharts ? createChartsPreviews() : 'ERRO - Gráfico dos usuários não definidos'}
                     </Modal.Body>
                     <Modal.Footer>
-                    <Button text="Salvar mudanças" transparent={false} onClick={closeChartsSelector} />
+                        <Button text="Concluir" transparent={false} onClick={closeChartsSelector} />
                     </Modal.Footer>
                 </Modal>
             </section>

@@ -193,3 +193,23 @@ h1 .username-title {
     font-size: 18px;
     color: var(--primaryGreen);
 }
+
+.chart-preview .chart-premium {
+    font-size: 18px;
+    color: var(--detailsGray);
+}
+
+.modal-body .alert-warning {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-body .alert-warning svg {
+    font-size: 32px;
+}
+
+.modal-body .alert-warning p {
+    height: 100%;
+    font-variant: normal;
+}

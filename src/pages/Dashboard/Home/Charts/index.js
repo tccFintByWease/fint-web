@@ -15,7 +15,7 @@ function Charts(props) {
                 chartType={props.chart.chartType}
                 data={props.chart.data}
                 options={props.chart.options}
-                width="96%"
+                width="100%"
                 height="480px"
                 legendToggle
             />
