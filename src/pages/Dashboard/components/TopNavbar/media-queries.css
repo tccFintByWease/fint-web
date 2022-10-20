@@ -1,0 +1,16 @@
+/* Desktop */
+@media only screen and (max-width: 1299px) {
+    
+}
+
+/* Tablet */
+@media only screen and (max-width: 960px) {
+    .username-dropdown-label {
+        display: none;
+    }
+}
+
+/* Mobile */
+@media only screen and (max-width: 720px) {
+    
+}

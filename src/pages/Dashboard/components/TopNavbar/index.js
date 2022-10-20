@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 /* stylesheets and assets */
 import './styles.css';
+import './media-queries.css';
 // import './media-queries.css';
 import logo from './../../../../assets/images/black-logo.png';
 import faEye from './../../../../assets/images/eye-solid.png';
@@ -58,11 +59,12 @@ function TopNavbar() {
                 <Dropdown as={ButtonGroup} className="user-options">
                     <div className="user-dropdown-label">
                         <img src={userPicture} alt="Foto do usuário" />
-                        <p>{user?.nomeUsuario}</p>
+                        <p className="username-dropdown-label">{user?.nomeUsuario}</p>
                     </div>
                     <Dropdown.Toggle split id="user-dropdown" />
                     <Dropdown.Menu>
                         <Dropdown.Item href="#/profile-and-settings">Perfil e Configurações</Dropdown.Item>
+                        <Dropdown.Divider />
                         <Dropdown.Item href="#/sign-out">
                             <a href="/" onClick={handleSignOut}>Desconectar-se</a>
                         </Dropdown.Item>
