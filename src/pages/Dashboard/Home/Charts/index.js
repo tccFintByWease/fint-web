@@ -1,10 +1,9 @@
 /* libraries */
 import React from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 /* stylesheets and assets */
 import './styles.css';
-// import './media-queries.css';
+import './media-queries.css';
 /* components */
 import { Chart } from "react-google-charts";
 

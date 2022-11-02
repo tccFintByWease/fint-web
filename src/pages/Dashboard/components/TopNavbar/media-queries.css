@@ -8,6 +8,18 @@
     .username-dropdown-label {
         display: none;
     }
+
+    #dashboard__nav header .hamburger {
+        visibility: visible;
+    }
+
+    #dashboard__nav header .dashboard-header-nav {
+        display: none;
+    }
+
+    .dashboard .home {
+        margin-left: 8.888vw;
+    }
 }
 
 /* Mobile */

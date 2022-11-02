@@ -241,7 +241,7 @@ function ForgotPassword() {
                             </Form.Group>
                             <p>Insira o email da sua conta para receber o código de verificação</p>
                             <hr />
-                            <p><A href="/sign-up">Criar uma nova conta</A> ou <A href="/login">Conectar-se</A></p>
+                            <p><a href="/sign-up">Criar uma nova conta</a> ou <a href="/login">Conectar-se</a></p>
                         </Form>
                     )}
                 </Formik>

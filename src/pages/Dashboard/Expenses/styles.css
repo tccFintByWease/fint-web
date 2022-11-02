@@ -1,0 +1,12 @@
+@import url(./../../../styles/global.css);
+
+/* Expenses */
+/* ------------------------------------------------------------- */
+.dashboard .expenses {
+    margin: 140px 60px 200px 340px;
+    margin-top: 140px;
+}
+
+.expenses h1 {
+    letter-spacing: var(--maxSpacing);
+}

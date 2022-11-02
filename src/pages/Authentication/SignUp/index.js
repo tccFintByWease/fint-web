@@ -14,7 +14,7 @@ import logo from './../../../assets/images/black-logo.png';
 import faEye from './../../../assets/images/eye-solid.png';
 /* components */
 import { Form, Row, Col, Spinner } from 'react-bootstrap';
-import { A, navigate } from 'hookrouter';
+import { navigate } from 'hookrouter';
 import Button from './../../../components/Button/index';
 import DownloadBox from './../components/DownloadBox/index';
 import AuthenticationErrorMessage from './../../../components/AuthenticationErrorMessage/index';
@@ -185,7 +185,7 @@ function SignUp() {
                 localStorage.removeItem('stepTwoValues');
 
                 await signIn(userData);
-                navigate('/dashboard/home');
+                navigate('/');
 
                 if (!isNaN(Number(values.valorInicial)) || Number(values.valorInicial) !== 0) {
                     const firstTransition = new Movimentacao(userId, 1, 1, 1, values.valorInicial, 'Receita inicial', getTodayDate());
@@ -487,12 +487,12 @@ function SignUp() {
                                     </button>
                                 </Col>
                             </Form.Group>
-                            <p>Ao cadastrar-se, você concorda com nossos <A href="/documentacao" onClick={() => window.location.reload()}>Termos de Uso e Política de Privacidade</A></p>
+                            <p>Ao cadastrar-se, você concorda com nossos <a href="/documentation">Termos de Uso e Política de Privacidade</a></p>
                             <hr />
                         </Form>
                     )}
                 </Formik>
-                <p>Já possui uma conta? <A href="/login">Conecte-se</A></p>
+                <p>Já possui uma conta? <a href="/login">Conecte-se</a></p>
             </div>
             <DownloadBox />
         </section>

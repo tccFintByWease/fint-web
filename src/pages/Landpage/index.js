@@ -1,11 +1,17 @@
+/* libraries */
 import React from 'react';
+/* stylesheets and assets */
 import './styles.css';
 import './mediaQueries.css';
+/* components */
 import Navbar from './Navbar/index';
 import Footer from './../../components/Footer/index';
 import Button from './../../components/Button/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { navigate } from 'hookrouter';
+/* services */
+import { openInNewTab } from './../../services/link-services';
 
 function Landpage() {
     return (
@@ -16,8 +22,8 @@ function Landpage() {
                     <h1>Facilitando a sua vida financeira.</h1>
                     <p>Aprenda a gerenciar seu dinheiro e conheça mais sobre o mundo financeiro com a Fint, uma plataforma que te proporcionará maior controle financeiro e a possibilidade de começar a investir com segurança.</p>
                     <div className="buttons-cta">
-                        <Button text="Baixar o aplicativo" transparent={false} />
-                        <Button text="Criar uma conta" transparent={true} />
+                        <Button text="Baixar o aplicativo" transparent={false} onClick={() => { openInNewTab('/') }} />
+                        <Button text="Criar uma conta" transparent={true} onClick={() => { navigate('/sign-up'); window.location.reload(); }} />
                     </div>
                 </div>
                 <div className="hero-image">

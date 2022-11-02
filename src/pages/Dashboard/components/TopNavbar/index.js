@@ -1,20 +1,21 @@
 /* libraries */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 /* stylesheets and assets */
 import './styles.css';
 import './media-queries.css';
-// import './media-queries.css';
 import logo from './../../../../assets/images/black-logo.png';
 import faEye from './../../../../assets/images/eye-solid.png';
 import faEyeSlash from './../../../../assets/images/eye-slash-solid.png';
 import userPicture from './../../../../assets/images/user-picture.png';
 /* components */
-import { A, navigate } from 'hookrouter';
 import { Dropdown, ButtonGroup } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 /* contexts */
 import { useAuth } from './../../../../contexts/auth';
 
-function TopNavbar() {
+function TopNavbar(props) {
     const {user, signOut} = useAuth();
 
     const [balanceValue, setBalanceValue] = useState(274.53);
@@ -22,7 +23,6 @@ function TopNavbar() {
 
     const handleSignOut = () => {
         signOut();
-        navigate('/login');
     }
 
     const handleBalanceVisibility = () => {
@@ -45,34 +45,45 @@ function TopNavbar() {
     
     return (
         <div id="dashboard__nav">
-            <header className="header flex fixed">
+            <header className="dashboard-header flex fixed">
                 <a href="/">
                     <img src={logo} alt="Fint" className="logo" />
                 </a>
-                <div className="balance">
-                    <p className="balance-description">SALDO</p>
-                    <div className="balance-value flex">
-                        <p className="balance-value-text">{`R$ ${balanceValue.toString().replace('.', ',')}`}</p>
-                        <img src={faEyeSlash} alt="Ícone de olho" id="balanceVisibilityButton" onClick={handleBalanceVisibility} />
+                <span className="hamburger" onClick={props.handleNavbarIsOpen}>
+                    <FontAwesomeIcon icon={faBars} />
+                </span>
+                <nav className="dashboard-header-nav flex">
+                    <div className="balance">
+                        <p className="balance-description">SALDO</p>
+                        <div className="balance-value flex">
+                            <p className="balance-value-text">{`R$ ${balanceValue.toString().replace('.', ',')}`}</p>
+                            <img src={faEyeSlash} alt="Ícone de olho" id="balanceVisibilityButton" onClick={handleBalanceVisibility} />
+                        </div>
                     </div>
-                </div>
-                <Dropdown as={ButtonGroup} className="user-options">
-                    <div className="user-dropdown-label">
-                        <img src={userPicture} alt="Foto do usuário" />
-                        <p className="username-dropdown-label">{user?.nomeUsuario}</p>
-                    </div>
-                    <Dropdown.Toggle split id="user-dropdown" />
-                    <Dropdown.Menu>
-                        <Dropdown.Item href="#/profile-and-settings">Perfil e Configurações</Dropdown.Item>
-                        <Dropdown.Divider />
-                        <Dropdown.Item href="#/sign-out">
-                            <a href="/" onClick={handleSignOut}>Desconectar-se</a>
-                        </Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
+                    <Dropdown as={ButtonGroup} className="user-options">
+                        <div className="user-dropdown-label">
+                            <img src={userPicture} alt="Foto do usuário" />
+                            <p className="username-dropdown-label">{user?.nomeUsuario}</p>
+                        </div>
+                        <Dropdown.Toggle split id="user-dropdown" />
+                        <Dropdown.Menu>
+                            <Dropdown.Item href="/profile-and-settings">
+                                Perfil e Configurações
+                            </Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item href="/login" onClick={handleSignOut}>
+                                Desconectar-se
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </nav>
             </header>
         </div>
     );
 }
+
+TopNavbar.propTypes = {
+    handleNavbarIsOpen: PropTypes.func.isRequired
+}  
 
 export default TopNavbar;

@@ -1,21 +1,22 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import './styles.css';
 import './mediaQueries.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareInstagram, faSquareTwitter } from '@fortawesome/free-brands-svg-icons';
 import logo from './../../assets/images/black-logo.png';
 
-function Footer() {
+function Footer(props) {
     return (
         <Fragment>
-            <footer>
+            <footer className={props.className ? props.className : ''}>
                 <div className="footer-text flex">
                     <a href="#">
                         <img src={logo} alt="Fint" className="logo" />
                     </a>
                     <div className="footer-links">
                         <a href="#">Contato</a>
-                        <a href="#">Termos de Uso</a>
+                        <a href="/documentation">Termos de Uso</a>
                         <a href="#">FAQ</a>
                     </div>
                     <div className="footer-links">
@@ -34,5 +35,9 @@ function Footer() {
         </Fragment>
     );
 }
+
+Footer.propTypes = {
+    className: PropTypes.string
+}  
 
 export default Footer;

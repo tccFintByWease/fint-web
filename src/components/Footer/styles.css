@@ -3,7 +3,7 @@
 footer {
     background-color: var(--white);
     margin-top: 6.25vw;
-    z-index: 30;
+    z-index: 3;
 }
 
 .footer-text {

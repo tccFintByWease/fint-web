@@ -14,7 +14,7 @@ import faEye from './../../../assets/images/eye-solid.png';
 import { Form, Row, Col, Spinner } from 'react-bootstrap';
 import DownloadBox from './../components/DownloadBox/index';
 import AuthenticationErrorMessage from './../../../components/AuthenticationErrorMessage/index';
-import { A, navigate } from 'hookrouter';
+import { navigate } from 'hookrouter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 /* utils */
@@ -50,7 +50,7 @@ function Login() {
             const response = await signIn(userData);
             
             if (response.data.result.emailUsuario === userData.emailUsuario && response.data.result.senhaUsuario === userData.senhaUsuario) {
-                    navigate('/dashboard/home');
+                    navigate('/');
             } else {
                 authenticateErrorMessage.innerText = 'Email ou senha incorretos';
                 setAuthenticationError(true);
@@ -172,9 +172,9 @@ function Login() {
                                     </button>
                                 </Col>
                             </Form.Group>
-                            <A href="/reset-password">
+                            <a href="/forgot-password">
                                 Esqueceu sua senha?
-                            </A>
+                            </a>
                             <hr />
                             <Form.Group as={Row} controlId="loginFacebook">
                                 <Col sm={12}>
@@ -192,7 +192,7 @@ function Login() {
                                     </button>
                                 </Col>
                             </Form.Group>
-                            <A href="/sign-up">Crie uma nova conta</A>
+                            <a href="/sign-up">Crie uma nova conta</a>
                         </Form>
                     )}
                 </Formik>

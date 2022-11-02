@@ -21,25 +21,17 @@ function Navbar() {
     // reset the menu settings when the window is resized
     const resizeFunction = () => {
         const nav = document.querySelector('.header-nav');
-        const navLinks = document.querySelector('.nav-links');
-        const navActions = document.querySelector('.nav-actions');
         const navBackground = document.querySelector('.nav-background');
 
         if (window.innerWidth >= 1300) {
             nav.classList.remove('mobile-navbar');
             nav.style.visibility = 'visible';
             navBackground.style.visibility = 'hidden';
-
-            navLinks.classList.remove('flex');
-            navActions.classList.remove('flex');
             
             setNavbarIsOpen(false);
         } else if (window.innerWidth < 1300 && !navbarIsOpen) {
             nav.classList.add('mobile-navbar');
             nav.style.visibility = 'hidden';
-
-            navLinks.classList.add('flex');
-            navActions.classList.add('flex');
         }
     }
 
@@ -56,14 +48,9 @@ function Navbar() {
 
     const openNavbar = () => {
         const nav = document.querySelector('.header-nav');
-        const navLinks = document.querySelector('.nav-links');
-        const navActions = document.querySelector('.nav-actions');
         const navBackground = document.querySelector('.nav-background');
 
         nav.classList.add('mobile-navbar');
-
-        navLinks.classList.add('flex');
-        navActions.classList.add('flex');
 
         nav.style.visibility = 'visible';
         navBackground.style.visibility = 'visible';
@@ -73,14 +60,9 @@ function Navbar() {
 
     const closeNavbar = () => {
         const nav = document.querySelector('.header-nav');
-        const navLinks = document.querySelector('.nav-links');
-        const navActions = document.querySelector('.nav-actions');
         const navBackground = document.querySelector('.nav-background');
 
         nav.classList.remove('mobile-navbar');
-
-        navLinks.classList.remove('flex');
-        navActions.classList.remove('flex');
 
         nav.style.visibility = 'hidden';
         navBackground.style.visibility = 'hidden';
@@ -105,8 +87,8 @@ function Navbar() {
                         <a href="#about-us">Sobre</a>
                     </span>
                     <span className="nav-actions">
-                        <a href="/authentication">Conectar-se</a>
-                        <a href="/authentication" className="linkButton">Cadastrar-se</a>
+                        <a href="/login">Conectar-se</a>
+                        <a href="/sign-up" className="linkButton">Cadastrar-se</a>
                     </span>
                 </nav>
             </header>
