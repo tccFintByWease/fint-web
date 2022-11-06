@@ -1,0 +1,50 @@
+@import url(./../../styles/global.css);
+
+/* Pagination */
+/* ------------------------------------------------------------- */
+
+.pagination {
+    user-select: none;
+}
+
+.pagination > .page-item > a.page-link, .pagination > .page-item > span.page-link {
+    width: 42px;
+    height: 42px;
+    margin: 0px 5px;
+    padding: 0px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 18px;
+    color: var(--black);
+
+    transition: ease all 0.3s;
+}
+
+.pagination > .page-item > a.page-link:hover {
+    background-color: var(--primaryGray);
+}
+
+.pagination > .page-item > a.page-link:focus, .pagination > .page-item > span.page-link:focus {
+    background-color: var(--primaryGray);
+}
+
+
+.pagination > .active > span.page-link {
+    background-color: var(--primaryGreen);
+
+    color: var(--white);
+}
+
+.pagination > .page-item > a.page-link > span:first-child {
+    font-size: 18px;
+}
+
+.pagination > .disabled > span.page-link > span {
+    color: var(--detailsGray);
+}

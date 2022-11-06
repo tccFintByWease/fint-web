@@ -1,32 +1,39 @@
 /* libraries */
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 /* stylesheets and assets */
 import './styles.css';
 import './media-queries.css';
 /* components */
-import { Modal } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faCheckCircle, faLock } from '@fortawesome/free-solid-svg-icons';
 import TopNavbar from './../components/TopNavbar/index';
 import SideNavbar from './../components/SideNavbar/index';
-import AlertMessage from './../../../components/AlertMessage/index';
-import Button from './../../../components/Button/index';
 import Footer from './../../../components/Footer/index';
 import { Chart } from "react-google-charts";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 /* contexts */
 import { useAuth } from './../../../contexts/auth';
-/* utils */
-import { getChartType } from '../../../utils/charts-utils';
 /* store */
-import { GET_CHARTS_URL, GET_USER_CHARTS_URL, INSERT_USER_CHART_URL, DELETE_USER_CHART_URL, CHECK_USER_TYPE_URL } from './../../../store/api-urls'
+import { GET_REVENUES_URL, GET_EXPENSES_URL } from './../../../store/api-urls';
 
 function Expenses() {
     const { user } = useAuth();
     const [userType, setUserType] = useState(1);
-    const [chart, setChart] = useState();
+    const [options, setOptions] = useState();
+    const [data, setData] = useState();
 
-    const [showModal, setShowModal] = useState(false);
+    const [totalRevenue, setTotalRevenue] = useState(2500);
+    const [totalExpense, setTotalExpense] = useState(1170);
+
+    const [revenuesPreviewList, setRevenuesPreviewList] = useState();
+    const [expensesPreviewList, setExpensesPreviewList] = useState();
+
+    useEffect(() => {
+        createChart();
+
+        genExpensesPreviewList((dataResults) => setExpensesPreviewList(dataResults));
+        genRevenuesPreviewList((dataResults) => setRevenuesPreviewList(dataResults));
+    }, []);
 
     const [navbarIsOpen, setNavbarIsOpen] = useState(false);
 
@@ -91,6 +98,102 @@ function Expenses() {
         }
     }
 
+    const createChart = () => {
+        const chartOptions = {
+            chartArea: {
+                width: '100%',
+                height: '75%'
+            },
+            colors: ['#2CE6A3', '#23B380', '#579C99'],
+            fontName: 'Roboto',
+            fontSize: 18,
+            titleTextStyle: {
+                marginBottom: 200,
+                fontSize: 24,
+                bold: true
+            },
+            legend: {
+                position: 'bottom',
+                alignment: 'center',
+                top: '200px',
+                textStyle: {
+                    color: '#818181',
+                    fontSize: 16,
+                },
+            },
+        }
+
+        setOptions(chartOptions);
+
+        const chartData = [
+            ['Tipo', 'Total'],
+            ['Receita', totalRevenue],
+            ['Despesas', totalExpense],
+        ];
+        
+        setData(chartData);
+    }
+
+    const listExpenses = async () => {
+        try {
+            const response = await axios.post(GET_EXPENSES_URL, { idUsuario: user.idUsuario });
+
+            return response.data.result;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const listRevenues = async () => {
+        try {
+            const response = await axios.post(GET_REVENUES_URL, { idUsuario: user.idUsuario });
+
+            return response.data.result;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const genExpensesPreviewList = async (callback) => {
+        let promises = (await listExpenses()).slice(0, 5).map(expense => (
+            <a href="#" className="expenses-control-list-item flex" key={expense.idMovimentacao}>
+                <div className="list-item-text">
+                    <p className="expenses-control-preview-title">
+                        {expense.observacaoMovimentacao}
+                    </p>
+                    <p className="expenses-control-preview-value">
+                        {`Valor: R$ ${expense.valorMovimentacao}`}
+                    </p>
+                </div>
+                <FontAwesomeIcon icon={faAngleRight} />
+            </a>
+        ));
+
+        let dataResults = await Promise.all(promises);
+        
+        callback(dataResults);
+    }
+
+    const genRevenuesPreviewList = async (callback) => {
+        let promises = (await listRevenues()).slice(0, 5).map(revenue => (
+            <a href="#" className="expenses-control-list-item flex" key={revenue.idMovimentacao}>
+                <div className="list-item-text">
+                    <p className="expenses-control-preview-title">
+                        {revenue.observacaoMovimentacao}
+                    </p>
+                    <p className="expenses-control-preview-value">
+                        {`Valor: R$ ${revenue.valorMovimentacao}`}
+                    </p>
+                </div>
+                <FontAwesomeIcon icon={faAngleRight} />
+            </a>
+        ));
+
+        let dataResults = await Promise.all(promises);
+        
+        callback(dataResults);
+    }
+
     return (
         <Fragment>
             <TopNavbar handleNavbarIsOpen={handleNavbarIsOpen} />
@@ -99,25 +202,39 @@ function Expenses() {
                 <section className="expenses">
                     <h1>Controle de Gastos</h1>
                     <div className="charts flex">
-                        {/* <Chart
-                            chartType={chart.chartType}
-                            data={chart.data}
-                            options={chart.options}
+                        <Chart
+                            chartType="PieChart"
+                            data={data}
+                            options={options}
                             width="100%"
-                            height="480px"
-                            legendToggle
-                        /> */}
+                            height="420px"
+                        />
                     </div>
-                    <div className="chart-description flex">
-                        <p className="chart-title">{chart?.name}</p>
+                    <div className="expenses-control-review flex">
+                        <div className="revenues-review">
+                            <p className="expenses-control-review-label">Receita mensal</p>
+                            <p className="expenses-control-review-value">
+                                {`R$ ${totalRevenue}`}
+                            </p>
+                        </div>
+                        <div className="expenses-review">
+                            <p className="expenses-control-review-label">Despesa mensal</p>
+                            <p className="expenses-control-review-value">
+                                {`R$ ${totalExpense}`}
+                            </p>
+                        </div>
                     </div>
                     <h2>Receitas e Despesas</h2>
                     <div className="expenses-list flex">
-                        <div className="revenues">
-                            <p>Receitas</p>
+                        <div className="expenses-control-list-preview revenues-list-preview">
+                            <h3>Receitas</h3>
+                            {revenuesPreviewList}
+                            <a href="/expenses/list?type=revenues" className="full-list-button">Ver mais</a>
                         </div>
-                        <div className="expenses">
-                            <p>Despesas</p>
+                        <div className="expenses-control-list-preview expenses-list-preview">
+                            <h3>Despesas</h3>
+                            {expensesPreviewList}
+                            <a href="/expenses/list?type=expenses" className="full-list-button">Ver mais</a>
                         </div>
                     </div>
                 </section>

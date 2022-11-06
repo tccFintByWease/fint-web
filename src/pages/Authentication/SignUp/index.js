@@ -25,7 +25,7 @@ import { handlePasswordVisibility } from './../../../utils/password-utils';
 import { getTodayDate } from './../../../utils/date-utils';
 /* store */
 import ListCurrencies from './../../../store/currencies';
-import { SIGN_UP_URL, INSERT_TRANSITION_URL } from './../../../store/api-urls';
+import { SIGN_UP_URL, INSERT_TRANSITION_URL, INSERT_USER_TYPE_URL } from './../../../store/api-urls';
 /* contexts */
 import { useAuth } from './../../../contexts/auth';
 /* models */
@@ -162,8 +162,9 @@ function SignUp() {
         const select = document.querySelector('#currenciesSelect');
         const idMoeda = select.value;
         const dataCadastroUsuario = getTodayDate();
+        const statusUsuario = 1;
 
-        const userData = {...stepOneData, ...stepTwoData, idMoeda, dataCadastroUsuario};
+        const userData = {...stepOneData, ...stepTwoData, idMoeda, dataCadastroUsuario, statusUsuario};
         delete userData.confirmarSenha;
 
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
@@ -175,9 +176,11 @@ function SignUp() {
 
             // returns a user object
             const response = await axios.post(SIGN_UP_URL, userData);
-
+            
             const userId = response.data.result.idUsuario;
             userData.idUsuario = userId;
+
+            const response_user_type = await axios.post(INSERT_USER_TYPE_URL, { idAssinatura: 1, idUsuario: userId, dataMudancaTipoUsuario: dataCadastroUsuario });
 
             if (_.isEqual(response.data.result, userData)) {
                 // clear localStorage

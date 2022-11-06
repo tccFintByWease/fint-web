@@ -1,14 +1,82 @@
 /* Desktop */
 @media only screen and (max-width: 1299px) {
+    .chart-preview {
+        width: 37.1824vw;
+    }
     
+    .chart-preview .chart-preview-header .chart-preview-name {
+        font-size: 20px !important;
+    }
+
+    .chart-preview .chart-preview-footer button {
+        width: 24.634vw;
+    }
 }
 
 /* Tablet */
 @media only screen and (max-width: 960px) {
+    .dashboard .home {
+        margin-right: 8.888vw;
+        margin-left: 8.888vw;
+    }
     
+    .chart-preview {
+        width: 66.6667vw;
+    }
+    
+    .chart-preview .chart-preview-header .chart-preview-name {
+        font-size: 20px !important;
+    }
+
+    .chart-preview .chart-preview-footer button {
+        width: 44.444vw;
+    }
+
+    .charts-selector .modal-body {
+        justify-content: center !important;
+    }
+
+    .charts .set-charts-button {
+        margin-left: calc(100% - 15vw);
+    }
 }
 
 /* Mobile */
 @media only screen and (max-width: 720px) {
+    .charts .slide-button {
+        display: none;
+        position: unset !important;
+    }
     
+    .charts-selector {
+        margin: 8px auto;
+    }
+
+    .chart-preview .chart-preview-header {
+        padding: 10px !important;
+    }
+
+    .chart-preview .chart-preview-header .chart-preview-name {
+        width: 80%;
+        font-size: max(2.777vw, 14px) !important;
+        text-align: left;
+    }
+
+    .chart-preview .chart-preview-header .chart-preview-selection {
+        width: 16px;
+        height: 16px;
+    }
+
+    .charts .set-charts-button {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+        font-weight: 400;
+    
+        margin-left: calc(100% - 20vw);
+    }
+
+    .home .chart-description {
+        width: 100% !important;
+    }
 }

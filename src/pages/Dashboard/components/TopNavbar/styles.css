@@ -106,7 +106,9 @@
 }
 
 #dashboard__nav .dropdown-menu {
-    border: solid 1px var(--secundaryGray);
+    padding: 0px;
+    background-color: transparent !important;
+    border: none;
     position: fixed !important;
     margin: 100px 3.33vw;
     box-shadow: 0px 0.26vw 1.04166vw rgba(0, 0, 0, 0.2);
@@ -115,13 +117,43 @@
 }
 
 .dropdown-menu .dropdown-item {
-    font-size: 20px;
+    padding: 5px 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: solid 2px var(--white);
+    background-color: var(--white);
+
+    font-size: 16px;
+
     transition: ease all 0.3s;
 }
 
 .dropdown-menu .dropdown-item:hover {
-    background-color: var(--white);
-    color: var(--detailsGreen);
+    background-color: transparent;
+    border-color: var(--secundaryGray);
+    color: var(--black);
+}
+
+.dropdown-menu .dropdown-item > svg {
+    margin-right: 10px;
+}
+
+.dropdown-menu .sign-out-dropdown-item {
+    /* margin-top: 10px; */
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: var(--red);
+    border: solid 2px var(--red);
+
+    color: var(--white);
+}
+
+.dropdown-menu .sign-out-dropdown-item:hover {
+    background-color: transparent;
+    border-color: var(--red);
+    color: var(--red);
 }
 
 /* Mobile Navbar */

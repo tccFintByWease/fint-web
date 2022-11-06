@@ -25,7 +25,7 @@ function Charts(props) {
                 chartType={props.chart.chartType}
                 data={props.chart.data}
                 options={props.chart.options}
-                width="418px"
+                width="90%"
             />
         );
     }

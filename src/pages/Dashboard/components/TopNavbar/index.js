@@ -11,7 +11,7 @@ import userPicture from './../../../../assets/images/user-picture.png';
 /* components */
 import { Dropdown, ButtonGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons';
 /* contexts */
 import { useAuth } from './../../../../contexts/auth';
 
@@ -68,10 +68,11 @@ function TopNavbar(props) {
                         <Dropdown.Toggle split id="user-dropdown" />
                         <Dropdown.Menu>
                             <Dropdown.Item href="/profile-and-settings">
+                                <FontAwesomeIcon icon={faUser} />
                                 Perfil e Configurações
                             </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item href="/login" onClick={handleSignOut}>
+                            <Dropdown.Item href="/login" className="sign-out-dropdown-item" onClick={handleSignOut}>
+                                <FontAwesomeIcon icon={faArrowRightFromBracket} />
                                 Desconectar-se
                             </Dropdown.Item>
                         </Dropdown.Menu>

@@ -2,12 +2,8 @@
 
 /* Charts */
 /* ------------------------------------------------------------- */
-.dashboard {
-    min-width: 100vw;
-}
-
 .dashboard .home {
-    margin: 140px 60px 200px 340px;
+    margin: 140px 60px 0px 340px;
     margin-top: 140px;
 }
 
@@ -145,7 +141,7 @@ h1 .username-title {
 
 /* Chart Preview */
 .chart-preview {
-    width: 458px;
+    width: 23.854vw;
     margin-bottom: 40px;
     border: solid 2px var(--secundaryGray);
     border-radius: 10px;
@@ -157,11 +153,20 @@ h1 .username-title {
     align-items: center;
 }
 
+.chart-preview .chart-preview-header .chart-preview-name {
+    font-size: max(1.04166vw, 17px) !important;
+}
+
 .chart-preview .chart-preview-header .chart-preview-selection {
     width: 18px;
     height: 18px;
     border-radius: 50%;
     border: solid 2px var(--secundaryGray);
+}
+
+.chart-preview .chart-preview-body {
+    justify-content: center;
+    align-items: center;
 }
 
 .chart-preview .chart-preview-footer {
@@ -172,7 +177,7 @@ h1 .username-title {
 }
 
 .chart-preview .chart-preview-footer button {
-    width: 320px;
+    width: 16.66vw;
     height: 40px;
     margin: 0px;
     

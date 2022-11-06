@@ -1,8 +1,12 @@
 @import url(./../../styles/global.css);
 
 footer {
+    width: 100%;
+    
     background-color: var(--white);
     margin-top: 6.25vw;
+
+    position: absolute;
     z-index: 3;
 }
 

@@ -16,6 +16,11 @@ const DELETE_USER_CHART_URL = `${API}/grafico/deletarGraficoUsuario`;
 const CHECK_USER_TYPE_URL = `${API}/usuario/verificarTipoUsuario`;
 const INSERT_USER_TYPE_URL = `${API}/usuario/inserirTipoUsuario`;
 const UPDATE_USER_TYPE_URL = `${API}/usuario/alterarTipoUsuario`;
+const UPDATE_TRANSITION_URL = `${API}/movimentacao/alterar`
+const DELETE_TRANSITION_URL = `${API}/movimentacao/deletar`;
+const GET_REVENUES_URL = `${API}/movimentacao/buscarTodasReceitas`;
+const GET_EXPENSES_URL = `${API}/movimentacao/buscarTodasDespesas`;
+const GET_TRANSITION_URL = `${API}/movimentacao/buscarUmPorId`;
 
 export  {
     SIGN_UP_URL,
@@ -33,5 +38,10 @@ export  {
     DELETE_USER_CHART_URL,
     CHECK_USER_TYPE_URL,
     INSERT_USER_TYPE_URL,
-    UPDATE_USER_TYPE_URL
+    UPDATE_USER_TYPE_URL,
+    UPDATE_TRANSITION_URL,
+    DELETE_TRANSITION_URL,
+    GET_REVENUES_URL,
+    GET_EXPENSES_URL,
+    GET_TRANSITION_URL,
 }

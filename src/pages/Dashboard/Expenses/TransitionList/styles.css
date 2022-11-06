@@ -1,0 +1,130 @@
+@import url(./../../../../styles/global.css);
+
+/* Transition List */
+/* ------------------------------------------------------------- */
+.expenses .transition-list {
+    width: 100%;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+}
+
+.transition-list > .list {
+    margin-top: 20px;
+}
+
+.transition-list > .list > .list-item {
+    padding: 10px 40px;
+    border-bottom: solid 1px var(--secundaryGray);
+
+    justify-content: space-between;
+    align-items: center;
+
+    transition: ease all 0.3s;
+}
+
+.list > .list-item:first-child {
+    border-top: solid 1px var(--secundaryGray);
+}
+
+.list-item >.list-item-text > p {
+    margin: 0px;
+}
+
+.list-item > .list-item-text > .list-item-title {
+    margin-bottom: 5px;
+
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.list-item > .list-item-text > .list-item-value {
+    font-size: 18px;
+    color: var(--detailsGray);
+}
+
+.list-item > svg {
+    font-size: 24px;
+}
+
+.list-item:hover {
+    background-color: var(--primaryGray);
+    color: var(--black);
+    cursor: pointer;
+}
+
+.transition-list > .search-bar {
+    justify-content: right;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.transition-list > .search-bar > .search-bar-input {
+    width: 100%;
+    padding: 8px 20px;
+    background-color: var(--primaryGray);
+
+    font-size: 18px;
+}
+
+.transition-list > .search-bar > svg {
+    color: var(--detailsGray);
+    position: absolute;
+    margin: 0px -20px;
+}
+
+/* Pagination */
+.pagination {
+    margin: 20px auto 0px;
+}
+
+/* Filters */
+.search-filters {
+    margin-top: 20px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.search-filters > .search-filter {
+    margin-right: 20px;
+    padding: 5px 15px;
+    border-radius: 5px;
+    background-color: var(--primaryGray);
+    
+    justify-content: center;
+    align-items: center;
+
+    user-select: none;
+}
+
+.new-transition-button {
+    height: 40px;
+    padding: 0px 15px;
+    background-color: var(--primaryGreen);
+    border: solid 2px var(--primaryGreen);
+    border-radius: 5px;
+
+    color: var(--white);
+    font-size: 20px;
+
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    transition: ease all 0.3s;
+}
+
+.new-transition-button:hover {
+    background-color: var(--transparent);
+    color: var(--primaryGreen);
+}
+
+.new-transition-button > p {
+    margin: 0px;
+}
+
+.new-transition-button > svg {
+    font-size: 24px;
+    margin-right: 10px;
+}

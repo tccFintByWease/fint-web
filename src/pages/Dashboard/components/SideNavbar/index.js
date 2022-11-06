@@ -10,8 +10,7 @@ import faEyeSlash from './../../../../assets/images/eye-slash-solid.png';
 import userPicture from './../../../../assets/images/user-picture.png';
 /* components */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { faHouse, faWallet, faMoneyBillWave, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faArrowRightFromBracket, faHouse, faWallet, faMoneyBillWave, faChartLine } from '@fortawesome/free-solid-svg-icons';
 /* contexts */
 import { useAuth } from './../../../../contexts/auth';
 
@@ -72,7 +71,7 @@ function SideNavbar(props) {
 
     return (
         <div id="dashboard__aside">
-            <aside className="aside fixed">
+            <aside className="aside">
                 <div className="top-navbar-content flex">
                     <div className="balance">
                         <p className="balance-description">SALDO</p>

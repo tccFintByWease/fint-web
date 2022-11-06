@@ -3,10 +3,151 @@
 /* Expenses */
 /* ------------------------------------------------------------- */
 .dashboard .expenses {
-    margin: 140px 60px 200px 340px;
+    margin: 140px 60px 0px 340px;
     margin-top: 140px;
 }
 
 .expenses h1 {
     letter-spacing: var(--maxSpacing);
+}
+
+.expenses .expenses-control-review {
+    width: 25vw;
+    margin-top: 20px !important;
+    margin-bottom: 60px !important;
+    border: solid 1px var(--secundaryGray);
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    
+    margin: 0 auto;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.expenses-control-review > .revenues-review, .expenses-control-review > .expenses-review {
+    width: 50%;
+    padding: 20px;
+}
+
+.expenses-control-review > .revenues-review {
+    border-right: solid 2px var(--secundaryGray);
+}
+
+.expenses-control-review p {
+    text-align: center;
+}
+
+.expenses-control-review .expenses-control-review-label {
+    margin-bottom: 5px;
+
+    font-size: 20px;
+    color: var(--detailsGray);
+}
+
+.expenses-control-review .expenses-control-review-value {
+    margin: 0px;
+
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: var(--maxSpacing);
+    color: var(--primaryGreen);
+}
+
+.expenses > h2 {
+    margin-bottom: 40px;
+
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: var(--maxSpacing);
+}
+
+.expenses .expenses-list {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.expenses-list .expenses-control-list-preview {
+    width: 50%;
+    min-height: 480px;
+    margin: 0px;
+    padding: 20px 0px;
+    border: solid 1px var(--secundaryGray);
+    border-radius: 10px;
+    box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+.expenses-list .revenues-list-preview {
+    margin-right: 120px;
+}
+
+.expenses-control-list-preview h3 {
+    width: 100%;
+    margin: 0px;
+    padding: 0px 40px 20px;
+
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: var(--maxSpacing);
+
+    border-bottom: solid 1px var(--secundaryGray);
+}
+
+.expenses-control-list-preview > .full-list-button {
+    width: 200px;
+    margin-top: 20px;
+    margin-left: 40px;
+    padding: 5px 24px;
+    border: solid 2px var(--detailsGreen);
+    border-radius: 50px;
+    background-color: var(--detailsGreen);
+
+    display: block;
+
+    font-size: 18px;
+    text-align: center;
+    color: var(--white);
+
+    transition: ease all 0.3s;
+}
+
+.expenses-control-list-preview > .full-list-button:hover {
+    background-color: transparent;
+    color: var(--detailsGreen);
+}
+
+.expenses-control-list-preview > .expenses-control-list-item {
+    padding: 10px 40px;
+    border-bottom: solid 1px var(--secundaryGray);
+
+    justify-content: space-between;
+    align-items: center;
+
+    transition: ease all 0.3s;
+}
+
+.list-item-text > p {
+    margin: 0px;
+}
+
+.list-item-text > .expenses-control-preview-title {
+    margin-bottom: 5px;
+
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.list-item-text > .expenses-control-preview-value {
+    font-size: 18px;
+    color: var(--detailsGray);
+}
+
+.expenses-control-list-item > svg {
+    font-size: 24px;
+}
+
+.expenses-control-list-item:hover {
+    background-color: var(--primaryGray);
+    color: var(--black);
+    cursor: pointer;
 }

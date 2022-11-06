@@ -82,3 +82,66 @@ button:disabled {
 button:disabled:hover {
     background-color: rgba(129, 129, 129, 0.6) !important;
 }
+
+.form-check {
+    margin: 0px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-check-input {
+    all: unset;
+
+    width: 18px;
+    height: 18px;
+    background-color: var(--white);
+    border: solid 1px var(--secundaryGray);
+    padding: 0px;
+    margin: 0px;
+    margin-right: 10px;
+    border-radius: 5px;
+
+    transition: ease all 0.3s;
+}
+
+.form-check-input:hover {
+    background-color: var(--primaryGray);
+}
+
+.form-check-input:checked {
+    border-color: var(--primaryGreen);
+    background-color: var(--primaryGreen);
+
+    background-image: url(data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 20 20%27%3e%3cpath fill=%27none%27 stroke=%27%23fff%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%273%27 d=%27m6 10 3 3 6-6%27/%3e%3c/svg%3e);
+}
+
+.form-check-input:checked:hover {
+    background-color: var(--secundaryGreen);
+}
+
+/* Modal */
+.large-modal {
+    max-width: 80vw;
+}
+
+.large-modal .modal-header > .modal-title {
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: var(--maxSpacing);
+}
+
+.large-modal .modal-body {
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.large-modal .btn-action {
+    width: 240px;
+    height: 40px;
+    padding: 0px 20px;
+
+    font-size: 20px;
+}

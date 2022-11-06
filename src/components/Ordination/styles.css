@@ -1,0 +1,26 @@
+@import url(./../../styles/global.css);
+
+/* Ordination */
+/* ------------------------------------------------------------- */
+.ordination-icon {
+    margin-left: 20px;
+
+    font-size: 20px;
+    color: #242424;
+    cursor: pointer;
+}
+
+.ordination-icon:hover {
+    opacity: 0.6;
+}
+
+.sort-up {
+    position: relative;
+    top: 4px;
+}
+
+.sort-down {
+    transform: rotate(180deg);
+    position: relative;
+    top: -6px;
+}

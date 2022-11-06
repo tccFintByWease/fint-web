@@ -11,8 +11,8 @@
     box-shadow: none;
 
     display: flex;
-
-    z-index: -1 !important;
+    position: fixed;
+    top: 0;
 }
 
 #dashboard__aside .aside-nav {

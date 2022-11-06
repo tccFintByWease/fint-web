@@ -15,7 +15,7 @@ Button.propTypes = {
     onClick: PropTypes.func,
     transparent: PropTypes.bool.isRequired,
     id: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
 }  
 
 export default Button;

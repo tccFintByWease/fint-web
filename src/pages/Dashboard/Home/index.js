@@ -110,7 +110,7 @@ function Home() {
     useEffect(() => {
         const getUserType = async () => {
             const response = await axios.post(CHECK_USER_TYPE_URL, { idUsuario: user.idUsuario });
-            setUserType(response.data.result.idAssinatura);
+            setUserType(response.data.result.idAssinatura ? response.data.result.idAssinatura : 1);
         }
 
         getUserType();
@@ -448,7 +448,9 @@ function Home() {
                         }}>{chart.name}</p>
                         {checkSelectedCharts('selector', chart)}
                     </div>
-                    <Charts chart={chart} preview={true} />
+                    <div className="chart-preview-body flex">
+                        <Charts chart={chart} preview={true} />
+                    </div>
                     <div className="chart-preview-footer">
                         {checkSelectedCharts('button', chart)}
                     </div>
@@ -478,7 +480,7 @@ function Home() {
                         {userCharts ? createSlideSelectors() : ''}
                     </div>
                 </section>
-                <Modal dialogClassName="charts-selector" show={showModal} onHide={closeChartsSelector} animation={false} scrollable={true} centered>
+                <Modal dialogClassName="charts-selector large-modal" show={showModal} onHide={closeChartsSelector} animation={false} scrollable={true} centered>
                     <Modal.Header closeButton>
                         <Modal.Title>Selecionar Gráficos</Modal.Title>
                     </Modal.Header>

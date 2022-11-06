@@ -1,0 +1,28 @@
+@import url(./../../../../../styles/global.css);
+
+/* Modal */
+/* ------------------------------------------------------------- */
+
+.modal-footer .cancel-button {
+    width: 240px;
+    height: 40px;
+    padding: 0px 20px;
+
+    margin-right: 20px;
+    border: none;
+    border-radius: 50px;
+    background-color: var(--detailsGray);
+    display: block;
+    
+    font-size: 20px;
+    text-align: center;
+    color: var(--white);
+
+    transition: ease all 0.3s;
+}
+
+.modal-footer .cancel-button:hover {
+    background-color: rgba(129, 129, 129, 0.6) !important;
+}
+
+/* Create transition */

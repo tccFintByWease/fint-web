@@ -12,7 +12,6 @@ const loginSchema = yup.object({
         .max(50, 'A senha deve conter entre 8 e 50 caracteres'),
 
     manterConectado: yup.bool()
-        
 });
 
 export {
