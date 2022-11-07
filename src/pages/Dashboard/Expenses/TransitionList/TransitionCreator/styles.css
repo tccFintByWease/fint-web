@@ -2,6 +2,10 @@
 
 /* Modal */
 /* ------------------------------------------------------------- */
+.modal-footer .btn-action:hover {
+    border-color: var(--detailsGreen);
+    background-color: var(--detailsGreen);
+}
 
 .modal-footer .cancel-button {
     width: 240px;
@@ -26,3 +30,50 @@
 }
 
 /* Create transition */
+.expenses .large-modal .modal-body {
+    justify-content: center !important;
+}
+
+.modal-body .modal-form {
+    width: 100%;
+    margin: 0px 0px 20px !important;
+}
+
+.modal-body .modal-form .row, .modal-form select {
+    width: 100%;
+    margin: 0px;
+}
+
+.modal-form .form-label {
+    margin-top: 20px;
+    margin-bottom: 5px;
+
+    color: var(--detailsGray);
+    font-size: 16px;
+}
+
+.modal-form .form-label[for="transitionCategories"] {
+    margin-top: 0px;
+}
+
+.modal-form .form-control, .modal-form select {
+    padding: 6px 0px;
+    border: none;
+    border-bottom: solid 2px var(--secundaryGray);
+    border-radius: 0px;
+
+    font-size: 20px;
+}
+
+.modal-form .input-error {
+    color: var(--red);
+}
+
+.modal-form .input-error:focus {
+    border-color: var(--red) !important;
+}
+
+.modal-form .error-message {
+    margin-top: 5px;
+}
+

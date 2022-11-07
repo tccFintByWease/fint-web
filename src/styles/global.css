@@ -119,6 +119,7 @@ button:disabled:hover {
 
 .form-check-input:checked:hover {
     background-color: var(--secundaryGreen);
+    border-color: var(--secundaryGreen);
 }
 
 /* Modal */
@@ -144,4 +145,18 @@ button:disabled:hover {
     padding: 0px 20px;
 
     font-size: 20px;
+}
+
+.error-message {
+    margin: 0px;
+    font-size: 14px;
+    color: var(--red) !important;
+}
+
+.input-error {
+    border-color: var(--red) !important;
+}
+
+.modal-header .btn-close {
+    box-shadow: none !important;
 }

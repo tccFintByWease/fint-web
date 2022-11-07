@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 /* store */
 import { INSERT_TRANSITION_URL } from './../../../../../store/api-urls';
 /* utils */
-import { getTodayDate } from './../../../../../utils/date-utils';
+import { getSpecificDate } from './../../../../../utils/date-utils';
 
 function TransitionCreator(props) {
     const [showSpinner, setShowSpinner] = useState(false);
@@ -31,8 +31,8 @@ function TransitionCreator(props) {
         setIsSubmitBtnDisabled(value);
     }
 
-    const insertTransition = () => {
-        console.log('oi');
+    const insertTransition = (data) => {
+        console.log(data);
     }
 
     return (
@@ -50,7 +50,7 @@ function TransitionCreator(props) {
                         observacaoMovimentacao: '',
                         dataMovimentacao: '',
                         periodoMovimentacao: '',
-                        valorMovimentacao: 0
+                        valorMovimentacao: ''
                     }}
                     validationSchema={insertTransitionSchema}>
                     {({
@@ -61,10 +61,26 @@ function TransitionCreator(props) {
                         touched,
                         errors
                     }) => (
-                        <Form className="modal-form" noValidate onSubmit={handleSubmit}>
+                        <Form className="modal-form" id="transitionCreator" noValidate onSubmit={handleSubmit}>
                             <AuthenticationErrorMessage authenticationError={authenticationError} />
-                            <Form.Group as={Row} controlId="observacaoMovimentacao">
+                            <Form.Group as={Row} controlId="transitionCategories">
                                 <Col>
+                                    <Form.Label>Período</Form.Label>
+                                    <select
+                                        name="categoriasMovimentacao"
+                                        id="transitionCategoriesSelect"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        defaultValue=""
+                                        data-testid="select-transition-categories"
+                                    >
+                                        {/* TODO: listar todas as categorias */}
+                                    </select>
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="transitionObservation">
+                                <Col>
+                                    <Form.Label>Nome</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder={`Nome da ${props.transitionType === 'expenses' ? 'Despesa' : props.transitionType === 'revenues' ? 'Receita' : ''}`}
@@ -75,20 +91,21 @@ function TransitionCreator(props) {
                                         onBlur={handleBlur}
                                         className={errors.observacaoMovimentacao && touched.observacaoMovimentacao ? "input-error" : ""}
                                         data-testid="txt-observacao-movimentacao"
-                                        autoComplete="none"
+                                        autoComplete="off"
                                     />
                                     {errors.observacaoMovimentacao && touched.observacaoMovimentacao && (
                                         <p className="error-message">{errors.observacaoMovimentacao}</p>
                                     )}
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} controlId="dataMovimentacao">
+                            <Form.Group as={Row} controlId="transitionDate">
                                 <Col>
+                                    <Form.Label>Data</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        placeholder="Data da Movimentação"
-                                        min={getTodayDate()}
-                                        max={getTodayDate()}
+                                        placeholder={`Data da ${props.transitionType === 'expenses' ? 'Despesa' : props.transitionType === 'revenues' ? 'Receita' : ''}`}
+                                        min={getSpecificDate(0, 0, -1)}
+                                        max={getSpecificDate(0, 0, 1)}
                                         name="dataMovimentacao"
                                         value={values.dataMovimentacao}
                                         onChange={handleChange}
@@ -112,17 +129,71 @@ function TransitionCreator(props) {
                                             e.currentTarget.type = 'date';
                                             handleChange(e);
                                         }}
-                                        className={errors.dataObservacao && touched.dataObservacao ? "input-error" : ""}
-                                        data-testid="txt-data-observacao"
-                                        autoComplete="bday"
+                                        className={errors.dataMovimentacao && touched.dataMovimentacao ? "input-error" : ""}
+                                        data-testid="txt-data-movimentacao"
+                                        autoComplete="off"
                                     />
-                                    {errors.dataObservacao && touched.dataObservacao && (
-                                        <p className="error-message">{errors.dataObservacao}</p>
+                                    {errors.dataMovimentacao && touched.dataMovimentacao && (
+                                        <p className="error-message">{errors.dataMovimentacao}</p>
                                     )}
                                 </Col>
                             </Form.Group>
-                            {/* TODO: PERÍODO */}
-                            {/* TODO: VALOR MOVIMENTAÇÃO */}
+                            <Form.Group as={Row} controlId="transitionDate">
+                                <Col>
+                                    <Form.Label>Período</Form.Label>
+                                    <select
+                                        name="periodoMovimentacao"
+                                        id="periodSelect"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        defaultValue="Nenhum"
+                                        data-testid="select-periodo"
+                                    >
+                                        <option value="Nenhum" key="1">
+                                            Nenhum
+                                        </option>
+                                        <option value="Semanal" key="2">
+                                            Semanal
+                                        </option>
+                                        <option value="Quinzenal" key="3">
+                                            Quinzenal
+                                        </option>
+                                        <option value="Mensal" key="4">
+                                            Mensal
+                                        </option>
+                                        <option value="Bimestral" key="5">
+                                            Bimestral
+                                        </option>
+                                        <option value="Trimestral" key="6">
+                                            Trimestral
+                                        </option>
+                                        <option value="Semestral" key="7">
+                                            Semestral
+                                        </option>
+                                        <option value="Anual" key="8">
+                                            Anual
+                                        </option>
+                                    </select>
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="transitionValue">
+                                <Col>
+                                    <Form.Label>Valor</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="0"
+                                        name="valorMovimentacao"
+                                        value={values.valorMovimentacao}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        data-testid="txt-valor-inicial"
+                                        autoComplete="off"
+                                    />
+                                    {errors.valorMovimentacao && touched.valorMovimentacao && (
+                                        <p className="error-message">{errors.valorMovimentacao}</p>
+                                    )}
+                                </Col>
+                            </Form.Group>
                         </Form>
                     )}
                 </Formik>
@@ -131,7 +202,7 @@ function TransitionCreator(props) {
                 <button className="cancel-button" onClick={props.closeModal}>
                     Cancelar
                 </button>
-                <button type="submit" disabled={isSubmitBtnDisabled}>
+                <button className="btn-action" type="submit" form="transitionCreator" disabled={isSubmitBtnDisabled}>
                     <div className={!showSpinner ? '' : 'none'}>Cadastrar</div>
                     <Spinner className={showSpinner ? '' : 'none'} animation="border" role="status" size="sm">
                         <span className="visually-hidden">Carregando...</span>
