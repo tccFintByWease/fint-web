@@ -1,8 +1,9 @@
 /* libraries */
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 /* schemas */
 import { insertTransitionSchema } from './../../../../../store/schemas/insert-transition-schema';
 /* stylesheets and assets */
@@ -11,13 +12,17 @@ import './media-queries.css';
 /* components */
 import AuthenticationErrorMessage from './../../../../../components/AuthenticationErrorMessage';
 import { Form, Row, Col, Spinner, Modal } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+/* contexts */
+import { useAuth } from '../../../../../contexts/auth';
 /* store */
 import { INSERT_TRANSITION_URL } from './../../../../../store/api-urls';
 /* utils */
-import { getSpecificDate } from './../../../../../utils/date-utils';
+import { getSpecificDate, getTodayDate } from './../../../../../utils/date-utils';
+/* services */
+import ListCategories from './../../../../../services/categories';
 
 function TransitionCreator(props) {
+    const { user } = useAuth();
     const [showSpinner, setShowSpinner] = useState(false);
     const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState(false);
 
@@ -31,12 +36,55 @@ function TransitionCreator(props) {
         setIsSubmitBtnDisabled(value);
     }
 
-    const insertTransition = (data) => {
-        console.log(data);
+    const insertTransition = async (userData) => {
+        const authenticateErrorMessage = document.querySelector('.authentication-error-message');
+        console.log(userData);
+        try {
+            // disable the button until the API returns
+            handleShowSpinner(true);
+            handleIsSubmitBtnDisabled(true);
+
+            const idUsuario = user.idUsuario;
+            const idTipoMovimentacao = props.transitionType === 'revenues' ? 1 : props.transitionType === 'expenses' ? 2 : '';
+            const transitionData = { ...userData, idTipoMovimentacao, idUsuario };
+
+            transitionData.idCategoria = 1; // TODO: ARRUMAR AQ
+
+            const date = transitionData.dataMovimentacao.replaceAll('/', '-');
+            const day = date.split('-')[2];
+            const month = date.split('-')[1];
+            const year = date.split('-')[0];
+
+            const dataMovimentacao = `${day}-${month}-${year}`;
+            const idDetalheMovimentacao = dataMovimentacao <= getTodayDate() ? 1 : 2;
+
+            transitionData.idDetalheMovimentacao = idDetalheMovimentacao;
+            transitionData.dataMovimentacao = dataMovimentacao;
+            delete transitionData.periodoMovimentacao;
+
+            const response = await axios.post(INSERT_TRANSITION_URL, transitionData);
+
+            // transitionData.idMovimentacao = response.data.result.idMovimentacao;
+
+            handleShowSpinner(false);
+            handleIsSubmitBtnDisabled(false);
+
+            if (_.isEqual(response.data.result, transitionData)) {
+                props.closeModal(setAuthenticationError);
+            } else {
+                authenticateErrorMessage.innerText = `Erro ao cadastrar movimentação. Tente novamente em instantes`;
+                setAuthenticationError(true);
+            }
+            
+        } catch(error) {
+            authenticateErrorMessage.innerText = `Erro ao cadastrar movimentação. Tente novamente em instantes`;
+            setAuthenticationError(true);
+            handleShowSpinner(false);
+        }
     }
 
     return (
-        <Modal dialogClassName="transition-creator large-modal" show={props.showModal} onHide={props.closeModal} animation={false} scrollable={true} centered>
+        <Modal dialogClassName="transition-creator large-modal" show={props.showModal} onHide={() => props.closeModal(setAuthenticationError)} animation={false} scrollable={true} centered>
             <Modal.Header closeButton>
                 <Modal.Title>
                     Cadastrar {props.transitionType === 'expenses' ? 'Despesa' : props.transitionType === 'revenues' ? 'Receita' : ''}
@@ -46,7 +94,7 @@ function TransitionCreator(props) {
                 <Formik
                     onSubmit={(values) => insertTransition(values)}
                     initialValues={{
-                        categoria: '',
+                        idCategoria: '',
                         observacaoMovimentacao: '',
                         dataMovimentacao: '',
                         periodoMovimentacao: '',
@@ -63,18 +111,17 @@ function TransitionCreator(props) {
                     }) => (
                         <Form className="modal-form" id="transitionCreator" noValidate onSubmit={handleSubmit}>
                             <AuthenticationErrorMessage authenticationError={authenticationError} />
-                            <Form.Group as={Row} controlId="transitionCategories">
+                            <Form.Group as={Row} controlId="categoryId">
                                 <Col>
-                                    <Form.Label>Período</Form.Label>
+                                    <Form.Label>Categoria</Form.Label>
                                     <select
-                                        name="categoriasMovimentacao"
+                                        name="idCategoria"
                                         id="transitionCategoriesSelect"
                                         onChange={handleChange}
                                         onBlur={handleBlur}
-                                        defaultValue=""
-                                        data-testid="select-transition-categories"
+                                        data-testid="select-category-id"
                                     >
-                                        {/* TODO: listar todas as categorias */}
+                                        <ListCategories />
                                     </select>
                                 </Col>
                             </Form.Group>
@@ -199,7 +246,7 @@ function TransitionCreator(props) {
                 </Formik>
             </Modal.Body>
             <Modal.Footer>
-                <button className="cancel-button" onClick={props.closeModal}>
+                <button className="cancel-button" onClick={() => props.closeModal(setAuthenticationError)}>
                     Cancelar
                 </button>
                 <button className="btn-action" type="submit" form="transitionCreator" disabled={isSubmitBtnDisabled}>

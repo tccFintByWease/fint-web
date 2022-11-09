@@ -164,8 +164,17 @@ function SignUp() {
         const dataCadastroUsuario = getTodayDate();
         const statusUsuario = 1;
 
+        let dataNascUsuario = stepTwoData.dataNascUsuario;
+
+        const day = dataNascUsuario.split('/')[0];
+        const month = dataNascUsuario.split('/')[1];
+        const year = dataNascUsuario.split('/')[2];
+        
+        dataNascUsuario = `${year}-${month}-${day}`;
+
         const userData = {...stepOneData, ...stepTwoData, idMoeda, dataCadastroUsuario, statusUsuario};
         delete userData.confirmarSenha;
+        userData.dataNascUsuario = dataNascUsuario;
 
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
         

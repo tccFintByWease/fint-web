@@ -11,6 +11,7 @@ import Footer from './../../../components/Footer/index';
 import { Chart } from "react-google-charts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from "react-datepicker";
 /* contexts */
 import { useAuth } from './../../../contexts/auth';
 /* store */
@@ -224,6 +225,57 @@ function Expenses() {
                             </p>
                         </div>
                     </div>
+
+                    <div className="period-selector flex">
+                        <div className="initial-date-selector">
+                            {/* <Form.Control
+                                type="text"
+                                placeholder="Data de Nascimento"
+                                min='1922-01-01'
+                                max={getTodayDate()}
+                                name="dataNascUsuario"
+                                value={values.dataNascUsuario}
+                                onChange={handleChange}
+                                onBlur={e => {
+                                    e.currentTarget.type = 'text';
+                                    if (e.currentTarget.value === '') {
+                                        e.currentTarget.value = '';
+                                        handleChange(e);
+                                    } else {
+                                        const date = e.currentTarget.value.replaceAll('-', '/');
+                                        const day = date.split('/')[2];
+                                        const month = date.split('/')[1];
+                                        const year = date.split('/')[0];
+
+                                        e.currentTarget.value = `${day}/${month}/${year}`;
+                                        handleChange(e);
+                                    }
+                                    handleBlur(e);
+                                }}
+                                onFocus={e => {
+                                    e.currentTarget.type = 'date';
+                                    handleChange(e);
+                                }}
+                                className={errors.dataNascUsuario && touched.dataNascUsuario ? "input-error" : ""}
+                                data-testid="txt-data-nasc-usuario"
+                                autoComplete="bday"
+                            />
+                            {errors.dataNascUsuario && touched.dataNascUsuario && (
+                                <p className="error-message">{errors.dataNascUsuario}</p>
+                            )}
+                            <p className="expen-label">Data inicial</p>
+                            <p className="expenses-control-review-value">
+                                {`R$ ${totalRevenue}`}
+                            </p> */}
+                        </div>
+                        <div className="final-date-selector">
+                            <p className="expen-label">Data final</p>
+                            <p className="expenses-control-review-value">
+                                {`R$ ${totalExpense}`}
+                            </p>
+                        </div>
+                    </div>
+
                     <h2>Receitas e Despesas</h2>
                     <div className="expenses-list flex">
                         <div className="expenses-control-list-preview revenues-list-preview">

@@ -39,6 +39,10 @@
     margin: 0px 0px 20px !important;
 }
 
+.modal-body .modal-form .col {
+    padding: 0px;
+}
+
 .modal-body .modal-form .row, .modal-form select {
     width: 100%;
     margin: 0px;
@@ -75,5 +79,22 @@
 
 .modal-form .error-message {
     margin-top: 5px;
+}
+
+.modal-form .alert-danger {
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-form .alert-danger > svg {
+    margin-right: 40px;
+
+    font-size: 32px;
+}
+
+.modal-form .alert-danger > .authentication-error-message {
+    margin-bottom: 0px;
+
+    font-size: 20px;
 }
 

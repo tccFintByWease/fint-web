@@ -19,15 +19,15 @@ import { faAngleRight, faSearch, faCirclePlus } from '@fortawesome/free-solid-sv
 /* contexts */
 import { useAuth } from '../../../../contexts/auth';
 /* store */
-import { GET_REVENUES_URL, GET_EXPENSES_URL } from '../../../../store/api-urls';
+import { GET_REVENUES_URL, GET_EXPENSES_URL, GET_CATEGORY_RECURRENCE_URL } from '../../../../store/api-urls';
 
-// TODO: TRAZER DADOS REAIS PARA O GRÁFICO
-// TODO: FAZER A PAGINAÇÃO, FILTROS E A BUSCA FUNCIONAR COM API
+// TODO: AJUSTAR PRA TER OBSERVAÇÃO E DESCRIÇÃO MOVIMENTAÇÃO (ADICIONAR O CAMPO NO CADASTRO E ARRUMAR ONDE USEI OBSERVAÇÃO COMO DESCRIÇÃO)
+// TODO: AJUSTAR A LISTAGEM DE CATEGORIAS NA TELA DE CADASTRO E TORNÁ-LA FUNCIONAL
+// TODO: CRIAR O SISTEMA DE PERÍODO, DATA INICIAL - FINAL E USÁ-LO PARA CHAMAR A BUSCA DE DESPESAS / RECEITAS NA API
+
+// TODO: TESTAR O CADASTRO (VER SE TÁ INSERINDO O TIPO USUÁRIO)
 // TODO: CRIAR A PÁGINA INDIVIDUAL DE CADA MOVIMENTAÇÃO
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // TODO: CRIAR O BOTÃO E A MODAL DE CADASTRO COM API //    
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO: DEIXAR RESPONSIVO
 
 function TransitionList() {
     const { user } = useAuth();
@@ -39,6 +39,7 @@ function TransitionList() {
     const [transitionType, setTransitionType] = useState('');
 
     const [transitionList, setTransitionList] = useState([]);
+    const [filteredTransitionList, setFilteredTransitionList] = useState([]);
     const [reloadTransitionList, setReloadTransitionList] = useState(true);
 
     const [searchBarText, setSearchBarText] = useState('');
@@ -48,13 +49,9 @@ function TransitionList() {
     const [valueAscOrder, setValueAscOrder] = useState(true);
     const [valueDescOrder, setValueDescOrder] = useState(false);
 
-    const [categoryAscOrder, setCategoryAscOrder] = useState(true);
-    const [categoryDescOrder, setCategoryDescOrder] = useState(false);
-
     const [valueFilter, setValueFilter] = useState(true);
-    const [categoryFilter, setCategoryFilter] = useState(true);
 
-    const ITEMS_PER_PAGE = 2; // TODO: change to 10
+    const ITEMS_PER_PAGE = 5; // TODO: change to 10
 
     useEffect(() => {
         const getTransitionList = async () => {
@@ -69,12 +66,13 @@ function TransitionList() {
                 transitionType = pair[1];
             }
 
-            createChart(transitionType);
+            const chartData = await genChartData(transitionType);
+            createChart(chartData);
 
             if (transitionType === 'expenses') {
-                genTransitionList(listExpenses, (dataResults) => setTransitionList(dataResults));
+                genTransitionList(listExpenses, (dataResults) => setFilteredTransitionList(dataResults));
             } else if (transitionType === 'revenues') {
-                genTransitionList(listRevenues, (dataResults) => setTransitionList(dataResults));
+                genTransitionList(listRevenues, (dataResults) => setFilteredTransitionList(dataResults));
             }
 
             setTotalItems(5);
@@ -148,13 +146,34 @@ function TransitionList() {
         }
     }
 
-    const createChart = (type) => {
+    const genChartData = async (type) => {
+        try {
+            const idUsuario = user.idUsuario;
+            const idTipoMovimentacao = type === 'revenues' ? 1 : type === 'expenses' ? 2 : '';
+            const response = await axios.post(GET_CATEGORY_RECURRENCE_URL, { idUsuario,  idTipoMovimentacao });
+            console.log(response);
+
+            return response.data.result;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const createChart = (data) => {
+        const colors = [];
+        const chartData = [['Categoria', 'Quantidade']];
+
+        for (let i = 0; i < data.length; i++) {
+            colors.push(data[i].corCategoria);
+            chartData.push([data[i].descricaoCategoria, data[i].recorrenciaCategoria]);
+        }
+
         const chartOptions = {
             chartArea: {
                 width: '100%',
                 height: '75%'
             },
-            colors: ['#2CE6A3', '#23B380', '#579C99'],
+            colors,
             fontName: 'Roboto',
             fontSize: 18,
             titleTextStyle: {
@@ -174,72 +193,68 @@ function TransitionList() {
         }
 
         setOptions(chartOptions);
-
-        const chartData = type === 'revenues' ? [
-            ['Categoria', 'Quantidade'],
-            ['Salário', 4],
-            ['Hora Extra', 2],
-            ['Dívida do Juca', 1],
-            ['Retorno de investimento', 3],
-        ] : [
-                ['Categoria', 'Quantidade'],
-                ['Farmácia', 1],
-                ['Conta de Luz', 2],
-                ['Aluguel', 1],
-                ['Mercado', 4],
-            ];
-        
         setData(chartData);
+    }
+
+    const filterList = (list) => {
+        let orderValue = valueFilter ? valueAscOrder ? 'ASC' : valueDescOrder ? 'DESC' : '' : '';
+
+        if (searchBarText !== '') {
+            list.filter((transition) => 
+                transition.observacaoMovimentacao.toLowerCase().indexOf(searchBarText.toLowerCase()) === 0);
+        }
+
+        if (orderValue === 'ASC') {
+            list.sort((t1, t2) => (t1.valorMovimentacao > t2.valorMovimentacao) ? 1 : -1);
+        } else if (orderValue === 'DESC') {
+            list.sort((t1, t2) => (t1.valorMovimentacao < t2.valorMovimentacao) ? 1 : -1);
+        }
+
+        return list;
     }
 
     const listExpenses = async () => {
         try {
-            let orderValue = valueFilter ? valueAscOrder ? 'ASC' : valueDescOrder ? 'DESC' : '' : '';
-            let orderCategory = categoryFilter ? categoryAscOrder ? 'ASC' : categoryDescOrder ? 'DESC' : '' : '';
-
-            const params = `?pagina=${currentPage}&ordem-valor=${orderValue}&ordem-categoria=${orderCategory}&filtro-pesquisa=${searchBarText}`;
-
-            // const response = await axios.post(GET_EXPENSES_URL + params, { idUsuario: user.idUsuario });
+            // const response = await axios.post(GET_EXPENSES_URL, { idUsuario: user.idUsuario, dataInicial, dataFinal });
             const response = await axios.post(GET_EXPENSES_URL, { idUsuario: user.idUsuario });
 
-            // setTotalItems(response.data.result.totalItens);
-            setTotalItems(5);
-            // setTransitionList(response.data.result.transitionList);
             setTransitionList(response.data.result);
 
-            // return response.data.result.transitionList;
-            return response.data.result;
+            let filteredList = filterList(response.data.result.slice(0));
+            
+            setTotalItems(filteredList.length);
+            setFilteredTransitionList(filteredList);
+
+            return filteredList;
         } catch (error) {
             setTransitionList([]);
+            setFilteredTransitionList([]);
             console.log(error);
         }
     }
 
     const listRevenues = async () => {
         try {
-            let orderValue = valueFilter ? valueAscOrder ? 'ASC' : valueDescOrder ? 'DESC' : '' : '';
-            let orderCategory = categoryFilter ? categoryAscOrder ? 'ASC' : categoryDescOrder ? 'DESC' : '' : '';
-            
-            const params = `?pagina=${currentPage}&ordem-valor=${orderValue}&ordem-categoria=${orderCategory}&filtro-pesquisa=${searchBarText}`;
-
-            // const response = await axios.post(GET_REVENUES_URL + params, { idUsuario: user.idUsuario });
+            // const response = await axios.post(GET_REVENUES_URL, { idUsuario: user.idUsuario, dataInicial, dataFinal });
             const response = await axios.post(GET_REVENUES_URL, { idUsuario: user.idUsuario });
 
-            // setTotalItems(response.data.result.totalItens);
-            setTotalItems(5);
-            // setTransitionList(response.data.result.transitionList);
             setTransitionList(response.data.result);
 
-            // return response.data.result.transitionList;
-            return response.data.result;
+            let filteredList = filterList(response.data.result.slice(0));
+            
+            setTotalItems(filteredList.length);
+            setFilteredTransitionList(filteredList);
+
+            return filteredList;
         } catch (error) {
             setTransitionList([]);
+            setFilteredTransitionList([]);
             console.log(error);
         }
     }
 
     const genTransitionList = async (listTransition, callback) => {
-        let promises = (await listTransition()).slice(0, 5).map(transition => (
+        let promises = (await listTransition()).slice(0, ITEMS_PER_PAGE).map(transition => (
             <a href="#" className="list-item flex" key={transition.idMovimentacao}>
                 <div className="list-item-text">
                     <p className="list-item-title">
@@ -260,20 +275,22 @@ function TransitionList() {
 
     const handleSearchBarText = (event) => {
         setSearchBarText(event.target.value);
-        setReloadTransitionList(true);
     }
 
     const handleChangePage = (page) => {
         setCurrentPage(page);
-        setReloadTransitionList(true);
+        
+        genTransitionList(() => listPage(page), (dataResults) => setFilteredTransitionList(dataResults));
+    }
+
+    const listPage = (page) => {
+        const pageList = transitionList.slice(0).splice((page - 1) * ITEMS_PER_PAGE, ITEMS_PER_PAGE);
+
+        return pageList;
     }
 
     const handleValueFilterChange = (event) => {
         setValueFilter(!valueFilter);
-    }
-
-    const handleCategoryFilterChange = (event) => {
-        setCategoryFilter(!categoryFilter);
     }
 
     const handleValueOrder = (event) => {
@@ -290,26 +307,13 @@ function TransitionList() {
         setReloadTransitionList(true);
     }
 
-    const handleCategoryOrder = (event) => {
-        event.preventDefault();
-
-        if (categoryAscOrder) {
-            setCategoryAscOrder(false);
-            setCategoryDescOrder(true);
-        } else if (categoryDescOrder) {
-            setCategoryAscOrder(true);
-            setCategoryDescOrder(false);
-        }
-
-        setReloadTransitionList(true);
-    }
-
     const openTransitionCreator = () => {
         setShowModal(true);
     }
 
-    const closeTransitionCreator = () => {
+    const closeTransitionCreator = (setAuthenticationError) => {
         setShowModal(false);
+        setAuthenticationError(false);
     }
 
     return (
@@ -339,7 +343,7 @@ function TransitionList() {
                             <FontAwesomeIcon icon={faSearch} />
                         </div>
                         <div className="search-filters flex">
-                            <div className="search-filter flex">
+                            {/* <div className="search-filter flex">
                                 <Form.Check 
                                     type="checkbox"
                                     name="filter-category"
@@ -352,7 +356,7 @@ function TransitionList() {
                                     descOrder={categoryDescOrder}
                                     handleOrder={handleCategoryOrder}
                                 />
-                            </div>
+                            </div> */}
                             <div className="search-filter flex">
                                 <Form.Check 
                                     type="checkbox"
@@ -373,7 +377,7 @@ function TransitionList() {
                             </div>
                         </div>
                         <div className="list">
-                            {transitionList}
+                            {filteredTransitionList}
                         </div>
                         <ListPagination 
                             totalItems={totalItems !== 0 ? totalItems : ITEMS_PER_PAGE}

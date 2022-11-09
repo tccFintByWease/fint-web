@@ -13,11 +13,11 @@ const insertTransitionSchema = yup.object({
 
     observacaoMovimentacao: yup.string()
         .required('Insira um nome para a movimentação')
-        .min(5, 'O nome da movimentação deve conter um mínimo de 5 caracteres')
+        .min(1, 'O nome da movimentação deve conter no mínimo 1 caractere')
         .max(300, 'O nome da movimentação deve conter um máximo de 300 caracteres'),
 
     dataMovimentacao: yup.date('Insira a data da movimentação novamente')
-        .required('Insira sua data de nascimento')
+        .required('Insira a data da movimentação')
         .min(minDate, 'A data mínima para cadastrar uma movimentação é de um ano atrás')
         .max(maxDate, 'A data máxima para cadastrar uma movimentação é de um ano a frente'),
 
