@@ -1,6 +1,7 @@
 /* libraries */
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 /* stylesheets and assets */
 import './styles.css';
 import './media-queries.css';
@@ -10,16 +11,18 @@ import SideNavbar from './../components/SideNavbar/index';
 import Footer from './../../../components/Footer/index';
 import { Chart } from "react-google-charts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import DatePicker from "react-datepicker";
+import { faAngleRight, faArrowRight, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 /* contexts */
 import { useAuth } from './../../../contexts/auth';
 /* store */
 import { GET_REVENUES_URL, GET_EXPENSES_URL } from './../../../store/api-urls';
+/* utils */
+import { getTodayDate, getSpecificDate } from './../../../utils/date-utils';
 
 function Expenses() {
     const { user } = useAuth();
-    const [userType, setUserType] = useState(1);
     const [options, setOptions] = useState();
     const [data, setData] = useState();
 
@@ -28,6 +31,10 @@ function Expenses() {
 
     const [revenuesPreviewList, setRevenuesPreviewList] = useState();
     const [expensesPreviewList, setExpensesPreviewList] = useState();
+
+    const [showCalendar, setShowCalendar] = useState(false);
+    const [initialDate, setInitialDate] = useState(new Date());
+    const [finalDate, setFinalDate] = useState(new Date());
 
     useEffect(() => {
         createChart();
@@ -195,6 +202,10 @@ function Expenses() {
         callback(dataResults);
     }
 
+    const handleShowCalendar = () => {
+        setShowCalendar(!showCalendar);
+    }
+
     return (
         <Fragment>
             <TopNavbar handleNavbarIsOpen={handleNavbarIsOpen} />
@@ -211,71 +222,54 @@ function Expenses() {
                             height="420px"
                         />
                     </div>
-                    <div className="expenses-control-review flex">
-                        <div className="revenues-review">
-                            <p className="expenses-control-review-label">Receita mensal</p>
-                            <p className="expenses-control-review-value">
-                                {`R$ ${totalRevenue}`}
-                            </p>
+                    <div className="expenses-info flex" onClick={handleShowCalendar}>
+                        <div className="expenses-control-review flex">
+                            <div className="revenues-review">
+                                <p className="expenses-control-review-label">Receita Mensal</p>
+                                <p className="expenses-control-review-value">
+                                    {`R$ ${totalRevenue}`}
+                                </p>
+                            </div>
+                            <div className="expenses-review">
+                                <p className="expenses-control-review-label">Despesa Mensal</p>
+                                <p className="expenses-control-review-value">
+                                    {`R$ ${totalExpense}`}
+                                </p>
+                            </div>
                         </div>
-                        <div className="expenses-review">
-                            <p className="expenses-control-review-label">Despesa mensal</p>
-                            <p className="expenses-control-review-value">
-                                {`R$ ${totalExpense}`}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="period-selector flex">
-                        <div className="initial-date-selector">
-                            {/* <Form.Control
-                                type="text"
-                                placeholder="Data de Nascimento"
-                                min='1922-01-01'
-                                max={getTodayDate()}
-                                name="dataNascUsuario"
-                                value={values.dataNascUsuario}
-                                onChange={handleChange}
-                                onBlur={e => {
-                                    e.currentTarget.type = 'text';
-                                    if (e.currentTarget.value === '') {
-                                        e.currentTarget.value = '';
-                                        handleChange(e);
-                                    } else {
-                                        const date = e.currentTarget.value.replaceAll('-', '/');
-                                        const day = date.split('/')[2];
-                                        const month = date.split('/')[1];
-                                        const year = date.split('/')[0];
-
-                                        e.currentTarget.value = `${day}/${month}/${year}`;
-                                        handleChange(e);
-                                    }
-                                    handleBlur(e);
-                                }}
-                                onFocus={e => {
-                                    e.currentTarget.type = 'date';
-                                    handleChange(e);
-                                }}
-                                className={errors.dataNascUsuario && touched.dataNascUsuario ? "input-error" : ""}
-                                data-testid="txt-data-nasc-usuario"
-                                autoComplete="bday"
-                            />
-                            {errors.dataNascUsuario && touched.dataNascUsuario && (
-                                <p className="error-message">{errors.dataNascUsuario}</p>
-                            )}
-                            <p className="expen-label">Data inicial</p>
-                            <p className="expenses-control-review-value">
-                                {`R$ ${totalRevenue}`}
-                            </p> */}
-                        </div>
-                        <div className="final-date-selector">
-                            <p className="expen-label">Data final</p>
-                            <p className="expenses-control-review-value">
-                                {`R$ ${totalExpense}`}
-                            </p>
+                        <div className="period-selector flex">
+                            <button className="period-selector-button" onClick={handleShowCalendar}><FontAwesomeIcon icon={faCalendar} /></button>
+                            <div className="period-selector-date flex">
+                                <p className="period-selector-date-label">Data Inicial</p>
+                                <p>{initialDate.toLocaleDateString()}</p>
+                            </div>
+                            <FontAwesomeIcon icon={faArrowRight} />
+                            <div className="period-selector-date flex">
+                                <p className="period-selector-date-label">Data Final</p>
+                                <p>{finalDate.toLocaleDateString()}</p>
+                            </div>
+                            <div className="datepickers flex">
+                                <Calendar
+                                    onChange={setInitialDate}
+                                    value={initialDate}
+                                    selectRange={true}
+                                    minDate={new Date(user.dataCadastroUsuario)}
+                                    maxDate={new Date(getSpecificDate(0, 0, 1))}
+                                    defaultValue={new Date(getTodayDate())}
+                                    minDetail="year"
+                                />
+                                <Calendar
+                                    onChange={setFinalDate}
+                                    value={finalDate}
+                                    selectRange={true}
+                                    minDate={new Date(user.dataCadastroUsuario)}
+                                    maxDate={new Date(getSpecificDate(0, 0, 1))}
+                                    defaultValue={new Date(getTodayDate())}
+                                    minDetail="year"
+                                />
+                            </div>
                         </div>
                     </div>
-
                     <h2>Receitas e Despesas</h2>
                     <div className="expenses-list flex">
                         <div className="expenses-control-list-preview revenues-list-preview">
