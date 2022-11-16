@@ -10,7 +10,7 @@ const getTodayDate = () => {
 
     if (mm < 10) {
         mm = '0' + mm;
-    } 
+    }
         
     today = yyyy + '-' + mm + '-' + dd;
 
@@ -29,7 +29,7 @@ const getSpecificDate = (days, months, years) => {
 
     if (mm < 10) {
         mm = '0' + mm;
-    } 
+    }
         
     today = yyyy + '-' + mm + '-' + dd;
 
@@ -46,8 +46,28 @@ const formatDatetime = (date) => {
     }
 }
 
+const removeTime = (date) => {
+    let formatedDate = new Date(date);
+    const yyyy = formatedDate.getFullYear();
+    let mm = formatedDate.getMonth() + 1;
+    let dd = formatedDate.getDate();
+
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    const newDate = dd + '/' + mm + '/' + yyyy;
+
+    return newDate;
+}
+
 export {
     getTodayDate,
     getSpecificDate,
-    formatDatetime
+    formatDatetime,
+    removeTime
 }

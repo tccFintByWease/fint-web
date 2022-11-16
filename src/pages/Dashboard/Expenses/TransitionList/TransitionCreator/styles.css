@@ -43,7 +43,7 @@
     padding: 0px;
 }
 
-.modal-body .modal-form .row, .modal-form select {
+.modal-body .modal-form .row, .modal-form select, .modal-form .css-b62m3t-container {
     width: 100%;
     margin: 0px;
 }
@@ -60,13 +60,29 @@
     margin-top: 0px;
 }
 
-.modal-form .form-control, .modal-form select {
+.modal-form .form-control, .modal-form select, .modal-form .css-b62m3t-container {
     padding: 6px 0px;
     border: none;
     border-bottom: solid 2px var(--secundaryGray);
     border-radius: 0px;
 
     font-size: 20px;
+}
+
+.modal-form select, .modal-form .css-b62m3t-container {
+    border: none;
+    border-bottom: solid 2px var(--secundaryGray);
+    box-shadow: none !important;
+}
+
+.modal-form .css-b62m3t-container:hover {
+    border: none;
+    border-bottom: solid 2px var(--secundaryGray);
+    box-shadow: none !important;
+}
+
+.css-b62m3t-container .css-319lph-ValueContainer {
+    padding: 0px !important;
 }
 
 .modal-form .input-error {
@@ -98,3 +114,22 @@
     font-size: 20px;
 }
 
+/* Categories select */
+.modal-form .categories {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.categories > .categories-select {
+    width: 70%;
+    margin-right: 60px;
+}
+
+.categories > .category-color {
+    width: 30%;
+}
+
+.categories > .category-color > input[type="color"] {
+    width: 100%;
+}

@@ -1,11 +1,11 @@
 /* libraries */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Formik } from 'formik';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 /* schemas */
-import { insertTransitionSchema } from './../../../../../store/schemas/insert-transition-schema';
+import { transitionSchema } from '../../../../../store/schemas/transition-schema';
 /* stylesheets and assets */
 import './styles.css';
 import './media-queries.css';
@@ -23,10 +23,13 @@ import ListCategories from './../../../../../services/categories';
 
 function TransitionCreator(props) {
     const { user } = useAuth();
+
     const [showSpinner, setShowSpinner] = useState(false);
     const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState(false);
 
     const [authenticationError, setAuthenticationError] = useState(false);
+
+    const [idCategoria, setIdCategoria] = useState();
 
     const handleShowSpinner = (value) => {
         setShowSpinner(value);
@@ -38,7 +41,7 @@ function TransitionCreator(props) {
 
     const insertTransition = async (userData) => {
         const authenticateErrorMessage = document.querySelector('.authentication-error-message');
-        console.log(userData);
+
         try {
             // disable the button until the API returns
             handleShowSpinner(true);
@@ -46,9 +49,8 @@ function TransitionCreator(props) {
 
             const idUsuario = user.idUsuario;
             const idTipoMovimentacao = props.transitionType === 'revenues' ? 1 : props.transitionType === 'expenses' ? 2 : '';
-            const transitionData = { ...userData, idTipoMovimentacao, idUsuario };
 
-            transitionData.idCategoria = 1; // TODO: ARRUMAR AQ
+            const transitionData = { ...userData, idTipoMovimentacao, idUsuario, idCategoria };
 
             const date = transitionData.dataMovimentacao.replaceAll('/', '-');
             const day = date.split('-')[2];
@@ -63,8 +65,8 @@ function TransitionCreator(props) {
             delete transitionData.periodoMovimentacao;
 
             const response = await axios.post(INSERT_TRANSITION_URL, transitionData);
-
-            // transitionData.idMovimentacao = response.data.result.idMovimentacao;
+            
+            transitionData.idMovimentacao = response.data.result.idMovimentacao;
 
             handleShowSpinner(false);
             handleIsSubmitBtnDisabled(false);
@@ -84,7 +86,7 @@ function TransitionCreator(props) {
     }
 
     return (
-        <Modal dialogClassName="transition-creator large-modal" show={props.showModal} onHide={() => props.closeModal(setAuthenticationError)} animation={false} scrollable={true} centered>
+        <Modal dialogClassName="transition-creator large-modal" show={props.showModal} onHide={() => props.closeModal(setAuthenticationError)} animation={true} scrollable={true} centered>
             <Modal.Header closeButton>
                 <Modal.Title>
                     Cadastrar {props.transitionType === 'expenses' ? 'Despesa' : props.transitionType === 'revenues' ? 'Receita' : ''}
@@ -95,12 +97,13 @@ function TransitionCreator(props) {
                     onSubmit={(values) => insertTransition(values)}
                     initialValues={{
                         idCategoria: '',
+                        descricaoMovimentacao: '',
                         observacaoMovimentacao: '',
                         dataMovimentacao: '',
                         periodoMovimentacao: '',
                         valorMovimentacao: ''
                     }}
-                    validationSchema={insertTransitionSchema}>
+                    validationSchema={transitionSchema}>
                     {({
                         handleSubmit,
                         handleChange,
@@ -113,24 +116,35 @@ function TransitionCreator(props) {
                             <AuthenticationErrorMessage authenticationError={authenticationError} />
                             <Form.Group as={Row} controlId="categoryId">
                                 <Col>
-                                    <Form.Label>Categoria</Form.Label>
-                                    <select
-                                        name="idCategoria"
-                                        id="transitionCategoriesSelect"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        data-testid="select-category-id"
-                                    >
-                                        <ListCategories />
-                                    </select>
+                                    <ListCategories transitionType={props.transitionType} setCategoryId={setIdCategoria} />
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} controlId="transitionObservation">
+                            <Form.Group as={Row} controlId="transitionDescription">
                                 <Col>
                                     <Form.Label>Nome</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder={`Nome da ${props.transitionType === 'expenses' ? 'Despesa' : props.transitionType === 'revenues' ? 'Receita' : ''}`}
+                                        maxLength={300}
+                                        name="descricaoMovimentacao"
+                                        value={values.descricaoMovimentacao}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        className={errors.descricaoMovimentacao && touched.descricaoMovimentacao ? "input-error" : ""}
+                                        data-testid="txt-descricao-movimentacao"
+                                        autoComplete="off"
+                                    />
+                                    {errors.descricaoMovimentacao && touched.descricaoMovimentacao && (
+                                        <p className="error-message">{errors.descricaoMovimentacao}</p>
+                                    )}
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId="transitionObservation">
+                                <Col>
+                                    <Form.Label>Observação</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Observação"
                                         maxLength={300}
                                         name="observacaoMovimentacao"
                                         value={values.observacaoMovimentacao}

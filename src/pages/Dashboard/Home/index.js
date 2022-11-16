@@ -480,7 +480,7 @@ function Home() {
                         {userCharts ? createSlideSelectors() : ''}
                     </div>
                 </section>
-                <Modal dialogClassName="charts-selector large-modal" show={showModal} onHide={closeChartsSelector} animation={false} scrollable={true} centered>
+                <Modal dialogClassName="charts-selector large-modal" show={showModal} onHide={closeChartsSelector} animation={true} scrollable={true} centered>
                     <Modal.Header closeButton>
                         <Modal.Title>Selecionar Gráficos</Modal.Title>
                     </Modal.Header>

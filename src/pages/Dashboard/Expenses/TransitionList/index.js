@@ -1,13 +1,13 @@
 /* libraries */
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 /* stylesheets and assets */
 import './styles.css';
 import './media-queries.css';
 /* components */
 import TopNavbar from '../../components/TopNavbar/index';
 import SideNavbar from '../../components/SideNavbar/index';
-import Button from '../../../../components/Button/index';
 import Footer from '../../../../components/Footer/index';
 import ListPagination from '../../../../components/ListPagination/index';
 import Ordination from '../../../../components/Ordination/index';
@@ -20,27 +20,19 @@ import { faAngleRight, faSearch, faCirclePlus } from '@fortawesome/free-solid-sv
 import { useAuth } from '../../../../contexts/auth';
 /* store */
 import { GET_REVENUES_URL, GET_EXPENSES_URL, GET_CATEGORY_RECURRENCE_URL } from '../../../../store/api-urls';
-
-// TODO: AJUSTAR PRA TER OBSERVAÇÃO E DESCRIÇÃO MOVIMENTAÇÃO (ADICIONAR O CAMPO NO CADASTRO E ARRUMAR ONDE USEI OBSERVAÇÃO COMO DESCRIÇÃO)
-
-// TODO: AJUSTAR A LISTAGEM DE CATEGORIAS NA TELA DE CADASTRO E TORNÁ-LA FUNCIONAL
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO: CRIAR O SISTEMA DE PERÍODO, DATA INICIAL - FINAL E USÁ-LO PARA CHAMAR A BUSCA DE DESPESAS / RECEITAS NA API
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-// TODO: TESTAR O CADASTRO (VER SE TÁ INSERINDO O TIPO USUÁRIO)
-// TODO: CRIAR A PÁGINA INDIVIDUAL DE CADA MOVIMENTAÇÃO
-// TODO: DEIXAR RESPONSIVO
+import { getSpecificDate } from '../../../../utils/date-utils';
 
 function TransitionList() {
     const { user } = useAuth();
     const [options, setOptions] = useState();
     const [data, setData] = useState();
+    const [isDataVisible, setIsDataVisible] = useState(true);
 
     const [showModal, setShowModal] = useState(false);
 
     const [transitionType, setTransitionType] = useState('');
+    const [initialDate, setInitialDate] = useState(new Date());
+    const [finalDate, setFinalDate] = useState(new Date(getSpecificDate(1, 1, 0)));
 
     const [transitionList, setTransitionList] = useState([]);
     const [filteredTransitionList, setFilteredTransitionList] = useState([]);
@@ -63,20 +55,41 @@ function TransitionList() {
             const paramString = urlString.split('?')[1];
             const queryString = new URLSearchParams(paramString);
 
-            let transitionType = '';
+            let transitionType = localStorage.getItem('transition-type') ? localStorage.getItem('transition-type') : '';
+            let iDate = formatDates(new Date(localStorage.getItem('initialDate'))) ? formatDates(new Date(localStorage.getItem('initialDate'))) : '';
+            let fDate = formatDates(new Date(localStorage.getItem('finalDate'))) ? formatDates(new Date(localStorage.getItem('finalDate'))) : '';
+            let index = 0;
 
-            for (let pair of queryString.entries()) {
-                setTransitionType(pair[1]);
-                transitionType = pair[1];
+            for (const pair of queryString.entries()) {
+                if (index === 0 && transitionType === '') {
+                    transitionType = pair[1];
+                    setTransitionType(pair[1]);
+                } else if (index === 1 && iDate === '') {
+                    let date = new Date(pair[1]);
+                    iDate = formatDates(date);
+
+                    setInitialDate(iDate);
+                } else if (index === 2 && fDate === '') {
+                    let date = new Date(pair[1]);
+                    fDate = formatDates(date);
+
+                    setFinalDate(fDate);
+                }
+
+                index++;
             }
 
-            const chartData = await genChartData(transitionType);
+            setTransitionType(transitionType);
+            setInitialDate(iDate);
+            setFinalDate(fDate);
+
+            const chartData = await genChartData(transitionType, iDate, fDate);
             createChart(chartData);
 
             if (transitionType === 'expenses') {
-                genTransitionList(listExpenses, (dataResults) => setFilteredTransitionList(dataResults));
+                genTransitionList(() => listExpenses(iDate, fDate), (dataResults) => setFilteredTransitionList(dataResults));
             } else if (transitionType === 'revenues') {
-                genTransitionList(listRevenues, (dataResults) => setFilteredTransitionList(dataResults));
+                genTransitionList(() => listRevenues(iDate, fDate), (dataResults) => setFilteredTransitionList(dataResults));
             }
 
             setTotalItems(5);
@@ -150,12 +163,29 @@ function TransitionList() {
         }
     }
 
-    const genChartData = async (type) => {
+    const formatDates = (date) => {
+        let yyyy = date.getFullYear();
+        let mm = date.getMonth() + 1;
+        let dd = date.getDate();
+
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+    
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        date = yyyy + '-' + mm + '-' + dd;
+
+        return date;
+    }
+
+    const genChartData = async (type, iDate, fDate) => {
         try {
             const idUsuario = user.idUsuario;
             const idTipoMovimentacao = type === 'revenues' ? 1 : type === 'expenses' ? 2 : '';
-            const response = await axios.post(GET_CATEGORY_RECURRENCE_URL, { idUsuario,  idTipoMovimentacao });
-            console.log(response);
+            const response = await axios.post(GET_CATEGORY_RECURRENCE_URL, { idUsuario,  idTipoMovimentacao, dataInicial: iDate, dataFinal: fDate });
 
             return response.data.result;
         } catch (error) {
@@ -165,7 +195,7 @@ function TransitionList() {
 
     const createChart = (data) => {
         const colors = [];
-        const chartData = [['Categoria', 'Quantidade']];
+        let chartData = [['Categoria', 'Quantidade']];
 
         for (let i = 0; i < data.length; i++) {
             colors.push(data[i].corCategoria);
@@ -198,14 +228,20 @@ function TransitionList() {
 
         setOptions(chartOptions);
         setData(chartData);
+
+        if (data !== []) {
+            setIsDataVisible(true);
+        } else {
+            setIsDataVisible(false);
+        }
     }
 
     const filterList = (list) => {
         let orderValue = valueFilter ? valueAscOrder ? 'ASC' : valueDescOrder ? 'DESC' : '' : '';
 
         if (searchBarText !== '') {
-            list.filter((transition) => 
-                transition.observacaoMovimentacao.toLowerCase().indexOf(searchBarText.toLowerCase()) === 0);
+            list = list.filter((transition) => 
+                transition.descricaoMovimentacao.toLowerCase().indexOf(searchBarText.toLowerCase()) >= 0);
         }
 
         if (orderValue === 'ASC') {
@@ -217,10 +253,9 @@ function TransitionList() {
         return list;
     }
 
-    const listExpenses = async () => {
+    const listExpenses = async (iDate, fDate) => {
         try {
-            // const response = await axios.post(GET_EXPENSES_URL, { idUsuario: user.idUsuario, dataInicial, dataFinal });
-            const response = await axios.post(GET_EXPENSES_URL, { idUsuario: user.idUsuario });
+            const response = await axios.post(GET_EXPENSES_URL, { idUsuario: user.idUsuario, dataInicial: iDate, dataFinal: fDate });
 
             setTransitionList(response.data.result);
 
@@ -237,10 +272,9 @@ function TransitionList() {
         }
     }
 
-    const listRevenues = async () => {
+    const listRevenues = async (iDate, fDate) => {
         try {
-            // const response = await axios.post(GET_REVENUES_URL, { idUsuario: user.idUsuario, dataInicial, dataFinal });
-            const response = await axios.post(GET_REVENUES_URL, { idUsuario: user.idUsuario });
+            const response = await axios.post(GET_REVENUES_URL, { idUsuario: user.idUsuario, dataInicial: iDate, dataFinal: fDate });
 
             setTransitionList(response.data.result);
 
@@ -262,7 +296,7 @@ function TransitionList() {
             <a href="#" className="list-item flex" key={transition.idMovimentacao}>
                 <div className="list-item-text">
                     <p className="list-item-title">
-                        {transition.observacaoMovimentacao}
+                        {transition.descricaoMovimentacao}
                     </p>
                     <p className="list-item-value">
                         {`Valor: R$ ${transition.valorMovimentacao}`}
@@ -279,6 +313,8 @@ function TransitionList() {
 
     const handleSearchBarText = (event) => {
         setSearchBarText(event.target.value);
+
+        setReloadTransitionList(true);
     }
 
     const handleChangePage = (page) => {
@@ -293,13 +329,13 @@ function TransitionList() {
         return pageList;
     }
 
-    const handleValueFilterChange = (event) => {
+    const handleValueFilterChange = () => {
         setValueFilter(!valueFilter);
+
+        setReloadTransitionList(true);
     }
 
-    const handleValueOrder = (event) => {
-        event.preventDefault();
-
+    const handleValueOrder = () => {
         if (valueAscOrder) {
             setValueAscOrder(false);
             setValueDescOrder(true);
@@ -318,6 +354,7 @@ function TransitionList() {
     const closeTransitionCreator = (setAuthenticationError) => {
         setShowModal(false);
         setAuthenticationError(false);
+        setReloadTransitionList(true);
     }
 
     return (
@@ -327,7 +364,7 @@ function TransitionList() {
                 <SideNavbar active={'expenses'} handleNavbarIsOpen={handleNavbarIsOpen} />
                 <section className="expenses">
                     <h1>{transitionType === 'expenses' ? 'Despesas' : transitionType === 'revenues' ? 'Receitas' : ''}</h1>
-                    <div className="charts flex">
+                    <div className={isDataVisible ? 'charts flex' : 'none'}>
                         <Chart
                             chartType="PieChart"
                             data={data}
@@ -336,6 +373,9 @@ function TransitionList() {
                             height="420px"
                         />
                     </div>
+                    <p className={!isDataVisible ? 'insert-transitions-message' : 'none'}>
+                        Cadastre {transitionType === 'expenses' ? 'despesas' : transitionType === 'revenues' ? 'receitas' : ''} para visualizar o gráfico.
+                    </p>
                     <div className="transition-list flex">
                         <div className="search-bar flex">
                             <Form.Control
@@ -347,20 +387,6 @@ function TransitionList() {
                             <FontAwesomeIcon icon={faSearch} />
                         </div>
                         <div className="search-filters flex">
-                            {/* <div className="search-filter flex">
-                                <Form.Check 
-                                    type="checkbox"
-                                    name="filter-category"
-                                    label="Categoria"
-                                    onChange={handleCategoryFilterChange}
-                                    checked={categoryFilter}
-                                />
-                                <Ordination
-                                    ascOrder={categoryAscOrder}
-                                    descOrder={categoryDescOrder}
-                                    handleOrder={handleCategoryOrder}
-                                />
-                            </div> */}
                             <div className="search-filter flex">
                                 <Form.Check 
                                     type="checkbox"

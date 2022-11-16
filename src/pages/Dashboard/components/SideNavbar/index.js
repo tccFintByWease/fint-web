@@ -1,5 +1,6 @@
 /* libraries */
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 /* stylesheets and assets */
 /* stylesheets and assets */
@@ -13,15 +14,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faArrowRightFromBracket, faHouse, faWallet, faMoneyBillWave, faChartLine } from '@fortawesome/free-solid-svg-icons';
 /* contexts */
 import { useAuth } from './../../../../contexts/auth';
+/* store*/
+import { GET_BALANCE_VALUE_URL } from './../../../../store/api-urls';
 
 function SideNavbar(props) {
     const {user, signOut} = useAuth();
+
+    useEffect(() => {
+        handleBalanceValue();
+    }, []);
 
     const [balanceValue, setBalanceValue] = useState(274.53);
     const [balanceVisibility, setBalanceVisibility] = useState(true);
 
     const handleSignOut = () => {
         signOut();
+    }
+
+    const handleBalanceValue = async () => {
+        const response = await axios.post(GET_BALANCE_VALUE_URL, { idUsuario: user.idUsuario });
+
+        const revenuesValue = response.data.result[0].somaMovimentacao;
+        const expensesValue = response.data.result[1].somaMovimentacao;
+
+        setBalanceValue(revenuesValue + expensesValue);
     }
 
     const handleBalanceVisibility = () => {

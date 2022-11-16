@@ -2,6 +2,14 @@
 
 /* Transition List */
 /* ------------------------------------------------------------- */
+.expenses .insert-transitions-message {
+    width: 100%;
+    margin: 120px 0px;
+
+    font-size: 32px;
+    text-align: center;
+}
+
 .expenses .transition-list {
     width: 100%;
 

@@ -1,20 +1,43 @@
 /* libraries */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+import chroma from 'chroma-js';
+/* components */
+import CreatableSelect from 'react-select/creatable'
+import { Form, Col } from 'react-bootstrap';
 /* store */
-import { GET_CATEGORIES_URL } from './../store/api-urls';
+import { GET_CATEGORIES_URL, INSERT_CATEGORY_URL } from './../store/api-urls';
+/* context */
+import { useAuth } from './../contexts/auth';
 
 function ListCategories(props) {
-    const [data, setData] = useState();
+    const { user } = useAuth();
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [options, setOptions] = useState();
+
+    const [value, setValue] = useState({ label: 'teste', value: '', color: '' });
+    const [isValueChanged, setIsValueChanged] = useState(false);
+    const [categoryColor, setCategoryColor] = useState(props?.defaultValue[2] ? props.defaultValue[2] : "#2CE6A3");
 
     useEffect(() => {
-        genCategoriesList((dataResults) => setData(dataResults));
+        genCategoriesList((dataResults) => setOptions(dataResults));
     }, []);
+
+    const handleDefaultValue = () => {
+        if (props.defaultValue[0] !== '') {
+            return { label: props.defaultValue[0], value: props.defaultValue[1], color: props.defaultValue[2] }
+        } else {
+            return value;
+        }
+    }
 
     const listCategories = async () => {
         try {
-            const response = await axios.get(GET_CATEGORIES_URL, props.transitionTypeId);
-            console.log(response);
+            const idTipoMovimentacao = props.transitionType === 'revenues' ? 1 : props.transitionType === 'expenses' ? 2 : '';
+
+            const response = await axios.post(GET_CATEGORIES_URL, { idUsuario: user.idUsuario, idTipoMovimentacao });
             const categories = response.data.result;
 
             return categories;
@@ -34,23 +57,110 @@ function ListCategories(props) {
 
     const genCategoriesList = async (callback) => {
         let promises = (await listCategories()).sort(compare).map(category => (
-            <option value={category.idCategoria} key={category.idCategoria}
-                style={{
-                    backgroundColor: `${category.corCategoria}`
-                }
-            }>
-                {category.descricaoCategoria}
-            </option>
-        ))
+            {
+                label: category.descricaoCategoria,
+                value: category.idCategoria,
+                color: category.corCategoria
+            }
+        ));
 
         let dataResults = await Promise.all(promises);
-
         callback(dataResults);
     }
-    
-    const dataReturn = data ? data : 'Carregando dados...'
 
-    return dataReturn;
+    const handleChange = (selectedOption) => {
+        setValue(selectedOption);
+        props.setCategoryId(selectedOption.value);
+    }
+
+    const createCategory = async (label) => {
+        try {
+            const idTipoMovimentacao = props.transitionType === 'revenues' ? 1 : props.transitionType === 'expenses' ? 2 : '';
+
+            const category = { idUsuario: user.idUsuario, idTipoMovimentacao, descricaoCategoria: label, corCategoria: categoryColor };
+
+            const response = await axios.post(INSERT_CATEGORY_URL, category);
+
+            return {
+                label,
+                value: response.data.result.idCategoria,
+                color: response.data.result.corCategoria
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleCreate = async (inputValue) => {
+        setIsLoading(true);
+        const newCategory = await createCategory(inputValue);
+        setIsLoading(false);
+        setOptions((prev) => [...prev, newCategory]);
+        setValue(newCategory);
+    }
+
+    const colorStyles = {
+        control: (styles) => ({
+            ...styles,
+
+            '&:hover': { border: 'none' },
+            border: 'none',
+            boxShadow: 'none'
+        }),
+
+        option: (styles, { data }) => ({
+            ...styles,
+            backgroundColor: data.color,
+            width: 'fill-content',
+            margin: '5px 20px',
+            padding: '5px 20px',
+            borderRadius: '5px',
+            color: '#FFF'
+        })
+    };
+
+    console.log(value === { label: '', value: '', color: '' } ? handleDefaultValue() : value);
+
+    return (
+        <div className="categories flex">
+            <div className="categories-select">
+                <Form.Label>Categoria</Form.Label>
+                <CreatableSelect
+                    name="idCategoria"
+                    id="transitionCategoriesSelect"
+                    placeholder="Selecione uma categoria"
+                    isDisabled={isLoading}
+                    isLoading={isLoading}
+                    onChange={handleChange}
+                    onCreateOption={handleCreate}
+                    options={options}
+                    value={value !== { label: '', value: '', color: '' } ? handleDefaultValue() : value}
+                    styles={colorStyles}
+                    noOptionsMessage={({inputValue}) => !inputValue ? "Nenhum resultado foi encontrado" : "Nenhum resultado foi encontrado"}
+                    isClearable
+                />
+            </div>
+            <div className="category-color">
+                <Form.Label>Cor da categoria</Form.Label>
+                <Form.Control
+                    type="color"
+                    name="corCategoria"
+                    value={props.defaultValue[2] ? props.defaultValue[2] : categoryColor}
+                    onChange={e => {
+                        setCategoryColor(e.target.value);
+                    }}
+                    data-testid="txt-descricao-movimentacao"
+                    autoComplete="off"
+                />
+            </div>
+        </div>
+    );
 }
+
+ListCategories.propTypes = {
+    transitionType: PropTypes.string.isRequired,
+    setCategoryId: PropTypes.func.isRequired,
+    defaultValue: PropTypes.array
+}  
 
 export default ListCategories;

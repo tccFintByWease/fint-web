@@ -27,8 +27,9 @@ const DELETE_TRANSITION_URL = `${API}/movimentacao/deletar`;
 const GET_REVENUES_URL = `${API}/movimentacao/buscarTodasReceitas`;
 const GET_EXPENSES_URL = `${API}/movimentacao/buscarTodasDespesas`;
 const GET_TRANSITION_URL = `${API}/movimentacao/buscarUmPorId`;
+const GET_BALANCE_VALUE_URL = `${API}/movimentacao/calcularDespesasReceitas`
 
-const GET_CATEGORIES_URL = `${API}/categoria/buscarTodosTipoMovimentacao`;
+const GET_CATEGORIES_URL = `${API}/categoria/buscarTodasCategorias`;
 const GET_CATEGORY_URL = `${API}/categoria/buscarUmPorId`;
 const INSERT_CATEGORY_URL = `${API}/categoria/inserir`;
 const UPDATE_CATEGORY_URL = `${API}/categoria/alterar`;
@@ -62,5 +63,6 @@ export  {
     INSERT_CATEGORY_URL,
     UPDATE_CATEGORY_URL,
     DELETE_CATEGORY_URL,
-    GET_CATEGORY_RECURRENCE_URL
+    GET_CATEGORY_RECURRENCE_URL,
+    GET_BALANCE_VALUE_URL
 }

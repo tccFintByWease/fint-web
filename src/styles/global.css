@@ -39,7 +39,7 @@ p {
     display: flex;
 }
 
-input:focus, select:focus {
+input:focus, select:focus, .css-b62m3t-container:focus {
     border-color: var(--secundaryGray) !important;
     outline: none;
     box-shadow: none !important;
