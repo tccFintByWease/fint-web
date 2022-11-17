@@ -13,8 +13,9 @@ import { transitionSchema } from '../../../../store/schemas/transition-schema';
 import TopNavbar from '../../components/TopNavbar/index';
 import SideNavbar from '../../components/SideNavbar/index';
 import Footer from '../../../../components/Footer/index';
+import Button from './../../../../components/Button';
 import AuthenticationErrorMessage from './../../../../components/AuthenticationErrorMessage';
-import { Form, Row, Col, Spinner } from 'react-bootstrap';
+import { Form, Row, Col, Spinner, Modal } from 'react-bootstrap';
 /* contexts */
 import { useAuth } from '../../../../contexts/auth';
 /* utils */
@@ -23,6 +24,7 @@ import { getSpecificDate, getTodayDate, removeTime } from './../../../../utils/d
 import { GET_CATEGORY_URL, GET_TRANSITION_URL, UPDATE_TRANSITION_URL } from '../../../../store/api-urls';
 /* services */
 import ListCategories from './../../../../services/categories';
+import { set } from 'lodash';
 
 function TransitionItem(props) {
     const { user } = useAuth();
@@ -37,9 +39,12 @@ function TransitionItem(props) {
     const [authenticationError, setAuthenticationError] = useState(false);
     
     const [transitionData, setTransitionData] = useState();
+    const [descricaoMovimentacao, setDescricaoMovimentacao] = useState();
     const [idCategoria, setIdCategoria] = useState();
     const [descricaoCategoria, setDescricaoCategoria] = useState('');
     const [corCategoria, setCorCategoria] = useState('');
+
+    const [showModal, setShowModal] = useState(false);
 
     const [navbarIsOpen, setNavbarIsOpen] = useState(false);
 
@@ -121,12 +126,12 @@ function TransitionItem(props) {
                 idCategoria: response.data.result?.idCategoria,
                 observacaoMovimentacao: response.data.result?.observacaoMovimentacao,
                 dataMovimentacao: removeTime(response.data.result?.dataMovimentacao),
-                periodoMovimentacao: 'Semanal',
                 valorMovimentacao: response.data.result?.valorMovimentacao
             }
 
             const responseCategory = await axios.post(GET_CATEGORY_URL, { idCategoria: data.idCategoria });
 
+            setIdCategoria(responseCategory.data.result.idCategoria);
             setDescricaoCategoria(responseCategory.data.result.descricaoCategoria);
             setCorCategoria(responseCategory.data.result.corCategoria);
             setTransitionData(data);
@@ -142,13 +147,20 @@ function TransitionItem(props) {
             // disable the button until the API returns
             handleShowSpinner(true);
             handleIsSubmitBtnDisabled(true);
+            setAuthenticationError(false);
+
+            setDescricaoMovimentacao(userData.descricaoMovimentacao);
 
             const idUsuario = user.idUsuario;
+            const idMovimentacao = props.transitionId;
             const idTipoMovimentacao = props.transitionType === 'revenues' ? 1 : props.transitionType === 'expenses' ? 2 : '';
+        
+            userData.idMovimentacao = idMovimentacao;
+            userData.idTipoMovimentacao = idTipoMovimentacao;
+            userData.idCategoria = idCategoria;
+            userData.idUsuario = idUsuario;
 
-            const transitionData = { ...userData, idTipoMovimentacao, idUsuario, idCategoria };
-
-            const date = transitionData.dataMovimentacao.replaceAll('/', '-');
+            const date = userData.dataMovimentacao.replaceAll('/', '-');
             const day = date.split('-')[2];
             const month = date.split('-')[1];
             const year = date.split('-')[0];
@@ -156,19 +168,18 @@ function TransitionItem(props) {
             const dataMovimentacao = `${day}-${month}-${year}`;
             const idDetalheMovimentacao = dataMovimentacao <= getTodayDate() ? 1 : 2;
 
-            transitionData.idDetalheMovimentacao = idDetalheMovimentacao;
-            transitionData.dataMovimentacao = dataMovimentacao;
-            delete transitionData.periodoMovimentacao;
+            userData.idDetalheMovimentacao = idDetalheMovimentacao;
+            userData.dataMovimentacao = dataMovimentacao;
 
-            const response = await axios.post(UPDATE_TRANSITION_URL, transitionData);
+            const response = await axios.put(UPDATE_TRANSITION_URL, userData);
             
-            transitionData.idMovimentacao = response.data.result.idMovimentacao;
+            userData.idMovimentacao = response.data.result.idMovimentacao;
 
             handleShowSpinner(false);
             handleIsSubmitBtnDisabled(false);
 
-            if (_.isEqual(response.data.result, transitionData)) {
-                props.closeModal(setAuthenticationError);
+            if (_.isEqual(response.data.result, userData)) {
+                openTransitionUpdateConfirmation();
             } else {
                 authenticateErrorMessage.innerText = `Erro ao atualizar movimentação. Tente novamente em instantes`;
                 setAuthenticationError(true);
@@ -179,6 +190,15 @@ function TransitionItem(props) {
             setAuthenticationError(true);
             handleShowSpinner(false);
         }
+    }
+
+    const openTransitionUpdateConfirmation = () => {
+        setShowModal(true);
+    }
+
+    const closeTransitionUpdateConfirmation = () => {
+        getTransitionData();
+        setShowModal(false);
     }
 
     return (
@@ -196,7 +216,6 @@ function TransitionItem(props) {
                                 idCategoria: transitionData?.idCategoria ?? '',
                                 observacaoMovimentacao: transitionData?.observacaoMovimentacao ?? '',
                                 dataMovimentacao: transitionData?.dataMovimentacao ?? '',
-                                periodoMovimentacao: 'Semanal',
                                 valorMovimentacao: transitionData?.valorMovimentacao ?? ''
                             }}
                             validationSchema={transitionSchema}
@@ -295,44 +314,6 @@ function TransitionItem(props) {
                                             )}
                                         </Col>
                                     </Form.Group>
-                                    <Form.Group as={Row} controlId="transitionDate">
-                                        <Col>
-                                            <Form.Label>Período</Form.Label>
-                                            <select
-                                                name="periodoMovimentacao"
-                                                id="periodSelect"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                defaultValue="Nenhum"
-                                                data-testid="select-periodo"
-                                            >
-                                                <option value="Nenhum" key="1">
-                                                    Nenhum
-                                                </option>
-                                                <option value="Semanal" key="2">
-                                                    Semanal
-                                                </option>
-                                                <option value="Quinzenal" key="3">
-                                                    Quinzenal
-                                                </option>
-                                                <option value="Mensal" key="4">
-                                                    Mensal
-                                                </option>
-                                                <option value="Bimestral" key="5">
-                                                    Bimestral
-                                                </option>
-                                                <option value="Trimestral" key="6">
-                                                    Trimestral
-                                                </option>
-                                                <option value="Semestral" key="7">
-                                                    Semestral
-                                                </option>
-                                                <option value="Anual" key="8">
-                                                    Anual
-                                                </option>
-                                            </select>
-                                        </Col>
-                                    </Form.Group>
                                     <Form.Group as={Row} controlId="transitionValue">
                                         <Col>
                                             <Form.Label>Valor</Form.Label>
@@ -374,6 +355,17 @@ function TransitionItem(props) {
                         </div>
                     </div>
                 </section>
+                <Modal dialogClassName="transition-update-confirmation" show={showModal} onHide={closeTransitionUpdateConfirmation} animation={true} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{descricaoMovimentacao}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>A {`${props.transitionType === 'revenues' ? 'receita' : props.transitionType === 'expenses' ? 'despesa' : ''}`} foi alterada com sucesso.</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button text="Concluir" transparent={false} onClick={closeTransitionUpdateConfirmation} />
+                    </Modal.Footer>
+                </Modal>
             </section>
             <div className="nav-background" onClick={handleNavbarIsOpen}></div>
             <Footer />

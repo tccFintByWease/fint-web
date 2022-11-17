@@ -24,8 +24,6 @@ const transitionSchema = yup.object({
         .min(minDate, 'A data mínima permitida para uma movimentação é de um ano atrás')
         .max(maxDate, 'A data máxima permitida para uma movimentação é de um ano a frente'),
 
-    periodoMovimentacao: yup.string(),
-
     valorMovimentacao: yup.number()
         .required('Insira o valor da movimentação'),
 

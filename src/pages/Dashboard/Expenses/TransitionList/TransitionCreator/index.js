@@ -62,7 +62,6 @@ function TransitionCreator(props) {
 
             transitionData.idDetalheMovimentacao = idDetalheMovimentacao;
             transitionData.dataMovimentacao = dataMovimentacao;
-            delete transitionData.periodoMovimentacao;
 
             const response = await axios.post(INSERT_TRANSITION_URL, transitionData);
             
@@ -100,7 +99,6 @@ function TransitionCreator(props) {
                         descricaoMovimentacao: '',
                         observacaoMovimentacao: '',
                         dataMovimentacao: '',
-                        periodoMovimentacao: '',
                         valorMovimentacao: ''
                     }}
                     validationSchema={transitionSchema}>
@@ -197,44 +195,6 @@ function TransitionCreator(props) {
                                     {errors.dataMovimentacao && touched.dataMovimentacao && (
                                         <p className="error-message">{errors.dataMovimentacao}</p>
                                     )}
-                                </Col>
-                            </Form.Group>
-                            <Form.Group as={Row} controlId="transitionDate">
-                                <Col>
-                                    <Form.Label>Período</Form.Label>
-                                    <select
-                                        name="periodoMovimentacao"
-                                        id="periodSelect"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        defaultValue="Nenhum"
-                                        data-testid="select-periodo"
-                                    >
-                                        <option value="Nenhum" key="1">
-                                            Nenhum
-                                        </option>
-                                        <option value="Semanal" key="2">
-                                            Semanal
-                                        </option>
-                                        <option value="Quinzenal" key="3">
-                                            Quinzenal
-                                        </option>
-                                        <option value="Mensal" key="4">
-                                            Mensal
-                                        </option>
-                                        <option value="Bimestral" key="5">
-                                            Bimestral
-                                        </option>
-                                        <option value="Trimestral" key="6">
-                                            Trimestral
-                                        </option>
-                                        <option value="Semestral" key="7">
-                                            Semestral
-                                        </option>
-                                        <option value="Anual" key="8">
-                                            Anual
-                                        </option>
-                                    </select>
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} controlId="transitionValue">

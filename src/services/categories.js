@@ -17,17 +17,16 @@ function ListCategories(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState();
 
-    const [value, setValue] = useState({ label: 'teste', value: '', color: '' });
-    const [isValueChanged, setIsValueChanged] = useState(false);
-    const [categoryColor, setCategoryColor] = useState(props?.defaultValue[2] ? props.defaultValue[2] : "#2CE6A3");
+    const [value, setValue] = useState(props.defaultValue ? { label: '', value: '', color: '' } : null);
+    const [categoryColor, setCategoryColor] = useState(props.defaultValue ? (props?.defaultValue[2] ? props.defaultValue[2] : "#2CE6A3") : "#2CE6A3");
 
     useEffect(() => {
         genCategoriesList((dataResults) => setOptions(dataResults));
     }, []);
 
     const handleDefaultValue = () => {
-        if (props.defaultValue[0] !== '') {
-            return { label: props.defaultValue[0], value: props.defaultValue[1], color: props.defaultValue[2] }
+        if (typeof props.defaultValue[1] === 'number') {
+            return { label: props.defaultValue[0], value: props.defaultValue[1], color: props.defaultValue[2] };
         } else {
             return value;
         }
@@ -119,8 +118,6 @@ function ListCategories(props) {
         })
     };
 
-    console.log(value === { label: '', value: '', color: '' } ? handleDefaultValue() : value);
-
     return (
         <div className="categories flex">
             <div className="categories-select">
@@ -134,7 +131,7 @@ function ListCategories(props) {
                     onChange={handleChange}
                     onCreateOption={handleCreate}
                     options={options}
-                    value={value !== { label: '', value: '', color: '' } ? handleDefaultValue() : value}
+                    value={props.defaultValue ? (value !== { label: '', value: '', color: '' } ? handleDefaultValue() : value) : value}
                     styles={colorStyles}
                     noOptionsMessage={({inputValue}) => !inputValue ? "Nenhum resultado foi encontrado" : "Nenhum resultado foi encontrado"}
                     isClearable
@@ -145,7 +142,7 @@ function ListCategories(props) {
                 <Form.Control
                     type="color"
                     name="corCategoria"
-                    value={props.defaultValue[2] ? props.defaultValue[2] : categoryColor}
+                    value={props.defaultValue ? (props?.defaultValue[2] ? props?.defaultValue[2] : categoryColor) : categoryColor}
                     onChange={e => {
                         setCategoryColor(e.target.value);
                     }}
@@ -161,6 +158,6 @@ ListCategories.propTypes = {
     transitionType: PropTypes.string.isRequired,
     setCategoryId: PropTypes.func.isRequired,
     defaultValue: PropTypes.array
-}  
+}
 
 export default ListCategories;

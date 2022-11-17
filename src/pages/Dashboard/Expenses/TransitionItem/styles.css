@@ -66,3 +66,14 @@
     margin-left: -40px;
     font-size: 32px;
 }
+
+/* Modal */
+.transition-update-confirmation .modal-body p {
+    margin: 0px;
+    font-size: 20px;
+}
+
+.transition-update-confirmation .modal-footer .btn-action {
+    width: 200px;
+    height: 40px;
+}
