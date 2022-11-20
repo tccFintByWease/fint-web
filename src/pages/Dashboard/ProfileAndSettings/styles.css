@@ -1,0 +1,266 @@
+@import url(./../../../styles/global.css);
+
+/* Profile and Settings */
+/* ------------------------------------------------------------- */
+.dashboard .profile-and-settings {
+    margin: 140px 60px 0px 340px;
+    margin-top: 140px;
+}
+
+.profile-and-settings .alert-danger {
+    margin-bottom: 20px;
+    padding: 20px;
+
+    font-size: 20px;
+}
+
+.profile-and-settings .alert-danger svg {
+    margin-right: 20px;
+
+    font-size: 36px;
+}
+
+.profile-and-settings .alert-danger .authentication-error-message {
+    height: 36px;
+    margin: 0px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-and-settings > .user-data-and-settings {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard .profile-and-settings h1 {
+    margin-bottom: 40px;
+    
+    letter-spacing: var(--maxSpacing);
+}
+
+.profile-and-settings .profile-box {
+    background-color: var(--white);
+    border-radius: 5px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.user-data-and-settings h2 {
+    font-weight: 300;
+    letter-spacing: var(--maxSpacing);
+}
+
+/* Profile */
+.profile-and-settings .user-data {
+    margin-right: 60px;
+
+    flex: 1;
+}
+
+.user-data-header, .user-data-body {
+    padding: 20px 40px;
+}
+
+.profile-and-settings .user-data > .user-data-header {
+    border-bottom: solid 1px var(--secundaryGray);
+
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.user-data-header > img {
+    width: 80px;
+    height: 80px;
+    margin-right: 40px;
+}
+
+.user-data-header > .user-data-header-text > .user-type {
+    width: fit-content;
+    margin: 0px;
+    padding: 5px 10px;
+    background-color: var(--primaryGreen);
+
+    color: var(--white);
+    letter-spacing: var(--minSpacing);
+}
+
+/* Form */
+.user-data-body label {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.user-data-body label[for="name"] {
+    margin-top: 0px;
+}
+
+.user-data-body input {
+    padding: 0px 0px 5px;
+    border-radius: 0px;
+    border: none;
+    border-bottom: solid 2px var(--secundaryGray);
+
+    font-size: 20px;
+}
+
+.user-data-body .error-message {
+    margin-top: 10px;
+}
+
+.user-data-body button {
+    width: 100%;
+    height: 40px;
+    margin-top: 20px;
+    padding: 0px 20px;
+
+    border: solid 2px var(--primaryGreen);
+    border-radius: 50px;
+    
+    font-size: 20px;
+    text-align: center;
+    color: var(--white);
+
+    transition: ease all 0.3s;
+}
+
+/* Settings */
+.user-data-and-settings > .settings {
+    height: 658.391px;
+    flex: 1;
+}
+
+
+.user-data-and-settings > .settings h2 {
+    margin: 20px 40px;
+}
+
+.settings > .color-theme-setting {
+    padding: 20px 40px;
+    border-top: solid 1px var(--secundaryGray);
+    border-bottom: solid 1px var(--secundaryGray);
+
+    font-size: 20px;
+
+    flex: 1;
+}
+
+.settings > .color-theme-setting > p {
+    margin: 0px;
+}
+
+.settings > .color-theme-setting svg {
+    margin-top: 20px;
+    margin-right: 40px;
+    padding: 10px;
+    background-color: var(--primaryGray);
+    border: solid 2px var(--primaryGray);
+    border-radius: 50%;
+
+    font-size: 24px;
+
+    transition: ease all 0.3s;
+
+    cursor: pointer;
+}
+
+.settings > .color-theme-setting svg:hover {
+    background-color: transparent;
+}
+
+.settings > .color-theme-setting .selected-theme {
+    background-color: var(--primaryGreen);
+    border-color: var(--primaryGreen);
+
+    color: var(--white);
+
+    cursor: default !important;
+}
+
+.settings > .color-theme-setting .selected-theme:hover {
+    background-color: var(--primaryGreen);
+    border-color: var(--primaryGreen);
+
+    color: var(--white);
+}
+
+.settings > .color-theme-setting > .setting-name {
+    margin-bottom: 10px;
+
+    font-size: 16px;
+    color: var(--detailsGray);
+}
+
+.settings > .settings-links > .link-button {
+    margin: 0px;
+    padding: 20px 40px;
+    border-bottom: solid 1px var(--secundaryGray);
+    display: block;
+
+    font-size: 20px;
+
+    transition: ease all 0.3s;
+
+    cursor: pointer;
+}
+
+.settings-links > .link-button:hover {
+    background-color: var(--primaryGray);
+
+    color: var(--black);
+}
+
+.user-settings {
+    padding: 20px 40px;
+    border-bottom: solid 1px var(--secundaryGray);
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-settings > .link-button {
+    padding: 5px 10px;
+    background-color: var(--primaryGray);
+    border-radius: 5px;
+    border: solid 2px var(--primaryGray);
+    display: block;
+
+    font-size: 20px;
+    text-align: center;
+
+    flex: 1;
+
+    transition: ease all 0.3s;
+}
+
+.user-settings > .link-button:first-child {
+    margin-right: 20px;
+    color: var(--black);
+}
+
+.user-settings > .link-button:hover {
+    background-color: transparent;
+}
+
+.user-settings > .remove-link-button {
+    background-color: var(--red);
+    border-color: var(--red);
+
+    color: var(--white);
+}
+
+.user-settings > .remove-link-button:hover {
+    background-color: transparent;
+    color: var(--red);
+}
+
+.settings > .version {
+    width: 100%;
+    padding: 36px 40px;
+
+    align-items: center;
+
+    font-size: 20px;
+    color: var(--detailsGray);
+}

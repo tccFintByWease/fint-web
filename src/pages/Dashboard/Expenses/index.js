@@ -27,8 +27,8 @@ function Expenses() {
     const [options, setOptions] = useState();
     const [data, setData] = useState();
 
-    const [totalRevenue, setTotalRevenue] = useState(2500);
-    const [totalExpense, setTotalExpense] = useState(1170);
+    const [totalRevenue, setTotalRevenue] = useState();
+    const [totalExpense, setTotalExpense] = useState();
 
     const [revenuesPreviewList, setRevenuesPreviewList] = useState();
     const [expensesPreviewList, setExpensesPreviewList] = useState();
@@ -54,11 +54,15 @@ function Expenses() {
     const [finalDate, setFinalDate] = useState(getStoragedFinalDate());
 
     useEffect(() => {
-        createChart();
+        const genPreviewList = async () => {
+            const expensesList = await genExpensesPreviewList((dataResults) => setExpensesPreviewList(dataResults));
+            const revenuesList = await genRevenuesPreviewList((dataResults) => setRevenuesPreviewList(dataResults));
 
-        genExpensesPreviewList((dataResults) => setExpensesPreviewList(dataResults));
-        genRevenuesPreviewList((dataResults) => setRevenuesPreviewList(dataResults));
+            createChart(expensesList, revenuesList);
+        }
 
+        genPreviewList();
+        
         localStorage.setItem('initialDate', initialDate);
         localStorage.setItem('finalDate', finalDate);
 
@@ -72,6 +76,8 @@ function Expenses() {
         }
 
         setTotalExpense(sum);
+
+        return sum;
     }
 
     const getRevenuesTotalValue = (revenues) => {
@@ -82,6 +88,8 @@ function Expenses() {
         }
 
         setTotalRevenue(sum);
+
+        return sum;
     }
 
     const [navbarIsOpen, setNavbarIsOpen] = useState(false);
@@ -166,7 +174,7 @@ function Expenses() {
         return date;
     }
 
-    const createChart = () => {
+    const createChart = (expensesList, revenuesList) => {
         const chartOptions = {
             chartArea: {
                 width: '100%',
@@ -193,10 +201,13 @@ function Expenses() {
 
         setOptions(chartOptions);
 
+        const revenuesTotalValue = getExpensesTotalValue(expensesList);
+        const expensesTotalValue = getRevenuesTotalValue(revenuesList);
+
         const chartData = [
             ['Tipo', 'Total'],
-            ['Receita', totalRevenue],
-            ['Despesas', totalExpense],
+            ['Receita', revenuesTotalValue],
+            ['Despesas', expensesTotalValue],
         ];
         
         setData(chartData);
@@ -233,14 +244,15 @@ function Expenses() {
     }
 
     const genExpensesPreviewList = async (callback) => {
-        let promises = (await listExpenses()).slice(0, 5).map(expense => (
+        const list = await listExpenses();
+        let promises = list.slice(0, 5).map(expense => (
             <a href={`expenses/expenses-${expense.idMovimentacao}`} className="expenses-control-list-item flex" key={expense.idMovimentacao}>
                 <div className="list-item-text">
                     <p className="expenses-control-preview-title">
                         {expense.descricaoMovimentacao}
                     </p>
                     <p className="expenses-control-preview-value">
-                        {`Valor: R$ ${expense.valorMovimentacao}`}
+                        {`Valor: R$ ${parseFloat(expense.valorMovimentacao).toFixed(2)}`}
                     </p>
                 </div>
                 <FontAwesomeIcon icon={faAngleRight} />
@@ -250,17 +262,21 @@ function Expenses() {
         let dataResults = await Promise.all(promises);
         
         callback(dataResults);
+
+        return list;
     }
 
     const genRevenuesPreviewList = async (callback) => {
-        let promises = (await listRevenues()).slice(0, 5).map(revenue => (
+        const list = await listRevenues();
+
+        let promises = list.slice(0, 5).map(revenue => (
             <a href={`expenses/revenues-${revenue.idMovimentacao}`} className="expenses-control-list-item flex" key={revenue.idMovimentacao}>
                 <div className="list-item-text">
                     <p className="expenses-control-preview-title">
                         {revenue.descricaoMovimentacao}
                     </p>
                     <p className="expenses-control-preview-value">
-                        {`Valor: R$ ${revenue.valorMovimentacao}`}
+                        {`Valor: R$ ${parseFloat(revenue.valorMovimentacao).toFixed(2)}`}
                     </p>
                 </div>
                 <FontAwesomeIcon icon={faAngleRight} />
@@ -270,6 +286,8 @@ function Expenses() {
         let dataResults = await Promise.all(promises);
         
         callback(dataResults);
+
+        return list;
     }
 
     const openModal = () => {
@@ -301,13 +319,13 @@ function Expenses() {
                             <div className="revenues-review">
                                 <p className="expenses-control-review-label">Receita Mensal</p>
                                 <p className="expenses-control-review-value">
-                                    {`R$ ${totalRevenue}`}
+                                    {`R$ ${parseFloat(totalRevenue).toFixed(2)}`}
                                 </p>
                             </div>
                             <div className="expenses-review">
                                 <p className="expenses-control-review-label">Despesa Mensal</p>
                                 <p className="expenses-control-review-value">
-                                    {`R$ ${totalExpense}`}
+                                    {`R$ ${parseFloat(totalExpense).toFixed(2)}`}
                                 </p>
                             </div>
                         </div>

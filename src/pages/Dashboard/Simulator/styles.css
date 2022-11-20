@@ -1,0 +1,114 @@
+@import url(./../../../styles/global.css);
+@import url(./../../../styles/react-calendar.css);
+
+/* Simulator */
+/* ------------------------------------------------------------- */
+.dashboard .simulator {
+    margin: 140px 60px 0px 340px;
+    margin-top: 140px;
+}
+
+.simulator h1 {
+    margin: 0px;
+    letter-spacing: var(--maxSpacing);
+}
+
+.simulator button {
+    width: 240px;
+    height: 40px;
+    margin-top: 20px;
+    padding: 0px 20px;
+
+    border: solid 2px var(--primaryGreen);
+    border-radius: 50px;
+    
+    font-size: 20px;
+    text-align: center;
+    color: var(--white);
+
+    transition: ease all 0.3s;
+}
+
+.simulator button:hover {
+    background-color: var(--detailsGreen);
+    border-color: var(--detailsGreen);
+}
+
+.simulator > .simulator-button-box {
+    width: 100%;
+    text-align: center;
+}
+
+.simulator > .simulator-button-box > button {
+    width: 360px;
+    height: 60px;
+    
+    font-size: 24px;
+}
+
+.simulator .simulation-data-box {
+    margin-top: 40px;
+    border-radius: 5px;
+    background-color: var(--white);
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.simulation-data-box > h2 {
+    padding: 20px 40px;
+    border-bottom: solid 1px var(--secundaryGray);
+}
+
+.simulation-data-box > .user-simulation-data, .simulation-data-box > .returned-simulation-data {
+    padding: 20px 40px;
+    border-bottom: solid 1px var(--secundaryGray);
+
+    align-items: center;
+}
+
+.user-simulation-data > .simulation-data, .returned-simulation-data > .simulation-data {
+    width: 320px;
+}
+
+.simulation-data > .simulation-data-label {
+    margin-bottom: 5px;
+
+    font-size: 20px;
+    color: var(--detailsGray);
+}
+
+.simulation-data > .simulation-data-value {
+    margin-bottom: 0px;
+
+    font-size: 24px;
+    color: var(--primaryGreen);
+}
+
+.simulation-data > .simulation-data-value svg {
+    margin-right: 20px;
+}
+
+.save-simulation-btn {
+    text-align: right;
+}
+
+.save-simulation-btn > button {
+    margin: 20px 40px;
+}
+
+/* Modal */
+.save-simulation-modal .modal-body {
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.save-simulation-modal .modal-body p {
+    margin: 0px;
+
+    font-size: 20px;
+}
+
+
+.save-simulation-modal .modal-footer button {
+    width: 200px;
+    height: 40px;
+}

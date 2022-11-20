@@ -87,9 +87,9 @@ function TransitionList() {
             createChart(chartData);
 
             if (transitionType === 'expenses') {
-                genTransitionList(() => listExpenses(iDate, fDate), (dataResults) => setFilteredTransitionList(dataResults));
+                genTransitionList(() => listExpenses(iDate, fDate), (dataResults) => setFilteredTransitionList(dataResults), transitionType);
             } else if (transitionType === 'revenues') {
-                genTransitionList(() => listRevenues(iDate, fDate), (dataResults) => setFilteredTransitionList(dataResults));
+                genTransitionList(() => listRevenues(iDate, fDate), (dataResults) => setFilteredTransitionList(dataResults), transitionType);
             }
 
             setTotalItems(5);
@@ -291,9 +291,9 @@ function TransitionList() {
         }
     }
 
-    const genTransitionList = async (listTransition, callback) => {
+    const genTransitionList = async (listTransition, callback, transitionType) => {
         let promises = (await listTransition()).slice(0, ITEMS_PER_PAGE).map(transition => (
-            <a href="#" className="list-item flex" key={transition.idMovimentacao}>
+            <a href={`${transitionType === 'expenses' ? 'expenses' : 'revenues'}-${transition.idMovimentacao}`} className="list-item flex" key={transition.idMovimentacao}>
                 <div className="list-item-text">
                     <p className="list-item-title">
                         {transition.descricaoMovimentacao}
@@ -381,6 +381,7 @@ function TransitionList() {
                             <Form.Control
                                 type="text"
                                 value={searchBarText}
+                                placeholder="Pesquise uma transição"
                                 onChange={handleSearchBarText}
                                 className="search-bar-input"
                             />

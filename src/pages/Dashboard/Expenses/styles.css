@@ -9,6 +9,7 @@
 }
 
 .expenses h1 {
+    margin: 0px;
     letter-spacing: var(--maxSpacing);
 }
 
@@ -21,7 +22,7 @@
 }
 
 .expenses .expenses-control-review {
-    width: 28.19166vw;
+    width: 31.25vw;
     margin-right: 60px;
     border: solid 1px var(--secundaryGray);
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
@@ -159,7 +160,7 @@
 
 /* DatePicker */
 .expenses .period-selector {
-    width: fit-content;
+    width: 31.25vw;
     height: 129px;
     margin: 0px;
     padding: 20px 40px;
@@ -199,7 +200,7 @@
 }
 
 .period-selector > svg:last-of-type {
-    margin: 0px 40px;
+    margin: 0px 60px;
 }
 
 .period-selector .period-selector-date:first-of-type{

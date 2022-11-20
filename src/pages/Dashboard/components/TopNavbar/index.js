@@ -38,7 +38,7 @@ function TopNavbar(props) {
         const revenuesValue = response.data.result[0].somaMovimentacao;
         const expensesValue = response.data.result[1].somaMovimentacao;
 
-        setBalanceValue(revenuesValue + expensesValue);
+        setBalanceValue(revenuesValue - expensesValue);
     }
 
     const handleBalanceVisibility = () => {

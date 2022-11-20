@@ -1,0 +1,110 @@
+@import url(./../../../styles/global.css);
+
+/* Simulations */
+/* ------------------------------------------------------------- */
+.dashboard .simulations {
+    margin: 140px 60px 0px 340px;
+    margin-top: 140px;
+}
+
+.simulations h1 {
+    margin: 0px;
+    letter-spacing: var(--maxSpacing);
+}
+
+.simulations .simulation-list {
+    width: 100%;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+}
+
+.simulation-list > .list {
+    margin-top: 20px;
+}
+
+.simulation-list > .list > .list-item {
+    padding: 10px 40px;
+    border-bottom: solid 1px var(--secundaryGray);
+
+    justify-content: space-between;
+    align-items: center;
+
+    transition: ease all 0.3s;
+}
+
+.list > .list-item:first-child {
+    border-top: solid 1px var(--secundaryGray);
+}
+
+.list-item >.list-item-text > p {
+    margin: 0px;
+}
+
+.list-item > .list-item-text > .list-item-title {
+    margin-bottom: 5px;
+
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.list-item > .list-item-text > .list-item-value {
+    font-size: 18px;
+    color: var(--detailsGray);
+}
+
+.list-item > svg {
+    font-size: 24px;
+}
+
+.list-item:hover {
+    background-color: var(--primaryGray);
+    color: var(--black);
+    cursor: pointer;
+}
+
+.simulation-list > .search-bar {
+    justify-content: right;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.simulation-list > .search-bar > .search-bar-input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px 20px;
+    background-color: var(--primaryGray);
+
+    font-size: 18px;
+}
+
+.simulation-list > .search-bar > svg {
+    color: var(--detailsGray);
+    position: absolute;
+    margin: 0px -20px;
+}
+
+/* Pagination */
+.pagination {
+    margin: 20px auto 0px;
+}
+
+/* Filters */
+.search-filters {
+    margin-top: 20px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.search-filters > .search-filter {
+    margin-right: 20px;
+    padding: 5px 15px;
+    border-radius: 5px;
+    background-color: var(--primaryGray);
+    
+    justify-content: center;
+    align-items: center;
+
+    user-select: none;
+}

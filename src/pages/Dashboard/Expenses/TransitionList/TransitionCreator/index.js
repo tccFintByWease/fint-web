@@ -49,8 +49,9 @@ function TransitionCreator(props) {
 
             const idUsuario = user.idUsuario;
             const idTipoMovimentacao = props.transitionType === 'revenues' ? 1 : props.transitionType === 'expenses' ? 2 : '';
+            const statusMovimentacao = 'ativo';
 
-            const transitionData = { ...userData, idTipoMovimentacao, idUsuario, idCategoria };
+            const transitionData = { ...userData, idTipoMovimentacao, idUsuario, idCategoria, statusMovimentacao };
 
             const date = transitionData.dataMovimentacao.replaceAll('/', '-');
             const day = date.split('-')[2];
@@ -64,6 +65,7 @@ function TransitionCreator(props) {
             transitionData.dataMovimentacao = dataMovimentacao;
 
             const response = await axios.post(INSERT_TRANSITION_URL, transitionData);
+            console.log('response:', response);
             
             transitionData.idMovimentacao = response.data.result.idMovimentacao;
 

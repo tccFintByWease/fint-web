@@ -8,6 +8,7 @@ const LIST_CURRENCIES_URL = `${API}/moeda/buscarTodos`;
 
 const INSERT_TRANSITION_URL = `${API}/movimentacao/inserir`;
 
+const GET_USER_URL = `${API}/usuario/buscarUmPorId`;
 const LOOK_FOR_EMAIL_URL = `${API}/usuario/buscarUmPorEmail`;
 const LOOK_FOR_CPF_URL = `${API}/usuario/buscarUmPorCPF`;
 const LOOK_FOR_PHONE_URL = `${API}/usuario/buscarUmPorFone`;
@@ -36,12 +37,16 @@ const UPDATE_CATEGORY_URL = `${API}/categoria/alterar`;
 const DELETE_CATEGORY_URL = `${API}/categoria/deletar`;
 const GET_CATEGORY_RECURRENCE_URL = `${API}/categoria/buscarRecorrenciaCategoriaMovimentacao`;
 
+const INSERT_SIMULATION_URL = `${API}/simulacao/inserir`;
+const GET_SIMULATIONS_URL = `${API}/simulacao/buscarTodasSimulacoesUsuario`;
+
 export  {
     SIGN_UP_URL,
     UPDATE_USER_URL,
     LOGIN_URL,
     LIST_CURRENCIES_URL,
     INSERT_TRANSITION_URL,
+    GET_USER_URL,
     LOOK_FOR_EMAIL_URL,
     LOOK_FOR_CPF_URL,
     LOOK_FOR_PHONE_URL,
@@ -64,5 +69,7 @@ export  {
     UPDATE_CATEGORY_URL,
     DELETE_CATEGORY_URL,
     GET_CATEGORY_RECURRENCE_URL,
-    GET_BALANCE_VALUE_URL
+    GET_BALANCE_VALUE_URL,
+    INSERT_SIMULATION_URL,
+    GET_SIMULATIONS_URL,
 }

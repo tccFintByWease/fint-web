@@ -37,7 +37,7 @@ function SideNavbar(props) {
         const revenuesValue = response.data.result[0].somaMovimentacao;
         const expensesValue = response.data.result[1].somaMovimentacao;
 
-        setBalanceValue(revenuesValue + expensesValue);
+        setBalanceValue(revenuesValue - expensesValue);
     }
 
     const handleBalanceVisibility = () => {
@@ -75,9 +75,9 @@ function SideNavbar(props) {
                 links[0].classList.add('active');
             } else if (props.active === 'expenses') {
                 links[1].classList.add('active');
-            } else if (props.active === 'simulation') {
+            } else if (props.active === 'simulator') {
                 links[2].classList.add('active');
-            } else if (props.active === 'investments') {
+            } else if (props.active === 'simulations') {
                 links[3].classList.add('active');
             }
         }
@@ -127,7 +127,7 @@ function SideNavbar(props) {
                         <FontAwesomeIcon icon={faMoneyBillWave} />
                         simulador
                     </a>
-                    <a href="/investments">
+                    <a href="/simulations">
                         <FontAwesomeIcon icon={faChartLine} />
                         investimentos
                     </a>
