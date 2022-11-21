@@ -22,7 +22,7 @@ import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../../contexts/auth';
 /* store */
 import { UPDATE_USER_URL } from '../../../store/api-urls';
-import { getTodayDate, removeTime } from '../../../utils/date-utils';
+import { getTodayDate, removeTime, formatDatetime } from '../../../utils/date-utils';
 import { formatCPF } from '../../../utils/cpf-utils';
 import { formatPhone } from '../../../utils/phone-utils';
 /* services */
@@ -118,7 +118,10 @@ function ProfileAndSettings() {
     }
 
     const getUserData = () => {
-        let date = user.dataNascUsuario.replaceAll('-', '/');
+        let date = new Date(user.dataNascUsuario);
+        date = removeTime(date);
+        date = String(date).replaceAll('-', '/');
+
         let day = date.split('/')[2];
         let month = date.split('/')[1];
         let year = date.split('/')[0];
@@ -170,10 +173,7 @@ function ProfileAndSettings() {
             
             userData.dataCadastroUsuario = dataCadastroUsuario;
 
-            console.log('userdata:', userData);
-
             const response = await axios.put(UPDATE_USER_URL, userData);
-            console.log('response:', response);
 
             handleShowSpinner(false);
             handleIsSubmitBtnDisabled(false);

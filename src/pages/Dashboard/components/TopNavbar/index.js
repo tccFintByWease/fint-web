@@ -72,7 +72,7 @@ function TopNavbar(props) {
                     <div className="balance">
                         <p className="balance-description">SALDO</p>
                         <div className="balance-value flex">
-                            <p className="balance-value-text">{`R$ ${balanceValue.toString().replace('.', ',')}`}</p>
+                            <p className="balance-value-text">{`R$ ${balanceValue.toFixed(2).toString().replace('.', ',')}`}</p>
                             <img src={faEyeSlash} alt="Ícone de olho" id="balanceVisibilityButton" onClick={handleBalanceVisibility} />
                         </div>
                     </div>

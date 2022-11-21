@@ -46,7 +46,7 @@ function SideNavbar(props) {
         const balanceVisibilityButton = document.querySelector('#asideBalanceVisibilityButton');
 
         if (!balanceVisibility) {
-            balance.innerHTML = `R$ ${balanceValue.toString().replace('.', ',')}`;
+            balance.innerHTML = `R$ ${balanceValue.toFixed(2).toString().replace('.', ',')}`;
             balanceVisibilityButton.src = faEyeSlash;
             
 

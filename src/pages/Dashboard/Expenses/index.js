@@ -276,7 +276,7 @@ function Expenses() {
                         {revenue.descricaoMovimentacao}
                     </p>
                     <p className="expenses-control-preview-value">
-                        {`Valor: R$ ${parseFloat(revenue.valorMovimentacao).toFixed(2)}`}
+                        {`Valor: R$ ${parseFloat(revenue.valorMovimentacao.toFixed(2))}`}
                     </p>
                 </div>
                 <FontAwesomeIcon icon={faAngleRight} />
@@ -319,13 +319,13 @@ function Expenses() {
                             <div className="revenues-review">
                                 <p className="expenses-control-review-label">Receita Mensal</p>
                                 <p className="expenses-control-review-value">
-                                    {`R$ ${parseFloat(totalRevenue).toFixed(2)}`}
+                                    {`R$ ${String(parseFloat(totalRevenue).toFixed(2)).replace('.', ',')}`}
                                 </p>
                             </div>
                             <div className="expenses-review">
                                 <p className="expenses-control-review-label">Despesa Mensal</p>
                                 <p className="expenses-control-review-value">
-                                    {`R$ ${parseFloat(totalExpense).toFixed(2)}`}
+                                    {`R$ ${String(parseFloat(totalExpense).toFixed(2)).replace('.', ',')}`}
                                 </p>
                             </div>
                         </div>

@@ -43,7 +43,6 @@ function Simulator(props) {
 
     const [simulationPeriod, setSimulationPeriod] = useState();
     const [simulationFinalValue, setSimulationFinalValue] = useState();
-    const [simulationMonthlyValue, setSimulationMonthlyValue] = useState();
     const [simulationProfit, setSimulationProfit] = useState();
 
     const [showSimulationModal, setShowSimulationModal] = useState(false);
@@ -264,7 +263,7 @@ function Simulator(props) {
             }
         }
 
-        const rentabilidade = totalInvestido * 
+        const rentabilidade = (totalAcumulado - investimentoInicial) / (investimentoInicial / 100);
 
         setSimulationFinalValue(totalInvestido);
         setSimulationProfit(rentabilidade);
@@ -368,9 +367,15 @@ function Simulator(props) {
                         <h2>Dados</h2>
                         <div className="user-simulation-data flex">
                             <div className="simulation-data">
-                                <p className="simulation-data-label">Valor investido</p>
+                                <p className="simulation-data-label">Investimento inicial</p>
                                 <p className="simulation-data-value">
-                                    {simulationData?.investimentoInicialSimulacao ? 'R$ ' + parseFloat(simulationData?.investimentoInicialSimulacao).toFixed(2) : '•••'}
+                                    {simulationData?.investimentoInicialSimulacao ? 'R$ ' + String(parseFloat(simulationData?.investimentoInicialSimulacao).toFixed(2)).replace('.', ',') : '•••'}
+                                </p>
+                            </div>
+                            <div className="simulation-data">
+                                <p className="simulation-data-label">Investimento mensal</p>
+                                <p className="simulation-data-value">
+                                    {simulationData?.investimentoMensalSimulacao ? 'R$ ' + String(parseFloat(simulationData?.investimentoMensalSimulacao).toFixed(2)).replace('.', ',') : '•••'}
                                 </p>
                             </div>
                             <div className="simulation-data">
@@ -390,13 +395,7 @@ function Simulator(props) {
                             <div className="simulation-data">
                                 <p className="simulation-data-label">Nesse período, você terá</p>
                                 <p className="simulation-data-value">
-                                    {simulationFinalValue ? 'R$ ' + parseFloat(simulationFinalValue).toFixed(2) : '•••'}
-                                </p>
-                            </div>
-                            <div className="simulation-data">
-                                <p className="simulation-data-label">Com o ganho de</p>
-                                <p className="simulation-data-value">
-                                    {simulationMonthlyValue ? 'R$ ' + parseFloat(simulationMonthlyValue).toFixed(2) : '•••'}
+                                    {simulationFinalValue ? 'R$ ' + String(parseFloat(simulationFinalValue).toFixed(2)).replace('.', ',') : '•••'}
                                 </p>
                             </div>
                             <div className="simulation-data">
@@ -419,6 +418,7 @@ function Simulator(props) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="flex">
+                        {console.log('sm data in:', simulationData?.dataInicialSimulacao)}
                         <Formik
                             onSubmit={(values) => createChart(values)}
                             initialValues={{
