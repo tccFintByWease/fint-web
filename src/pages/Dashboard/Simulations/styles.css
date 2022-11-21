@@ -8,7 +8,7 @@
 }
 
 .simulations h1 {
-    margin: 0px;
+    margin-bottom: 20px;
     letter-spacing: var(--maxSpacing);
 }
 

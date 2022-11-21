@@ -15,7 +15,7 @@ const appRoutes = {
     '/expenses/list': () => <TransitionList />,
     '/expenses/:transitionType-:id': ({transitionType, id}) => <TransitionItem transitionType={transitionType} transitionId={id} />,
     '/profile-and-settings': () => <ProfileAndSettings />,
-    '/simulator': () => <Simulator />,
+    '/simulator-:id': ({id}) => <Simulator simulationId={id} />,
     '/simulations': () => <Simulations />
 }
 

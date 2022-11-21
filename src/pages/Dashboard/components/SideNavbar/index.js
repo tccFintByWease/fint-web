@@ -34,8 +34,8 @@ function SideNavbar(props) {
     const handleBalanceValue = async () => {
         const response = await axios.post(GET_BALANCE_VALUE_URL, { idUsuario: user.idUsuario });
 
-        const revenuesValue = response.data.result[0].somaMovimentacao;
-        const expensesValue = response.data.result[1].somaMovimentacao;
+        const revenuesValue = response.data.result[0]?.somaMovimentacao;
+        const expensesValue = response.data.result[1]?.somaMovimentacao;
 
         setBalanceValue(revenuesValue - expensesValue);
     }
@@ -123,7 +123,7 @@ function SideNavbar(props) {
                         <FontAwesomeIcon icon={faWallet} />
                         gastos
                     </a>
-                    <a href="/simulator">
+                    <a href="/simulator-0">
                         <FontAwesomeIcon icon={faMoneyBillWave} />
                         simulador
                     </a>

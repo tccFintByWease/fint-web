@@ -39,6 +39,7 @@ const GET_CATEGORY_RECURRENCE_URL = `${API}/categoria/buscarRecorrenciaCategoria
 
 const INSERT_SIMULATION_URL = `${API}/simulacao/inserir`;
 const GET_SIMULATIONS_URL = `${API}/simulacao/buscarTodasSimulacoesUsuario`;
+const GET_SIMULATION_URL = `${API}/simulacao/buscarUmPorId`;
 
 export  {
     SIGN_UP_URL,
@@ -72,4 +73,5 @@ export  {
     GET_BALANCE_VALUE_URL,
     INSERT_SIMULATION_URL,
     GET_SIMULATIONS_URL,
+    GET_SIMULATION_URL
 }

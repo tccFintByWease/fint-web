@@ -112,3 +112,16 @@
     width: 200px;
     height: 40px;
 }
+
+.simulator > .charts-message {
+    height: 320px;
+    margin-top: 20px;
+    background-color: var(--primaryGray);
+    border-radius: 5px;
+
+    font-size: 32px;
+    color: var(--detailsGray);
+
+    justify-content: center;
+    align-items: center;
+}

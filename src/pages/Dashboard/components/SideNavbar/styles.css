@@ -61,13 +61,17 @@
 .aside-nav a.active {
     padding: 10px;
     background-color: var(--primaryGray);
+    border: solid 2px var(--white);
     border-radius: 5px;
 
     color: var(--primaryGreen);
+
+    transition: ease all 0.3s;
 }
 
 .aside-nav a.active:hover {
-    color: var(--detailsGreen);
+    background-color: transparent;
+    border-color: var(--primaryGray);
 }
 
 #dashboard__aside > .mobile-side-nav {

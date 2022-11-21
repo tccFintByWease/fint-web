@@ -5,8 +5,11 @@ const simulationSchema = yup.object({
         .required('Insira um nome para a simulação')
         .max(100, 'O nome da simulação deve conter um máximo de 100 caracteres'),
 
-    valorInicialSimulacao: yup.number()
-        .required('Insira o valor investido'),
+    investimentoInicialSimulacao: yup.number()
+        .required('Insira o valor do investimento inicial'),
+
+    investimentoMensalSimulacao: yup.number()
+        .required('Insira o valor do investimento mensal'),
 
     dataInicialSimulacao: yup.date('Insira a data novamente')
     .required('Insira a data inicial da simulação'),
@@ -14,11 +17,8 @@ const simulationSchema = yup.object({
     dataFinalSimulacao: yup.date('Insira a data novamente')
     .required('Insira a data final da simulação'),
 
-    taxaCorretagemSimulacao: yup.number()
-        .required('Insira uma taxa de corretagem'),
-
     taxaJurosSimulacao: yup.number()
-        .required('Insira uma taxa de corretagem')
+        .required('Insira a taxa de juros da simulação')
 });
 
 export {

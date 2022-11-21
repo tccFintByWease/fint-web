@@ -2,6 +2,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 /* libraries */
 import { simulationSchema } from './../../../store/schemas/simulation-schema';
@@ -21,12 +22,15 @@ import { Form, Row, Col, Modal, Spinner } from 'react-bootstrap';
 /* contexts */
 import { useAuth } from '../../../contexts/auth';
 /* store */
-import { INSERT_SIMULATION_URL } from '../../../store/api-urls';
+import { GET_SIMULATION_URL, INSERT_SIMULATION_URL } from '../../../store/api-urls';
 /* utils */
-import { getSpecificDate } from '../../../utils/date-utils';
+import { removeTime } from '../../../utils/date-utils';
+import { navigate } from 'hookrouter';
+import { isEditableInput } from '@testing-library/user-event/dist/utils';
 
-function Simulator() {
+function Simulator(props) {
     const { user } = useAuth();
+    const [isChartVisible, setIsChartVisible] = useState(false);
     const [options, setOptions] = useState();
     const [data, setData] = useState();
 
@@ -46,7 +50,14 @@ function Simulator() {
     const [showSaveSimulationModal, setShowSaveSimulationModal] = useState(false);
 
     useEffect(() => {
-        createChart();
+        const getSimulation = async () => {
+            const simulacao = await getSimulationProps();
+            if (!_.isEqual(simulacao.data.result, {})) {
+                createChart(simulacao.data.result);
+            }
+        }
+
+        getSimulation();
     }, []);
 
     const [navbarIsOpen, setNavbarIsOpen] = useState(false);
@@ -112,6 +123,35 @@ function Simulator() {
         }
     }
 
+    const getSimulationPeriod = (initialDate, finalDate) => {
+        const iD = new Date(initialDate);
+        const fD = new Date(finalDate);
+
+        const period = (fD.getFullYear() - iD.getFullYear()) * 12 + (fD.getMonth() - iD.getMonth());
+
+        setSimulationPeriod(period);
+
+        return period;
+    }
+
+    const getSimulationProps = async () => {
+        try {
+            const response = await axios.post(GET_SIMULATION_URL, { idSimulacao: props.simulationId });
+
+            setSimulationData(response.data.result);
+
+            const initialDate = response.data.result.dataInicialSimulacao;
+            const finalDate = response.data.result.dataFinalSimulacao;
+
+            response.data.result.dataInicialSimulacao = removeTime(initialDate);
+            response.data.result.dataFinalSimulacao = removeTime(finalDate);
+
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const createChart = (values) => {
         const chartOptions = {
             chartArea: {
@@ -150,12 +190,6 @@ function Simulator() {
 
         setOptions(chartOptions);
 
-        const dataInicial = new Date(values?.dataInicialSimulacao);
-        const dataFinal = new Date(values?.dataFinalSimulacao);
-
-        let mesInicial = dataInicial.getMonth();
-        let mesFinal = dataFinal.getMonth();
-
         const months = [
             'Jan',
             'Fev',
@@ -171,48 +205,78 @@ function Simulator() {
             'Dez'
         ]
 
-        mesInicial = months[mesInicial];
-        mesFinal = months[mesFinal];
+        const dataInicial = new Date(values?.dataInicialSimulacao);
+        const dataFinal = new Date(values?.dataFinalSimulacao);
 
-        if (mesInicial && (mesInicial === mesFinal)) {
-            mesInicial = mesInicial + ' - ' + dataInicial.getFullYear();
-            mesFinal = mesFinal + ' - ' + dataFinal.getFullYear();
-        }
+        const periodo = getSimulationPeriod(dataInicial, dataFinal);
 
-        const periodo = (dataFinal.getFullYear() - dataInicial.getFullYear()) * 12 + (dataFinal.getMonth() - dataInicial.getMonth());
+        const investimentoInicial = Number(values?.investimentoInicialSimulacao);
+        const investimentoMensal = Number(values?.investimentoMensalSimulacao);
+        const taxaJurosSimulacao = (values?.taxaJurosSimulacao / periodo) / 100;
 
-        setSimulationPeriod(periodo);
-
-        const valorInicial = Number(values?.valorInicialSimulacao);
-        // const taxaJurosSimulacao = values?.taxaJurosSimulacao;
-        const taxaJurosSimulacao = 2;
-        const taxaCorretagemSimulacao = values?.taxaCorretagemSimulacao;
-        const valorFinal = Number((valorInicial + (valorInicial * taxaJurosSimulacao * periodo) - (taxaCorretagemSimulacao * periodo)));
-
-        const ganhoMensal = (valorFinal - valorInicial) / periodo;
-        
-        const rentabilidade = (valorFinal - valorInicial) / valorInicial;
+        let totalInvestido = investimentoInicial;
+        let totalAcumulado = 0;
 
         const chartData = [
-            ['Tempo', 'Valor'],
-            [mesInicial, valorInicial],
-            [mesFinal, valorFinal]
+            ['Tempo', 'Valor']
         ];
 
-        setSimulationFinalValue(valorFinal);
-        setSimulationMonthlyValue(ganhoMensal);
+        let mesInicial = dataInicial.getMonth();
+        let mesFinal = dataFinal.getMonth();
+        let mes = mesInicial;
+
+        let c = 1;
+
+        for (let i = 0; i <= periodo; i++) {
+            if (i !== 0 && i !== 12) {
+                let rendimento =  totalInvestido * taxaJurosSimulacao;
+                totalInvestido = totalInvestido + investimentoMensal
+                totalAcumulado = totalInvestido + rendimento;
+                totalInvestido = totalAcumulado;
+
+                const index = mesInicial + c;
+                console.log('index:', index);
+                
+                if (index === 12) {
+                    c = 0;
+                    mes = months[c];
+                } else {
+                    mes = months[index];
+                }
+                c++;
+
+                chartData.push([mes, totalAcumulado]);
+            } else if (i === 0) {
+                mes = months[mesInicial] + ' - ' + dataInicial.getFullYear();
+
+                chartData.push([mes, totalInvestido]);
+            } else if (i === 12) {
+                let rendimento =  totalInvestido * taxaJurosSimulacao;
+                totalInvestido = totalInvestido + investimentoMensal
+                totalAcumulado = totalInvestido + rendimento;
+                totalInvestido = totalAcumulado;
+
+                mes = months[mesFinal] + ' - ' + dataFinal.getFullYear();
+
+                chartData.push([mes, Number(totalAcumulado)]);
+
+                setIsChartVisible(true);
+            }
+        }
+
+        const rentabilidade = totalInvestido * 
+
+        setSimulationFinalValue(totalInvestido);
         setSimulationProfit(rentabilidade);
         
         setData(chartData);
-
         setSimulationData(values);
         closeSimulationModal();
     }
 
-    const saveSimulation = async () => {
-        console.log('sm data:', simulationData);
+    const saveSimulation = async (simulationData) => {
         try {
-            const simulation = { ...simulationData, idUsuario: user.idUsuario }
+            simulationData.idUsuario = user.idUsuario;
 
             let iDate = new Date(simulationData?.dataInicialSimulacao);
             let yyyy = iDate.getFullYear();
@@ -228,9 +292,8 @@ function Simulator() {
             }
 
             const dataInicialSimulacao = yyyy + '-' + mm + '-' + dd;
-            console.log(dataInicialSimulacao);
 
-            simulation.dataInicialSimulacao = dataInicialSimulacao;
+            simulationData.dataInicialSimulacao = dataInicialSimulacao;
 
             let fDate = new Date(simulationData?.dataFinalSimulacao);
             yyyy = fDate.getFullYear();
@@ -246,17 +309,20 @@ function Simulator() {
             }
 
             const dataFinalSimulacao = yyyy + '-' + mm + '-' + dd;
-            console.log(dataFinalSimulacao);
 
-            simulation.dataFinalSimulacao = dataFinalSimulacao;
+            simulationData.dataFinalSimulacao = dataFinalSimulacao;
 
-            console.log(simulation);
+            console.log('sData:', simulationData);
 
-            const response = await axios.post(INSERT_SIMULATION_URL, simulation);
-            console.log('response:', response);
+            const response = await axios.post(INSERT_SIMULATION_URL, simulationData);
+            console.log('response do xsqdl:', response.data);
+
+            navigate(`/simulator-${response.data.result.idSimulacao}`);
+            window.location.reload();
         } catch (error) {
             console.log(error);
         }
+        
     }
 
     const openSimulationModal = () => {
@@ -283,7 +349,7 @@ function Simulator() {
                 <SideNavbar active={'simulator'} handleNavbarIsOpen={handleNavbarIsOpen} />
                 <section className="simulator">
                     <h1>Simulador</h1>
-                    <div className="charts flex">
+                    <div className={isChartVisible ? 'charts flex' : 'none'}>
                         <Chart
                             chartType="AreaChart"
                             data={data}
@@ -292,6 +358,7 @@ function Simulator() {
                             height="420px"
                         />
                     </div>
+                    <p className={!isChartVisible ? 'charts-message flex' : 'none'}>Insira os dados da simulação para visualizar o gráfico.</p>
                     <div className="simulator-button-box">
                         <button className="simulator-btn btn-action" onClick={openSimulationModal}>
                             Simular
@@ -303,7 +370,7 @@ function Simulator() {
                             <div className="simulation-data">
                                 <p className="simulation-data-label">Valor investido</p>
                                 <p className="simulation-data-value">
-                                    {simulationData?.valorInicialSimulacao ? 'R$ ' + simulationData?.valorInicialSimulacao : '•••'}
+                                    {simulationData?.investimentoInicialSimulacao ? 'R$ ' + parseFloat(simulationData?.investimentoInicialSimulacao).toFixed(2) : '•••'}
                                 </p>
                             </div>
                             <div className="simulation-data">
@@ -313,15 +380,9 @@ function Simulator() {
                                 </p>
                             </div>
                             <div className="simulation-data">
-                                <p className="simulation-data-label">Taxa de corretagem</p>
-                                <p className="simulation-data-value">
-                                    {simulationData?.taxaCorretagemSimulacao ? simulationData?.taxaCorretagemSimulacao + '%' : '•••'}
-                                </p>
-                            </div>
-                            <div className="simulation-data">
                                 <p className="simulation-data-label">Taxa de juros</p>
                                 <p className="simulation-data-value">
-                                    {simulationData?.taxaJurosSimulacao ? simulationData?.taxaJurosSimulacao + '%' : '•••'}
+                                    {simulationData?.taxaJurosSimulacao ? parseFloat(simulationData?.taxaJurosSimulacao).toFixed(2) + '%' : '•••'}
                                 </p>
                             </div>
                         </div>
@@ -329,20 +390,20 @@ function Simulator() {
                             <div className="simulation-data">
                                 <p className="simulation-data-label">Nesse período, você terá</p>
                                 <p className="simulation-data-value">
-                                    {simulationFinalValue ? 'R$ ' + simulationFinalValue : '•••'}
+                                    {simulationFinalValue ? 'R$ ' + parseFloat(simulationFinalValue).toFixed(2) : '•••'}
                                 </p>
                             </div>
                             <div className="simulation-data">
                                 <p className="simulation-data-label">Com o ganho de</p>
                                 <p className="simulation-data-value">
-                                    {simulationMonthlyValue ? 'R$ ' + simulationMonthlyValue : '•••'}
+                                    {simulationMonthlyValue ? 'R$ ' + parseFloat(simulationMonthlyValue).toFixed(2) : '•••'}
                                 </p>
                             </div>
                             <div className="simulation-data">
                                 <p className="simulation-data-label">Rentabilidade</p>
                                 <p className="simulation-data-value">
                                     <FontAwesomeIcon icon={faAnglesUp} className={simulationProfit ? '' : 'none'} />
-                                    {simulationProfit ? simulationProfit + '%' : '•••'}
+                                    {simulationProfit ? parseFloat(simulationProfit).toFixed(2) + '%' : '•••'}
                                 </p>
                             </div>
                         </div>
@@ -362,10 +423,10 @@ function Simulator() {
                             onSubmit={(values) => createChart(values)}
                             initialValues={{
                                 descricaoSimulacao: simulationData?.descricaoSimulacao ?? '',
-                                valorInicialSimulacao: simulationData?.valorInicialSimulacao ?? '',
-                                dataInicialSimulacao: simulationData?.dataInicialSimulacao ?? '',
-                                dataFinalSimulacao: simulationData?.dataFinalSimulacao ?? '',
-                                taxaCorretagemSimulacao: simulationData?.taxaCorretagemSimulacao ?? '',
+                                investimentoInicialSimulacao: simulationData?.investimentoInicialSimulacao ?? '',
+                                investimentoMensalSimulacao: simulationData?.investimentoMensalSimulacao ?? '',
+                                dataInicialSimulacao: (simulationData?.dataInicialSimulacao && Number.isNaN(simulationData?.dataInicialSimulacao)) ? simulationData?.dataInicialSimulacao : '',
+                                dataFinalSimulacao: (simulationData?.dataFinalSimulacao && Number.isNaN(simulationData?.dataFinalSimulacao)) ? simulationData?.dataFinalSimulacao : '',
                                 taxaJurosSimulacao: simulationData?.taxaCorretagemSimulacao ?? '',
                             }}
                             validationSchema={simulationSchema}
@@ -392,7 +453,6 @@ function Simulator() {
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
                                                 className={errors.descricaoSimulacao && touched.descricaoSimulacao ? "input-error" : ""}
-                                                data-testid="txt-descricao-movimentacao"
                                                 autoComplete="off"
                                             />
                                             {errors.descricaoSimulacao && touched.descricaoSimulacao && (
@@ -400,22 +460,39 @@ function Simulator() {
                                             )}
                                         </Col>
                                     </Form.Group>
-                                    <Form.Group as={Row} controlId="simulationValue">
+                                    <Form.Group as={Row} controlId="simulationInitialValue">
                                         <Col>
-                                            <Form.Label>Valor investido</Form.Label>
+                                            <Form.Label>Investimento inicial</Form.Label>
                                             <Form.Control
                                                 type="number"
                                                 placeholder="Valor investido"
-                                                name="valorInicialSimulacao"
-                                                value={values.valorInicialSimulacao}
+                                                name="investimentoInicialSimulacao"
+                                                value={values.investimentoInicialSimulacao}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                className={errors.valorInicialSimulacao && touched.valorInicialSimulacao ? "input-error" : ""}
-                                                data-testid="txt-observacao-movimentacao"
+                                                className={errors.investimentoInicialSimulacao && touched.investimentoInicialSimulacao ? "input-error" : ""}
                                                 autoComplete="off"
                                             />
-                                            {errors.valorInicialSimulacao && touched.valorInicialSimulacao && (
-                                                <p className="error-message">{errors.valorInicialSimulacao}</p>
+                                            {errors.investimentoInicialSimulacao && touched.investimentoInicialSimulacao && (
+                                                <p className="error-message">{errors.investimentoInicialSimulacao}</p>
+                                            )}
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group as={Row} controlId="simulationMonthlyValue">
+                                        <Col>
+                                            <Form.Label>Investimento mensal</Form.Label>
+                                            <Form.Control
+                                                type="number"
+                                                placeholder="Valor investido"
+                                                name="investimentoMensalSimulacao"
+                                                value={values.investimentoMensalSimulacao}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                className={errors.investimentoMensalSimulacao && touched.investimentoMensalSimulacao ? "input-error" : ""}
+                                                autoComplete="off"
+                                            />
+                                            {errors.investimentoMensalSimulacao && touched.investimentoMensalSimulacao && (
+                                                <p className="error-message">{errors.investimentoMensalSimulacao}</p>
                                             )}
                                         </Col>
                                     </Form.Group>
@@ -449,7 +526,6 @@ function Simulator() {
                                                     handleChange(e);
                                                 }}
                                                 className={errors.dataInicialSimulacao && touched.dataInicialSimulacao ? "input-error" : ""}
-                                                data-testid="txt-data-movimentacao"
                                                 autoComplete="off"
                                             />
                                             {errors.dataInicialSimulacao && touched.dataInicialSimulacao && (
@@ -459,7 +535,7 @@ function Simulator() {
                                     </Form.Group>
                                     <Form.Group as={Row} controlId="simulationFinalDate">
                                         <Col>
-                                            <Form.Label>Data inicial</Form.Label>
+                                            <Form.Label>Data final</Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Data final da simulação"
@@ -487,29 +563,10 @@ function Simulator() {
                                                     handleChange(e);
                                                 }}
                                                 className={errors.dataFinalSimulacao && touched.dataFinalSimulacao ? "input-error" : ""}
-                                                data-testid="txt-data-movimentacao"
                                                 autoComplete="off"
                                             />
                                             {errors.dataFinalSimulacao && touched.dataFinalSimulacao && (
                                                 <p className="error-message">{errors.dataFinalSimulacao}</p>
-                                            )}
-                                        </Col>
-                                    </Form.Group>
-                                    <Form.Group as={Row} controlId="simulationTax">
-                                        <Col>
-                                            <Form.Label>Taxa de corretagem (em %)</Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                placeholder="0"
-                                                name="taxaCorretagemSimulacao"
-                                                value={values.taxaCorretagemSimulacao}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                data-testid="txt-valor-inicial"
-                                                autoComplete="off"
-                                            />
-                                            {errors.taxaCorretagemSimulacao && touched.taxaCorretagemSimulacao && (
-                                                <p className="error-message">{errors.taxaCorretagemSimulacao}</p>
                                             )}
                                         </Col>
                                     </Form.Group>
@@ -523,7 +580,6 @@ function Simulator() {
                                                 value={values.taxaJurosSimulacao}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                data-testid="txt-valor-inicial"
                                                 autoComplete="off"
                                             />
                                             {errors.taxaJurosSimulacao && touched.taxaJurosSimulacao && (

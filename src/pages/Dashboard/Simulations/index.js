@@ -24,9 +24,8 @@ function TransitionList() {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // TODO: ARRUMAR O DATA INICIAL E FINAL EM OUTRAS COISAS DE MOVIMENTAÇÃO !!!!!
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    const { user } = useAuth();
 
-    const [showModal, setShowModal] = useState(false);
+    const { user } = useAuth();
 
     const [simulationList, setSimulationList] = useState([]);
     const [filteredSimulationList, setFilteredSimulationList] = useState([]);
@@ -41,7 +40,7 @@ function TransitionList() {
 
     const [valueFilter, setValueFilter] = useState(true);
 
-    const ITEMS_PER_PAGE = 5; // TODO: change to 10
+    const ITEMS_PER_PAGE = 5;
 
     useEffect(() => {
         const getSimulationList = async () => {
@@ -137,7 +136,6 @@ function TransitionList() {
     const listSimulation = async () => {
         try {
             const response = await axios.post(GET_SIMULATIONS_URL, { idUsuario: user.idUsuario });
-            console.log('LIST TRANSITION RESPONSE: \n', response.data);
 
             setSimulationList(response.data.result);
 
@@ -156,7 +154,7 @@ function TransitionList() {
 
     const genSimulationList = async (getList, callback) => {
         let promises = (await getList()).slice(0, ITEMS_PER_PAGE).map(simulation => (
-            <a href={`${simulation.idSimulacao}`} className="list-item flex" key={simulation.idSimulacao}>
+            <a href={`/simulator-${simulation.idSimulacao}`} className="list-item flex" key={simulation.idSimulacao}>
                 <div className="list-item-text">
                     <p className="list-item-title">
                         {simulation.descricaoSimulacao}
