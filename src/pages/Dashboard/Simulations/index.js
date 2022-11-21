@@ -20,11 +20,6 @@ import { useAuth } from '../../../contexts/auth';
 import { GET_SIMULATIONS_URL } from '../../../store/api-urls';
 
 function TransitionList() {
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // TODO: ARRUMAR O DATA INICIAL E FINAL EM OUTRAS COISAS DE MOVIMENTAÇÃO !!!!!
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     const { user } = useAuth();
 
     const [simulationList, setSimulationList] = useState([]);
@@ -116,6 +111,15 @@ function TransitionList() {
         }
     }
 
+    const getSimulationPeriod = (initialDate, finalDate) => {
+        const iD = new Date(initialDate);
+        const fD = new Date(finalDate);
+
+        const period = (fD.getFullYear() - iD.getFullYear()) * 12 + (fD.getMonth() - iD.getMonth());
+
+        return period;
+    }
+
     const filterList = (list) => {
         let orderValue = valueFilter ? valueAscOrder ? 'ASC' : valueDescOrder ? 'DESC' : '' : '';
 
@@ -160,7 +164,15 @@ function TransitionList() {
                         {simulation.descricaoSimulacao}
                     </p>
                     <p className="list-item-value">
-                        {`Valor: R$ ${simulation.valorInicialSimulacao}`}
+                        <span className="item-value">
+                            {`Investimento inicial: R$ ${String(parseFloat(simulation?.investimentoInicialSimulacao).toFixed(2))}`}
+                        </span>
+                        <span className="item-value">
+                            {`Investimento mensal: R$ ${String(parseFloat(simulation?.investimentoMensalSimulacao).toFixed(2))}`}
+                        </span>
+                        <span className="item-value">
+                            {`Período: ${getSimulationPeriod(simulation?.dataInicialSimulacao, simulation?.dataFinalSimulacao)} meses`}
+                        </span>
                     </p>
                 </div>
                 <FontAwesomeIcon icon={faAngleRight} />

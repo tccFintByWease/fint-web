@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import _, { set } from 'lodash';
 /* libraries */
 import { simulationSchema } from './../../../store/schemas/simulation-schema';
 /* stylesheets and assets */
@@ -41,12 +41,40 @@ function Simulator(props) {
 
     const [simulationData, setSimulationData] = useState();
 
+    const [simulationId, setSimulationId] = useState();
+
     const [simulationPeriod, setSimulationPeriod] = useState();
     const [simulationFinalValue, setSimulationFinalValue] = useState();
     const [simulationProfit, setSimulationProfit] = useState();
 
     const [showSimulationModal, setShowSimulationModal] = useState(false);
     const [showSaveSimulationModal, setShowSaveSimulationModal] = useState(false);
+
+    // TODO: ARRUMAR ESSE ID PRA SELECIONAR OS BOTÕES QUE VÃO OU NÃO APARECER
+    // TODO: FAZER UPDATE E EXCLUIR SIMULAÇÃO
+    // TODO: CORRIGIR BUGS DE CONTROLE DE GASTOS
+    // TODO: DADOS REAIS NOS GRÁFICOS DA HOME
+    // TODO: MELHORAR DESIGN DOS GRÁFICOS SEM DADOS E DA LISTAGEM DE MOVIMENTAÇÕES (VALOR)
+    // TODO: ARRUMAR OS FILTROS DA LISTAGEM DE SIMULAÇÃO
+
+    // TODO: CRIAR A TRILHA DE APRENDIZAGEM (DESIGN)
+    // TODO: CRIAR O JSON DA TRILHA DE APRENDIZAGEM
+
+    useEffect(() => {
+        const urlString = window.location.href;
+        const paramString = urlString.split('-')[1];
+        console.log(paramString);
+            
+        const getSimulation = async () => {
+            const simulacao = await getSimulationProps();
+            setSimulationId();
+            if (!_.isEqual(simulacao.data.result, {})) {
+                createChart(simulacao.data.result);
+            }
+        }
+
+        getSimulation();
+    }, []);
 
     useEffect(() => {
         const getSimulation = async () => {
@@ -234,7 +262,6 @@ function Simulator(props) {
                 totalInvestido = totalAcumulado;
 
                 const index = mesInicial + c;
-                console.log('index:', index);
                 
                 if (index === 12) {
                     c = 0;
@@ -263,10 +290,10 @@ function Simulator(props) {
             }
         }
 
-        const rentabilidade = (totalAcumulado - investimentoInicial) / (investimentoInicial / 100);
+        const lucro = (totalAcumulado - investimentoInicial - investimentoMensal * periodo);
 
         setSimulationFinalValue(totalInvestido);
-        setSimulationProfit(rentabilidade);
+        setSimulationProfit(lucro);
         
         setData(chartData);
         setSimulationData(values);
@@ -311,10 +338,7 @@ function Simulator(props) {
 
             simulationData.dataFinalSimulacao = dataFinalSimulacao;
 
-            console.log('sData:', simulationData);
-
             const response = await axios.post(INSERT_SIMULATION_URL, simulationData);
-            console.log('response do xsqdl:', response.data);
 
             navigate(`/simulator-${response.data.result.idSimulacao}`);
             window.location.reload();
@@ -322,6 +346,22 @@ function Simulator(props) {
             console.log(error);
         }
         
+    }
+
+    const updateSimulation = async (simulationData) => {
+        try {
+            console.log('updateSimulation:', simulationData);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const removeSimulation = async (simulationData) => {
+        try {
+            console.log('removeSimulation:', simulationData);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const openSimulationModal = () => {
@@ -387,27 +427,29 @@ function Simulator(props) {
                             <div className="simulation-data">
                                 <p className="simulation-data-label">Taxa de juros</p>
                                 <p className="simulation-data-value">
-                                    {simulationData?.taxaJurosSimulacao ? parseFloat(simulationData?.taxaJurosSimulacao).toFixed(2) + '%' : '•••'}
+                                    {simulationData?.taxaJurosSimulacao ? String(parseFloat(simulationData?.taxaJurosSimulacao).toFixed(2)).replace('.', ',') + '%' : '•••'}
                                 </p>
                             </div>
                         </div>
                         <div className="returned-simulation-data flex">
                             <div className="simulation-data">
-                                <p className="simulation-data-label">Nesse período, você terá</p>
+                                <p className="simulation-data-label">Valor final</p>
                                 <p className="simulation-data-value">
                                     {simulationFinalValue ? 'R$ ' + String(parseFloat(simulationFinalValue).toFixed(2)).replace('.', ',') : '•••'}
                                 </p>
                             </div>
                             <div className="simulation-data">
-                                <p className="simulation-data-label">Rentabilidade</p>
+                                <p className="simulation-data-label">Lucro</p>
                                 <p className="simulation-data-value">
+                                    {simulationProfit ? 'R$ ' + String(parseFloat(simulationProfit).toFixed(2)).replace('.', ',') : '•••'}
                                     <FontAwesomeIcon icon={faAnglesUp} className={simulationProfit ? '' : 'none'} />
-                                    {simulationProfit ? parseFloat(simulationProfit).toFixed(2) + '%' : '•••'}
                                 </p>
                             </div>
                         </div>
-                        <div className="save-simulation-btn">
-                            <button className="btn-action" onClick={openSaveSimulationModal}>Salvar simulação</button>
+                        <div className="simulation-data-buttons">
+                            <button className={props.simulationId === -1 ? 'btn-action' : 'none'} onClick={openSaveSimulationModal}>Salvar simulação</button>
+                            <button className={props.simulationId !== -1 ? 'btn-action' : 'none'} onClick={updateSimulation}>Atualizar simulação</button>
+                            <button className={props.simulationId !== -1 ? 'btn-action btn-remove' : 'none'} onClick={removeSimulation}>Excluir simulação</button>
                         </div>
                     </div>
                 </section>
@@ -418,7 +460,6 @@ function Simulator(props) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="flex">
-                        {console.log('sm data in:', simulationData?.dataInicialSimulacao)}
                         <Formik
                             onSubmit={(values) => createChart(values)}
                             initialValues={{
@@ -620,5 +661,9 @@ function Simulator(props) {
         </Fragment>
     );
 }
+
+Simulator.propTypes = {
+    simulationId: PropTypes.number.isRequired
+}  
 
 export default Simulator;

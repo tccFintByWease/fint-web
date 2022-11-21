@@ -123,7 +123,7 @@ function SideNavbar(props) {
                         <FontAwesomeIcon icon={faWallet} />
                         gastos
                     </a>
-                    <a href="/simulator-0">
+                    <a href={`/simulator-${-1}`}>
                         <FontAwesomeIcon icon={faMoneyBillWave} />
                         simulador
                     </a>

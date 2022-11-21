@@ -66,7 +66,7 @@
 }
 
 .user-simulation-data > .simulation-data, .returned-simulation-data > .simulation-data {
-    width: 320px;
+    width: 280px;
 }
 
 .simulation-data > .simulation-data-label {
@@ -84,15 +84,21 @@
 }
 
 .simulation-data > .simulation-data-value svg {
-    margin-right: 20px;
+    font-size: 20px;
+    margin-left: 10px;
 }
 
-.save-simulation-btn {
+.simulation-data-buttons {
     text-align: right;
 }
 
-.save-simulation-btn > button {
-    margin: 20px 40px;
+.simulation-data-buttons > button {
+    margin: 20px 0px;
+    margin-right: 10px;
+}
+
+.simulation-data-buttons > button:last-child {
+    margin-right: 20px;
 }
 
 /* Modal */

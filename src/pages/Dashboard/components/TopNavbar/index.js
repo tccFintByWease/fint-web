@@ -34,7 +34,7 @@ function TopNavbar(props) {
 
     const handleBalanceValue = async () => {
         const response = await axios.post(GET_BALANCE_VALUE_URL, { idUsuario: user.idUsuario });
-
+        
         const revenuesValue = response.data.result[0].somaMovimentacao;
         const expensesValue = response.data.result[1].somaMovimentacao;
 

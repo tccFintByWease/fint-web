@@ -25,7 +25,7 @@
 }
 
 .simulation-list > .list > .list-item {
-    padding: 10px 40px;
+    padding: 20px 40px;
     border-bottom: solid 1px var(--secundaryGray);
 
     justify-content: space-between;
@@ -43,15 +43,25 @@
 }
 
 .list-item > .list-item-text > .list-item-title {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 
     font-size: 20px;
     font-weight: 500;
 }
 
-.list-item > .list-item-text > .list-item-value {
+.list-item > .list-item-text .list-item-value {
     font-size: 18px;
-    color: var(--detailsGray);
+    color: var(--black);
+}
+
+.list-item-value > span.item-value {
+    margin-right: 20px;
+    padding: 5px 20px;
+    background-color: var(--primaryGray);
+    border: solid 2px var(--primaryGray);
+    border-radius: 5px;
+
+    transition: ease all 0.3s;
 }
 
 .list-item > svg {
@@ -62,6 +72,11 @@
     background-color: var(--primaryGray);
     color: var(--black);
     cursor: pointer;
+}
+
+.list-item:hover span.item-value {
+    border: solid 2px var(--white) !important;
+    background-color: var(--white) !important;
 }
 
 .simulation-list > .search-bar {
