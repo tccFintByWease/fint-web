@@ -1,25 +1,17 @@
 # Fint - Aplicação Web
 
-## TODO
+## COMO EXECUTAR O PROJETO
 
-### LANDPAGE
+1. Executar o script do MySql para a criação do banco, das tabelas e dos inserts;
+1. Abrir o projeto da API (https://github.com/tccFintByWease/fint-api) no console;
+2. Executar os comandos no console na pasta do projeto da API:
+  - npm start;
 
-- Carregar o conteúdo dinamicamente com o scroll
-- Adicionar e configurar as ilustrações
-- Resolver o erro do delay do menu mobile quando abre / fecha (o fundo some antes das letras)
-- Arrumar o botão flutuante de assinatura na responsividade
-
-### PÁGINAS DE LOGIN
-
-- Enviar o código de verificação por email
-
-### TERMOS DE USO E POLÍTICA DE PRIVACIDADE
-
-- Adicionar o menu lateral com os tópicos da página
-- Adicionar um botão para download do arquivos em PDF dos Termos de Uso e da Política de Privacidade
-- Remover a borda do container no menor tamanho de media query
-
-### TELA INICIAL
-
-- Corrigir bug no qual o gráfico não recebe os valores corretos de props inicialmente
-- Adicionar mais recursos na tela inicial (preview das simulações salvas, das aulas da trilha etc.)
+1. Abrir o projeto no console;
+2. Executar os comandos no console pasta do projeto:
+  - npm install --legacy-peer-deps
+  - npm start
+  
+3. Na página de login, entrar com o usuário criado para testes:
+  - Email: joaog@gmail.com
+  - Senha: Jsenha123!
