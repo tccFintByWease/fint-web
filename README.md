@@ -14,4 +14,3 @@ Inicialmente um Trabalho de Conclusão de Curso desenvolvido na Escola Técnica 
 2. Executar o banco de dados em MySql: https://drive.google.com/file/d/1F5ShwJWAWpXxCEAucSVE85WyMUzYzmYM/view?usp=share_link
 2. Instalar as dependências do projeto: ```npm install --legacy-peer-deps```
 3. Executar o projeto: ```npm start```
-
